@@ -4,7 +4,7 @@
 click
 Sphinx
 coverage
-awscli
+# awscli
 python-dotenv>=0.5.1
 make
 # dev requirements
@@ -30,7 +30,7 @@ beautifulsoup4
 requests
 # Database packages
 sqlalchemy
-psycopg2
+# psycopg2
 # Misc packages
 pyyaml
 python-dotenv
