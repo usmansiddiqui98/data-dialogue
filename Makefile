@@ -7,7 +7,7 @@
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 BUCKET = [OPTIONAL] your-bucket-for-syncing-data (do not include 's3://')
 PROFILE = default
-PROJECT_NAME = nlp-dsa4263
+PROJECT_NAME = data-dialogue
 PYTHON_INTERPRETER = python3
 
 ifeq (,$(shell which conda))
@@ -31,10 +31,49 @@ install:
 .PHONY: black
 black:
 	black src --line-length=120
+	black tests --line-length=120
+
+.PHONY: test_black
+test_black:
+	black src --line-length=120 --check
+	black tests --line-length=120 --check
 
 .PHONY: flake8
 flake8:
 	flake8 src --count --show-source --statistics
+	flake8 tests --count --show-source --statistics
+
+.PHONY: test_flake8
+test_flake8:
+	flake8 src --count --show-source --statistics --exit-zero
+	flake8 tests --count --show-source --statistics --exit-zero
+
+.PHONY: isort
+isort:
+	isort src --profile black --line-length=120
+	isort tests --profile black --line-length=120
+
+.PHONY: test_isort
+test_isort:
+	isort src -c --profile black --line-length=120
+	isort tests -c --profile black --line-length=120
+
+.PHONY: mypy
+mypy:
+	mypy src --ignore-missing-imports
+	mypy tests --ignore-missing-imports
+
+## Format files and typecasting
+.PHONY: format
+format:
+	make black
+	make flake8
+	make isort
+	make mypy
+
+.PHONY: test
+test:
+	pytest tests --cov-report term-missing --cov=tests/
 
 ## Make Dataset
 .PHONY: data
@@ -46,12 +85,6 @@ data: requirements
 clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
-
-## Format using flake8 and black
-.PHONY: format
-format:
-	make black
-	make flake8
 
 ## Upload Data to S3
 sync_data_to_s3:
