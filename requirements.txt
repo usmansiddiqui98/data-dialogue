@@ -25,14 +25,7 @@ sketch
 plotly
 matplotlib
 seaborn
-# Web Scraping packages
-beautifulsoup4
-requests
-# Database packages
-sqlalchemy
-# psycopg2
 # Misc packages
-pyyaml
 python-dotenv
 # AWS packages
 boto3
@@ -43,4 +36,6 @@ pytest-cov
 flake8
 black
 isort
+mypy
+pre-commit
 
