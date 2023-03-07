@@ -86,6 +86,10 @@ clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
 
+.PHONY: run
+run:
+	streamlit run src/app/main.py
+
 ## Upload Data to S3
 sync_data_to_s3:
 ifeq (default,$(PROFILE))

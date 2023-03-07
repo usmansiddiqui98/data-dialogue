@@ -10,6 +10,7 @@ make
 # dev requirements
 jupyter
 jupyterlab
+python
 # NLP packages
 nltk
 spacy
@@ -38,4 +39,5 @@ black
 isort
 mypy
 pre-commit
-
+# App
+streamlit
