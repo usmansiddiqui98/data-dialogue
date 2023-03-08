@@ -10,7 +10,6 @@ make
 # dev requirements
 jupyter
 jupyterlab
-python
 # NLP packages
 nltk
 spacy
@@ -41,3 +40,6 @@ mypy
 pre-commit
 # App
 streamlit
+# Deeplearning
+transformers
+torch -f https://download.pytorch.org/whl/cu112/torch_stable.html
