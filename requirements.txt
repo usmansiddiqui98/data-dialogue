@@ -27,7 +27,6 @@ matplotlib
 seaborn
 # Misc packages
 python-dotenv
-random
 # AWS packages
 boto3
 # Testing packages

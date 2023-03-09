@@ -25,6 +25,7 @@ exclude_packages = [
     "os",
     "sys",
     "math",
+    "random",
 ]
 
 
