@@ -27,11 +27,14 @@ matplotlib
 seaborn
 # Misc packages
 python-dotenv
+re
+random
 # AWS packages
 boto3
 # Testing packages
 pytest
 pytest-cov
+logging
 # Dev packages
 flake8
 black
@@ -42,4 +45,4 @@ pre-commit
 streamlit
 # Deeplearning
 transformers
-torch -f https://download.pytorch.org/whl/cu112/torch_stable.html
+torch

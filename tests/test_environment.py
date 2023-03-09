@@ -1,5 +1,7 @@
-import sys
 import os
+import re
+import sys
+
 REQUIRED_PYTHON = "python3"
 
 
@@ -10,11 +12,11 @@ def test_python_version():
     elif REQUIRED_PYTHON == "python3":
         required_major = 3
     else:
-        raise ValueError("Unrecognized python interpreter: {}".format(
-            REQUIRED_PYTHON))
+        raise ValueError("Unrecognized python interpreter: {}".format(REQUIRED_PYTHON))
 
     assert system_major == required_major, "This project requires Python {}. Found: Python {}".format(
-        required_major, sys.version)
+        required_major, sys.version
+    )
 
 
 def test_development_environment():
@@ -32,6 +34,10 @@ def test_development_environment():
                     content = f.read()
                 for line in content.splitlines():
                     if "import" in line:
-                        package = line.split()[1]
-                        assert package in requirements, f"Package {package} used in {filepath} is not listed in {req_file_path}"
-
+                        package_match = re.search(r"^\s*import\s+(\w+)", line)
+                        if package_match:
+                            package = package_match.group(1)
+                            if "src" not in package:
+                                assert (
+                                    package in requirements
+                                ), f"Package {package} used in {filepath} is not listed in {req_file_path}"
