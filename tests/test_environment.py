@@ -18,7 +18,6 @@ def test_python_version():
         required_major, sys.version
     )
 
-
 def test_development_environment():
     # Get the path of the requirements.txt file
     req_file_path = os.path.join(os.path.dirname(__file__), "..", "requirements.txt")
@@ -34,10 +33,11 @@ def test_development_environment():
                     content = f.read()
                 for line in content.splitlines():
                     if "import" in line:
-                        package_match = re.search(r"^\s*import\s+(\w+)", line)
+                        package_match = re.search(r'^\s*import\s+(\w+)', line)
                         if package_match:
                             package = package_match.group(1)
-                            if "src" not in package:
+                            if "src" not in package and package not in sys.builtin_module_names:
                                 assert (
                                     package in requirements
                                 ), f"Package {package} used in {filepath} is not listed in {req_file_path}"
+
