@@ -18,6 +18,16 @@ def test_python_version():
         required_major, sys.version
     )
 
+
+# List of package names to exclude
+exclude_packages = [
+    "re",
+    "os",
+    "sys",
+    "math",
+]
+
+
 def test_development_environment():
     # Get the path of the requirements.txt file
     req_file_path = os.path.join(os.path.dirname(__file__), "..", "requirements.txt")
@@ -33,11 +43,14 @@ def test_development_environment():
                     content = f.read()
                 for line in content.splitlines():
                     if "import" in line:
-                        package_match = re.search(r'^\s*import\s+(\w+)', line)
+                        package_match = re.search(r"^\s*import\s+(\w+)", line)
                         if package_match:
                             package = package_match.group(1)
-                            if "src" not in package and package not in sys.builtin_module_names:
+                            if (
+                                "src" not in package
+                                and package not in sys.builtin_module_names
+                                and package not in exclude_packages
+                            ):
                                 assert (
                                     package in requirements
                                 ), f"Package {package} used in {filepath} is not listed in {req_file_path}"
-
