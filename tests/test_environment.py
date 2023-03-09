@@ -26,6 +26,7 @@ exclude_packages = [
     "sys",
     "math",
     "random",
+    "logging",
 ]
 
 

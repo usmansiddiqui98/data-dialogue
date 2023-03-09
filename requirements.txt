@@ -32,7 +32,6 @@ boto3
 # Testing packages
 pytest
 pytest-cov
-logging
 # Dev packages
 flake8
 black
