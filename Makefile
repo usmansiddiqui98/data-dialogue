@@ -24,7 +24,7 @@ endif
 .PHONY: install
 install:
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
-	python -m pip install --upgrade pip
+	$(PYTHON_INTERPRETER) -m pip install --upgrade pip
 	pip install -r requirements.txt -U
 	pip install -e . --no-deps
 
