@@ -24,7 +24,7 @@ endif
 .PHONY: install
 install:
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
-	python -m pip install --upgrade pip
+	$(PYTHON_INTERPRETER) -m pip install --upgrade pip
 	pip install -r requirements.txt -U
 	pip install -e . --no-deps
 
@@ -40,13 +40,13 @@ test_black:
 
 .PHONY: flake8
 flake8:
-	flake8 src --count --show-source --statistics
-	flake8 tests --count --show-source --statistics
+	flake8 src --ignore=E203,W503,E501,W605 --count --show-source --statistics
+	flake8 tests --ignore=E203,W503,E501,W605 --count --show-source --statistics
 
 .PHONY: test_flake8
 test_flake8:
-	flake8 src --count --show-source --statistics --exit-zero
-	flake8 tests --count --show-source --statistics --exit-zero
+	flake8 src --ignore=E203,W503,E501,W605 --count --show-source --statistics --exit-zero
+	flake8 tests --ignore=E203,W503,E501,W605 --count --show-source --statistics --exit-zero
 
 .PHONY: isort
 isort:
@@ -85,6 +85,10 @@ data: requirements
 clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
+
+.PHONY: run
+run:
+	streamlit run src/app/main.py
 
 ## Upload Data to S3
 sync_data_to_s3:
