@@ -12,7 +12,7 @@ def test_clean():
 
 
 def test_clean_df():
-    df = pd.read_csv("../data/raw/reviews.csv").head(10)
+    df = pd.read_csv("data/raw/reviews.csv").head(10)
     df = preprocess.clean_df(df)
     assert (
         df["Cleaned Text"][5] == "like people mention coffee great taste try different instant coffee one one "
