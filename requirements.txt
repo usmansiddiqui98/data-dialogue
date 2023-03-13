@@ -33,6 +33,8 @@ black
 isort
 mypy
 pre-commit
+nbformat
+nbconvert
 # App
 streamlit
 # Deeplearning
