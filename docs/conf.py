@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# nlp_4263 documentation build configuration file, created by
+# data-dialogue documentation build configuration file, created by
 # sphinx-quickstart.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -41,7 +41,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'nlp_4263'
+project = u'data-dialogue'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
