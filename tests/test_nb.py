@@ -6,6 +6,7 @@ from nbconvert.preprocessors import ClearOutputPreprocessor
 
 # This test case ensures all the notebooks are cleared of output before committing
 
+
 def test_notebooks():
     exporter = NotebookExporter(preprocessors=[ClearOutputPreprocessor()])
     for file_name in os.listdir("."):
