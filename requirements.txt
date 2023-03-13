@@ -16,7 +16,7 @@ spacy
 gensim
 contractions
 # ML packages
-sklearn
+scikit-learn
 # Data Analysis packages
 pandas
 numpy
