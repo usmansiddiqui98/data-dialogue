@@ -37,6 +37,5 @@ jobs:
       run: |
         make mypy
     - name: pytest
-      uses: ./.github/actions/pytest
       run: |
         make test

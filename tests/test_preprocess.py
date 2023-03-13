@@ -1,7 +1,8 @@
 import pandas as pd
-
+import os
 import src.data.preprocess as preprocess
 
+fname = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "raw", "reviews.csv"))
 
 def test_clean():
     text = preprocess.clean(
@@ -12,7 +13,7 @@ def test_clean():
 
 
 def test_clean_df():
-    df = pd.read_csv("../data/raw/reviews.csv").head(10)
+    df = pd.read_csv(fname).head(10)
     df = preprocess.clean_df(df)
     assert (
         df["Cleaned Text"][5] == "like people mention coffee great taste try different instant coffee one one "
