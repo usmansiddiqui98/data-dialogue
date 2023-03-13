@@ -1,8 +1,11 @@
-import pandas as pd
 import os
+
+import pandas as pd
+
 import src.data.preprocess as preprocess
 
 fname = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "raw", "reviews.csv"))
+
 
 def test_clean():
     text = preprocess.clean(
