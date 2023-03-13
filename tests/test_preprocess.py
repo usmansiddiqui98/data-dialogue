@@ -21,7 +21,7 @@ def test_clean_df():
 
 
 def test_clean_csv():
-    df = preprocess.clean_csv("../data/raw/reviews.csv")
+    df = preprocess.clean_csv("data/raw/reviews.csv")
     assert (
         df["Cleaned Text"][1] == "pleased natural balance dog food dog issue dog food past someone recommend "
         "natural balance grain free since possible allergic grain since switch issue "
