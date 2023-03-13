@@ -12,13 +12,13 @@ jobs:
 
     steps:
     - name: Set up Python 3.10
-      uses: .github/actions/setup-python@v3
+      uses: actions/setup-python@v3
       with:
         python-version: "3.10"
         architecture: "x64"
       env:
         AGENT_TOOLSDIRECTORY: /opt/hostedtoolcache
-    - uses: .github/actions/checkout@v3
+    - uses: actions/checkout@v3
     - name: install
       run: |
         make install
@@ -37,5 +37,6 @@ jobs:
       run: |
         make mypy
     - name: pytest
+      uses: ./.github/actions/pytest
       run: |
         make test
