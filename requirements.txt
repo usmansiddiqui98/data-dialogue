@@ -2,6 +2,7 @@
 Sphinx
 coverage
 python-dotenv>=0.5.1
+click
 make
 jupyter
 jupyterlab
