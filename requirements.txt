@@ -1,33 +1,26 @@
-# local package
 -e .
-# external requirements
-click
 Sphinx
 coverage
 python-dotenv>=0.5.1
+click
 make
-# dev requirements
 jupyter
 jupyterlab
-# NLP packages
 nltk
 spacy
 gensim
 contractions
-# ML packages
+bertopic
 scikit-learn
-# Data Analysis packages
 pandas
 numpy
 scipy
-# Data Visualization packages
 plotly
 matplotlib
 seaborn
 # Testing packages
 pytest
 pytest-cov
-# Dev packages
 flake8
 black
 isort
@@ -35,9 +28,7 @@ mypy
 pre-commit
 nbformat
 nbconvert
-# App
 streamlit
-# Deeplearning
 transformers
 torch
 # tensorflow
