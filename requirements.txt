@@ -44,3 +44,4 @@ torch
 wordcloud
 keras
 pyLDAvis
+xgboost
