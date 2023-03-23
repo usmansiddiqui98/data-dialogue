@@ -4,7 +4,8 @@ from pathlib import Path
 
 from dotenv import find_dotenv, load_dotenv
 
-# from src.data.preprocess import Preprocessor
+from src.data.feature_engineering import FeatureEngineering
+from src.data.preprocess import Preprocessor
 
 
 def main(input_filepath, output_filepath):
@@ -14,10 +15,13 @@ def main(input_filepath, output_filepath):
     logger = logging.getLogger(__name__)
     logger.info("making final data set from raw data")
 
-    # preprocessor = Preprocessor(input_filepath)
-    # pre_processed_df = preprocessor.clean_df
-    # feature_extracted_df = FeatureExtractpr.extract(pre_processed_df)
-    # train_test_split =
+    preprocessor = Preprocessor(input_filepath)
+    pre_processed_df = preprocessor.clean_df
+    feature_engineer = FeatureEngineering(pre_processed_df)
+    feature_engineer.add_features()
+    feature_engineered_df = feature_engineer.feature_engineered_df
+    # TODO: remove
+    print(feature_engineered_df)
 
 
 if __name__ == "__main__":
