@@ -1,12 +1,13 @@
 import string
-from nltk.tokenize import word_tokenize
-from spellchecker import SpellChecker
+import contractions
 import nltk
 
-nltk.download("averaged_perceptron_tagger")
-import contractions
+from nltk.tokenize import word_tokenize
+from spellchecker import SpellChecker
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from textblob import TextBlob
+
+nltk.download("averaged_perceptron_tagger")
 
 
 # Define function to count number of lowercase
