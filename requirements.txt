@@ -36,3 +36,4 @@ wordcloud
 keras
 pyLDAvis
 xgboost
+jovian
