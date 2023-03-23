@@ -58,7 +58,8 @@ class Preprocessor:
         return lemmatized_sentence
 
     def clean_csv(self):
-        df = pd.read_csv(self.dirty_file_path)
-        new_df = df.copy()
+        new_df = self.dirty_df.copy()
         new_df["Cleaned Text"] = new_df["Text"].apply(Preprocessor.clean_sentence)
+        # lower case all column names
+        new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]
         self.clean_df = new_df
