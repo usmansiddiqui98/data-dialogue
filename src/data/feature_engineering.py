@@ -2,7 +2,6 @@ import string
 
 import contractions
 import nltk
-from nltk.tokenize import word_tokenize
 from spellchecker import SpellChecker
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
@@ -12,7 +11,7 @@ nltk.download("averaged_perceptron_tagger")
 
 # Define function to count number of lowercase
 def count_lower(sentence):
-    words = word_tokenize(sentence)
+    words = nltk.word_tokenize(sentence)
     count = 0
     for word in words:
         if not word.isupper():  # eg Real is considered lowercase
@@ -22,7 +21,7 @@ def count_lower(sentence):
 
 # Define function to count number of uppercase
 def count_upper(sentence):
-    words = word_tokenize(sentence)
+    words = nltk.word_tokenize(sentence)
     count = 0
     for word in words:
         if word.isupper():
@@ -33,7 +32,7 @@ def count_upper(sentence):
 
 # Define function to list uppercase words
 def uppercase_list(sentence):
-    words = word_tokenize(sentence)
+    words = nltk.word_tokenize(sentence)
     uppercase = []
     for word in words:
         if word.isupper():
@@ -45,7 +44,7 @@ def uppercase_list(sentence):
 
 # Define function to get uppercase:total tokens ratio
 def uppercase_ratio(sentence):
-    words = word_tokenize(sentence)
+    words = nltk.word_tokenize(sentence)
     count = 0
     for word in words:
         if word.isupper():
@@ -58,7 +57,7 @@ def uppercase_ratio(sentence):
 
 # Define function to count number of punctuations
 def count_punc(sentence):
-    words = word_tokenize(sentence)
+    words = nltk.word_tokenize(sentence)
     count = 0
     for word in words:
         if word in string.punctuation:
