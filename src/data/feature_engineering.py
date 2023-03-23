@@ -1,11 +1,11 @@
 import string
+
 import contractions
 import nltk
-
 from nltk.tokenize import word_tokenize
 from spellchecker import SpellChecker
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from textblob import TextBlob
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 nltk.download("averaged_perceptron_tagger")
 
