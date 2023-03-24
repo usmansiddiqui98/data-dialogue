@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from pathlib import Path
 from sklearn.model_selection import train_test_split
-import pandas as pd
 from dotenv import find_dotenv, load_dotenv
 
 from src.data.feature_engineering import FeatureEngineer
@@ -19,8 +18,9 @@ def main(input_filepath, train_split_output_filepath, test_split_output_filepath
     feature_engineer.add_features()
     feature_engineered_df = feature_engineer.feature_engineered_df
     # train test split and write splits to csv
-    train, test = train_test_split(feature_engineered_df, test_size=0.2, random_state=4263,
-                                   stratify=feature_engineered_df['sentiment'])
+    train, test = train_test_split(
+        feature_engineered_df, test_size=0.2, random_state=4263, stratify=feature_engineered_df["sentiment"]
+    )
 
     train.to_csv(train_split_output_filepath)
     test.to_csv(test_split_output_filepath)

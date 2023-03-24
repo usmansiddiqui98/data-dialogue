@@ -58,4 +58,6 @@ class FeatureEngineer:
         new_df["polarity"] = new_df["cleaned_text"].apply(compound_polarity_score)
         new_df["subjectivity"] = new_df["cleaned_text"].apply(get_subjectivity)
         new_df = self.add_pos_neg_count(new_df)
+        # lower case all column names
+        new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]
         self.feature_engineered_df = new_df

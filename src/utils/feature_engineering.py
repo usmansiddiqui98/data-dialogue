@@ -7,6 +7,7 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 nltk.download("averaged_perceptron_tagger")
 
+
 def num_typos(sentence):
     # remove punctuations
     s = sentence.translate(str.maketrans("", "", string.punctuation))
