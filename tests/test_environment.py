@@ -27,6 +27,7 @@ exclude_packages = [
     "math",
     "random",
     "logging",
+    "string",
 ]
 
 
