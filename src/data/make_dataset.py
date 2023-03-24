@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from pathlib import Path
-from sklearn.model_selection import train_test_split
+
 from dotenv import find_dotenv, load_dotenv
+from sklearn.model_selection import train_test_split
 
 from src.data.feature_engineering import FeatureEngineer
 from src.data.preprocess import Preprocessor
