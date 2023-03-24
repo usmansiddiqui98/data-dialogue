@@ -1,4 +1,17 @@
-from src.utils.feature_engineering import *
+import nltk
+
+from src.utils.feature_engineering import (
+    compound_polarity_score,
+    count_lower,
+    count_pos_neg_neutral,
+    count_punc,
+    count_upper,
+    get_subjectivity,
+    num_typos,
+    pos_tags,
+    uppercase_list,
+    uppercase_ratio,
+)
 
 
 class FeatureEngineer:
