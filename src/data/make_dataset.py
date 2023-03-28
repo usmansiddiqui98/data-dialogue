@@ -27,10 +27,10 @@ def main(input_filepath, train_split_output_filepath, test_split_output_filepath
     )
 
     # Write splits to csv
-    # train = X_train.join(y_train)
-    # test = X_test.join(y_test)
-    # train.to_csv(train_split_output_filepath)
-    # test.to_csv(test_split_output_filepath)
+    train = X_train.join(y_train)
+    test = X_test.join(y_test)
+    train.to_csv(train_split_output_filepath)
+    test.to_csv(test_split_output_filepath)
 
     return X_train, X_test, y_train, y_test
 
