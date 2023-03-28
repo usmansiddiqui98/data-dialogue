@@ -1,6 +1,6 @@
 from src.data.make_dataset import main as make_dataset
-from src.models.sentiment_analysis.logistic_regression import LogisticRegression
 from src.models.sentiment_analysis.bert import BERTModel
+from src.models.sentiment_analysis.logistic_regression import LogisticRegression
 
 
 def run_training_pipeline(input_file, train_output_file, test_output_file):
