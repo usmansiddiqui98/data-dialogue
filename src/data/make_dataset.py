@@ -8,10 +8,11 @@ from src.data.feature_engineering import FeatureEngineer
 from src.data.preprocess import Preprocessor
 
 
-def main(input_filepath, train_split_output_filepath, test_split_output_filepath):
+def main(input_filepath, train_split_output_filepath=None, test_split_output_filepath=None):
     """Runs data processing scripts to turn raw data from (../raw) into
     cleaned data ready to be analyzed (saved in ../processed).
     """
+
     preprocessor = Preprocessor(input_filepath)
     preprocessor.clean_csv()
     pre_processed_df = preprocessor.clean_df
@@ -25,12 +26,12 @@ def main(input_filepath, train_split_output_filepath, test_split_output_filepath
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=4263, stratify=feature_engineered_df["sentiment"]
     )
-
-    # Write splits to csv
-    train = X_train.join(y_train)
-    test = X_test.join(y_test)
-    train.to_csv(train_split_output_filepath)
-    test.to_csv(test_split_output_filepath)
+    if train_split_output_filepath and test_split_output_filepath:
+        # Write splits to csv
+        train = X_train.join(y_train)
+        test = X_test.join(y_test)
+        train.to_csv(train_split_output_filepath)
+        test.to_csv(test_split_output_filepath)
 
     return X_train, X_test, y_train, y_test
 
