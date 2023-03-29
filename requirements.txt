@@ -14,6 +14,9 @@ bertopic
 scikit-learn
 pandas
 numpy
+pyspellchecker
+vaderSentiment
+textblob
 scipy
 plotly
 matplotlib
@@ -37,3 +40,4 @@ wordcloud
 keras
 pyLDAvis
 xgboost
+jovian
