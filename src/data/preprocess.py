@@ -63,3 +63,7 @@ class Preprocessor:
         # lower case all column names
         new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]
         self.clean_df = new_df
+
+    # TODO: make a method to add cleaned_text_512 to the clean_df which only truncates the text to max 512 tokens taking nouns and adjectives
+    # TODO: Keep nouns and adjectives with their bigrams and trigrams (if they exist)
+    # TODO: Edit list of stopwords to be removed
