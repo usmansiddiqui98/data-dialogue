@@ -17,6 +17,7 @@ numpy
 scipy
 plotly
 matplotlib
+joblib
 seaborn
 # Testing packages
 pytest
