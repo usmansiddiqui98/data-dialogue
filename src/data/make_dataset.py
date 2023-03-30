@@ -20,11 +20,11 @@ def main(input_filepath, train_split_output_filepath=None, test_split_output_fil
     feature_engineer.add_features()
     feature_engineered_df = feature_engineer.feature_engineered_df
     # Separate target variable (y) and features (X)
-    X = feature_engineered_df.drop("sentiment", axis=1)
+    X = feature_engineered_df.drop(["sentiment", "time"], axis=1)
     y = feature_engineered_df["sentiment"]
     # train test split and write splits to csv
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=4263, stratify=feature_engineered_df["sentiment"]
+        X, y, test_size=0.2, random_state=4263, stratify=y
     )
     if train_split_output_filepath and test_split_output_filepath:
         # Write splits to csv
