@@ -24,13 +24,14 @@ class LDAGensim:
 
     def print_topics(self, num_topics, passes=10):
         if not self.tags:
-            reviews = [word_tokenize(review) for review in self.df['cleaned_text']]
+            reviews = [word_tokenize(review) for review in self.df["cleaned_text"]]
         else:
-            reviews = self.lemmatization([word_tokenize(review) for review in self.df['cleaned_text']], tags=self.tags)
+            reviews = self.lemmatization([word_tokenize(review) for review in self.df["cleaned_text"]], tags=self.tags)
         self.id2word = corpora.Dictionary(reviews)
         self.corpus = [self.id2word.doc2bow(tokens) for tokens in reviews]
-        self.lda_model = gensim.models.ldamodel.LdaModel(corpus=self.corpus, id2word=self.id2word,
-                                                         num_topics=num_topics, passes=passes, random_state=4263)
+        self.lda_model = gensim.models.ldamodel.LdaModel(
+            corpus=self.corpus, id2word=self.id2word, num_topics=num_topics, passes=passes, random_state=4263
+        )
         for element in self.lda_model.print_topics():
-            print('Topic ' + str(element[0]))
+            print("Topic " + str(element[0]))
             print(element[1])
