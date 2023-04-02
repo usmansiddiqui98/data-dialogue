@@ -1,8 +1,7 @@
 import spacy
-
+from nltk.tokenize import word_tokenize
 from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import TfidfVectorizer
-from nltk.tokenize import word_tokenize
 
 
 class LSAModel:

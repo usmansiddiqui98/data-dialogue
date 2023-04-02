@@ -1,6 +1,5 @@
 import gensim
 import spacy
-
 from gensim import corpora
 from nltk.tokenize import word_tokenize
 
