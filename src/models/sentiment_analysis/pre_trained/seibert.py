@@ -13,8 +13,8 @@ class Seibert:
     def predict(self, x_test):
         x_test = x_test.text.to_list()
         x_test = [x[:512] if len(x) > 512 else x for x in x_test]
-        specific_model = pipeline(model="siebert/sentiment-roberta-large-english", device=self.device)
-        results = specific_model(x_test)
+        sentiment_analysis = pipeline('sentiment-analysis', model="siebert/sentiment-roberta-large-english", device=self.device)
+        results = sentiment_analysis(x_test)
         labels = [result['label'] for result in results]
         y_pred = [1 if label == 'POSITIVE' else 0 for label in labels]
         return y_pred
