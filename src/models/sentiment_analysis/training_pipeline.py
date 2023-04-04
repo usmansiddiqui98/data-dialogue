@@ -27,7 +27,8 @@ def run_training_pipeline(input_file, train_output_file, test_output_file):
 
     print(f"Best model: {best_model.__class__.__name__} with F1 score: {best_f1}")
 
-def run_scoring_pipeline(input_file, train_output_file = None, test_output_file = None):
+
+def run_scoring_pipeline(input_file, train_output_file=None, test_output_file=None):
     X_train, X_test, y_train, y_test = make_dataset(input_file, train_output_file, test_output_file)
 
     models = [
@@ -46,4 +47,3 @@ def run_scoring_pipeline(input_file, train_output_file = None, test_output_file 
             best_model = model
 
     print(f"Best model: {best_model.__class__.__name__} with F1 score: {best_f1}")
-
