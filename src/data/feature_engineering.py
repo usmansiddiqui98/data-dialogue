@@ -1,6 +1,6 @@
 import nltk
 
-from src.utils.feature_engineering import (
+from src.utils.feature_engineering_helpers import (
     compound_polarity_score,
     count_lower,
     count_pos_neg_neutral,
