@@ -24,6 +24,10 @@ def main(input_filepath, train_split_output_filepath=None, test_split_output_fil
     y = feature_engineered_df["sentiment"]
     # train test split and write splits to csv
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=4263, stratify=y)
+    X_train.reset_index(drop=True, inplace=True)
+    X_test.reset_index(drop=True, inplace=True)
+    y_train.reset_index(drop=True, inplace=True)
+    y_test.reset_index(drop=True, inplace=True)
     if train_split_output_filepath and test_split_output_filepath:
         # Write splits to csv
         train = X_train.join(y_train)
