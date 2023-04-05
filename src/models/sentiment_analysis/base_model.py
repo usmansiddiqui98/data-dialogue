@@ -1,5 +1,6 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import TruncatedSVD
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 
 class BaseModel:
     def __init__(self, vectorizer=None, dim_reducer=None):
@@ -28,4 +29,3 @@ class BaseModel:
 
     def evaluate(self, X_test, y_test):
         raise NotImplementedError("Subclasses should implement this method")
-

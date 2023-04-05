@@ -143,7 +143,7 @@ stopwords = [
     "anyway",
     "however",
     "just",
-    "quite"
+    "quite",
 ]
 
 stopwords = list(stopwords)
@@ -175,7 +175,7 @@ class Preprocessor:
             nouns_adjectives = [word for word, tag in pos_tagged if tag.startswith("N") or tag.startswith("J")]
 
             truncated = (
-                words[:512] if len(nouns_adjectives) >= 512 else nouns_adjectives + words[len(nouns_adjectives): 512]
+                words[:512] if len(nouns_adjectives) >= 512 else nouns_adjectives + words[len(nouns_adjectives) : 512]
             )
             return " ".join(truncated)
 
