@@ -1,19 +1,31 @@
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
-
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import TruncatedSVD
 
 class BaseModel:
-    def __init__(self):
-        self.model = None
+    def __init__(self, vectorizer=None, dim_reducer=None):
+        self.vectorizer = vectorizer or TfidfVectorizer()
+        self.dim_reducer = dim_reducer
 
-    def train(self, X_train, y_train):
-        raise NotImplementedError
+    def fit_transform(self, X):
+        X_vectorized = self.vectorizer.fit_transform(X)
+        if self.dim_reducer is not None:
+            return self.dim_reducer.fit_transform(X_vectorized)
+        else:
+            return X_vectorized
 
-    def predict(self, X_test):
-        return self.model.predict(X_test)
+    def process(self, X):
+        X_vectorized = self.vectorizer.transform(X)
+        if self.dim_reducer is not None:
+            return self.dim_reducer.transform(X_vectorized)
+        else:
+            return X_vectorized
+
+    def fit(self, X_train, y_train):
+        raise NotImplementedError("Subclasses should implement this method")
+
+    def predict(self, X):
+        raise NotImplementedError("Subclasses should implement this method")
 
     def evaluate(self, X_test, y_test):
-        f1 = f1_score(y_test, self.predict(X_test), average="weighted")
-        precision = precision_score(y_test, self.predict(X_test), average="weighted")
-        recall = recall_score(y_test, self.predict(X_test), average="weighted")
-        accuracy = accuracy_score(y_test, self.predict(X_test))
-        return f1, precision, recall, accuracy
+        raise NotImplementedError("Subclasses should implement this method")
+
