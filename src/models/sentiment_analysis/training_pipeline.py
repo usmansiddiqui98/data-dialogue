@@ -1,49 +1,86 @@
+import os
+import pickle
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import accuracy_score
+
 from src.data.make_dataset import main as make_dataset
-from src.models.sentiment_analysis.bert import BERTModel
-from src.models.sentiment_analysis.logistic_regression import LogisticRegression
+from src.models.sentiment_analysis.xg_boost import XgBoost
 
 
-def run_training_pipeline(input_file, train_output_file, test_output_file):
-    X_train, X_test, y_train, y_test = make_dataset(input_file, train_output_file, test_output_file)
+def train_models(models, X_train, y_train, models_path):
+    for model_name, model_instance in models.items():
+        # Train the model
+        model_instance.fit(X_train, y_train)
 
-    models = [
-        LogisticRegression(),
-        BERTModel(),
-    ]
+        # Create the model's directory if it doesn't exist
+        model_dir = os.path.join(models_path, model_name)
+        os.makedirs(model_dir, exist_ok=True)
 
-    for model in models:
-        model.train(X_train, y_train)
+        # Save the model, vectorizer, and dimensionality reducer to pickle files
+        with open(os.path.join(model_dir, "model.pkl"), "wb") as f:
+            pickle.dump(model_instance.model, f)
+        with open(os.path.join(model_dir, "vectorizer.pkl"), "wb") as f:
+            pickle.dump(model_instance.vectorizer, f)
+        if model_instance.dim_reducer is not None:
+            with open(os.path.join(model_dir, "dim_reducer.pkl"), "wb") as f:
+                pickle.dump(model_instance.dim_reducer, f)
 
-    best_f1 = 0
+
+def find_best_model(models_path, X_test, y_test):
+    best_accuracy = 0
     best_model = None
-    for model in models:
-        y_pred = model.predict(X_test)  # Predict using X_test
-        f1, precision, recall = model.evaluate(y_test, y_pred)  # Evaluate model performance
-        print(f"{model.__class__.__name__} - F1: {f1}, Precision: {precision}, Recall: {recall}")
+    best_vectorizer = None
+    best_dim_reducer = None
+    best_model_name = None
 
-        if f1 > best_f1:
-            best_f1 = f1
-            best_model = model
+    # Iterate through the model directories
+    for model_name in os.listdir(models_path):
+        model_dir = os.path.join(models_path, model_name)
 
-    print(f"Best model: {best_model.__class__.__name__} with F1 score: {best_f1}")
+        if os.path.isdir(model_dir):
+            # Load model, vectorizer, and dimension reducer
+            with open(os.path.join(model_dir, "model.pkl"), "rb") as f:
+                model = pickle.load(f)
+            with open(os.path.join(model_dir, "vectorizer.pkl"), "rb") as f:
+                vectorizer = pickle.load(f)
+            with open(os.path.join(model_dir, "dim_reducer.pkl"), "rb") as f:
+                dim_reducer = pickle.load(f)
+
+            # Preprocess the test data
+            X_test_vectorized = vectorizer.transform(X_test)
+            if dim_reducer is not None:
+                X_test_reduced = dim_reducer.transform(X_test_vectorized)
+            else:
+                X_test_reduced = X_test_vectorized
+
+            # Predict and evaluate the model
+            y_pred = model.predict(X_test_reduced)
+            accuracy = accuracy_score(y_test, y_pred)
+
+            # Check if the model has the highest accuracy
+            if accuracy > best_accuracy:
+                best_accuracy = accuracy
+                best_model = model
+                best_vectorizer = vectorizer
+                best_dim_reducer = dim_reducer
+                best_model_name = model_name
+
+    return best_model, best_vectorizer, best_dim_reducer, best_model_name, best_accuracy
 
 
-def run_scoring_pipeline(input_file, train_output_file=None, test_output_file=None):
-    X_train, X_test, y_train, y_test = make_dataset(input_file, train_output_file, test_output_file)
-
-    models = [
-        LogisticRegression(),
-        BERTModel(),
-    ]
-    best_f1 = 0
-    best_model = None
-    for model in models:
-        y_pred = model.predict(X_test)  # Predict using X_test, returning a list of 1, 0
-        f1, precision, recall = model.evaluate(y_test, y_pred)  # Evaluate model performance
-        print(f"{model.__class__.__name__} - F1: {f1}, Precision: {precision}, Recall: {recall}")
-
-        if f1 > best_f1:
-            best_f1 = f1
-            best_model = model
-
-    print(f"Best model: {best_model.__class__.__name__} with F1 score: {best_f1}")
+if __name__ == "__main__":
+    # Load the data
+    X_train, X_test, y_train, y_test = make_dataset("../../../data/raw/reviews.csv")
+    models = {
+        "xg_boost": XgBoost(vectorizer=TfidfVectorizer()),
+        # Add other model instances here
+    }
+    models_path = "../../../models/sentiment_analysis"
+    # Train the models and save them
+    train_models(models, X_train, y_train, models_path)
+    best_model, best_vectorizer, best_dim_reducer, best_model_name, best_accuracy = find_best_model(
+        models_path, X_test, y_test
+    )
+    print(f"Best model: {best_model_name}")
+    print(f"Accuracy: {best_accuracy}")
