@@ -4,7 +4,7 @@ import contractions
 import nltk
 import pandas as pd
 from nltk.corpus import wordnet
-from nltk.stem import PorterStemmer
+from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 
 # necessary package downloads
@@ -144,6 +144,7 @@ stopwords = [
     "however",
     "just",
     "quite",
+    "i"
 ]
 
 stopwords = list(stopwords)
@@ -157,16 +158,38 @@ class Preprocessor:
 
     @staticmethod
     def clean_sentence(sentence, stop_words):  # takes in single string, returns a cleaned string
-        stemmer = PorterStemmer()
+        def pos_tagger(nltk_tag):
+            if nltk_tag.startswith("J"):
+                return wordnet.ADJ
+            elif nltk_tag.startswith("V"):
+                return wordnet.VERB
+            elif nltk_tag.startswith("N"):
+                return wordnet.NOUN
+            elif nltk_tag.startswith("R"):
+                return wordnet.ADV
+            else:
+                return None
+        lemmatizer = WordNetLemmatizer()
         sentence = re.sub(r"<.*?>|Length::\d+:\d+Mins", " ", sentence)  # remove tags
         sentence = contractions.fix(sentence)  # resolve contractions
         sentence = re.sub(r"[^a-zA-Z\s]", " ", sentence)  # remove digits and special characters
         words = word_tokenize(sentence)  # tokenize
         words = [word.lower() for word in words if word.isalpha()]  # change to lower case and remove punctuations
         words = [word for word in words if word not in stop_words]  # remove stop words
-        stemmed_sentence = [stemmer.stem(word) for word in words]
-        stemmed_sentence = " ".join(stemmed_sentence)
-        return stemmed_sentence
+        pos_tagged = nltk.pos_tag(words)  # find the POS tag for each token
+        # we use our own pos_tagger function to make things simpler to understand.
+        wordnet_tagged = list(map(lambda x: (x[0], pos_tagger(x[1])), pos_tagged))
+        lemmatized_sentence = []
+        for word, tag in wordnet_tagged:
+            if tag is None:
+                # if there is no available tag, append the token as is
+                lemmatized_sentence.append(word)
+            else:
+                # else use the tag to lemmatize the token
+                lemmatized_sentence.append(lemmatizer.lemmatize(word, tag))
+        lemmatized_sentence = " ".join(lemmatized_sentence)
+        return lemmatized_sentence
+        # return stemmed_sentence
 
     def add_cleaned_text_512(self):
         def truncate_to_512(sentence):

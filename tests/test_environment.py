@@ -28,6 +28,7 @@ exclude_packages = [
     "random",
     "logging",
     "string",
+    "pickle"
 ]
 
 
