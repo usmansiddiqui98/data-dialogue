@@ -16,5 +16,9 @@ class Seibert:
         sentiment_analysis = pipeline('sentiment-analysis', model="siebert/sentiment-roberta-large-english", device=self.device)
         results = sentiment_analysis(x_test)
         labels = [result['label'] for result in results]
-        y_pred = [1 if label == 'POSITIVE' else 0 for label in labels]
-        return y_pred
+        predicted_sentiment = [1 if label == 'POSITIVE' else 0 for label in labels]
+        predicted_sentiment_probability = [result['score'] for result in results]
+        return pd.DataFrame(
+            {'predicted_sentiment': predicted_sentiment,
+             'predicted_sentiment_probability': predicted_sentiment_probability
+             })
