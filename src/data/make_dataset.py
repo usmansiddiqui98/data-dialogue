@@ -1,31 +1,48 @@
 # -*- coding: utf-8 -*-
-import logging
 from pathlib import Path
 
-import click
 from dotenv import find_dotenv, load_dotenv
+from sklearn.model_selection import train_test_split
+
+from src.data.feature_engineering import FeatureEngineer
+from src.data.preprocess import Preprocessor
 
 
-@click.command()
-@click.argument("input_filepath", type=click.Path(exists=True))
-@click.argument("output_filepath", type=click.Path())
-def main(input_filepath, output_filepath):
+def main(input_filepath, train_split_output_filepath=None, test_split_output_filepath=None):
     """Runs data processing scripts to turn raw data from (../raw) into
     cleaned data ready to be analyzed (saved in ../processed).
     """
-    logger = logging.getLogger(__name__)
-    logger.info("making final data set from raw data")
+
+    preprocessor = Preprocessor(input_filepath)
+    preprocessor.clean_csv()
+    pre_processed_df = preprocessor.clean_df
+    feature_engineer = FeatureEngineer(pre_processed_df)
+    feature_engineer.add_features()
+    feature_engineered_df = feature_engineer.feature_engineered_df
+    # Separate target variable (y) and features (X)
+    X = feature_engineered_df.drop("sentiment", axis=1)
+    y = feature_engineered_df["sentiment"]
+    # train test split and write splits to csv
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=4263, stratify=feature_engineered_df["sentiment"]
+    )
+    if train_split_output_filepath and test_split_output_filepath:
+        # Write splits to csv
+        train = X_train.join(y_train)
+        test = X_test.join(y_test)
+        train.to_csv(train_split_output_filepath)
+        test.to_csv(test_split_output_filepath)
+
+    return X_train, X_test, y_train, y_test
 
 
 if __name__ == "__main__":
     log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    logging.basicConfig(level=logging.INFO, format=log_fmt)
-
     # not used in this stub but often useful for finding various files
     project_dir = Path(__file__).resolve().parents[2]
-
-    # find .env automagically by walking up directories until it's found, then
-    # load up the .env entries as environment variables
     load_dotenv(find_dotenv())
-
-    main()
+    # relative dir
+    input_file = "../../data/raw/reviews.csv"
+    train_output_file = "../../data/processed/train_final_processed_reviews.csv"
+    test_output_file = "../../data/processed/test_final_processed_reviews.csv"
+    X_train, X_test, y_train, y_test = main(input_file, train_output_file, test_output_file)

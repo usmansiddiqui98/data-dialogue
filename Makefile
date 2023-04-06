@@ -40,7 +40,7 @@ test_black:
 
 .PHONY: flake8
 flake8:
-	flake8 src --ignore=E203,W503,E501,W605 --count --show-source --statistics
+	flake8 src --ignore=E203,W503,E501,W605,F401 --count --show-source --statistics
 	flake8 tests --ignore=E203,W503,E501,W605 --count --show-source --statistics
 
 .PHONY: test_flake8

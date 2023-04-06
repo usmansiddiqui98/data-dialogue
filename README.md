@@ -13,48 +13,48 @@ Project Organization
 ------------
 
     ├── LICENSE
-    ├── Makefile           <- Makefile with commands like `make data` or `make train`
-    ├── README.md          <- The top-level README for developers using this project.
     ├── data
     │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
+    │   ├── raw            <- The original, immutable data dump.
     │
     ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
     │
     ├── notebooks          <- Jupyter notebooks.
     │
-    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
-    ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
     ├── src                <- Source code for use in this project.
     │   ├── __init__.py    <- Makes src a Python module
     │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
+    │   ├── data           <- Scripts to preprocess, feature engineer, and split data
+    │   │   ├── feature_engineering.py
+    │   │   ├── make_dataset.py
+    │   │   ├── preprocess.py
     │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_sentiment_features.py
-    │   │   └── build_topic_features.py
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
+    │   ├── models         <- Scripts to train models and predict using trained models
     │   │   ├── sentiment_analysis
-    │   │   │   ├── pre_trained
-    │   │   │   │   └── predict_bert.py
+    │   │   │   ├── base_model.py
     │   │   └── topic_modelling
-    │   │       ├── lda
-    │   │       │   └── predict_lda.py
-    │   │       └── lsa
-    │   │           └── predict_lsa.py
+    │   │
+    │   ├── utils         <- Scripts to perform common tasks
+    │   │   ├── clear_cache.py
+    │   │   ├── feature_engineering.py
+    │
     │── tests        <- All tests for the project
     │   ├── __init__.py    <- Makes tests a Python module
-    │   ├── test_sentiment_analysis.py
-    │   └── test_topic_modelling.py
+    │   ├── test_environment.py
+    │   ├── test_feature_engineering.py
+    │   ├── test_nb.py
+    │   ├── test_preprocess.py
+    │   ├── test_preprocess_feat_engineering.py
+    │
     │── Dockerfile         <- Dockerfile for building the app
+    │
     │── Makefile          <- Makefile with commands like `make install` or `make run`
+    │
     │── pre-commit-config.yaml <- pre-commit configuration file
+    │    
     │── .flake8            <- flake8 configuration file
+    │    
     │── requirements.txt   <- The requirements file for reproducing the analysis environment
+    │
     │── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
-
 --------
