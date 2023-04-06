@@ -5,9 +5,10 @@ import pandas as pd
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score
 
 from src.data.make_dataset import main as make_dataset
+from src.models.sentiment_analysis.pre_trained.seibert import Seibert
 from src.models.sentiment_analysis.xg_boost import XgBoost
 from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
-from src.models.sentiment_analysis.pre_trained.seibert import Seibert
+
 
 def train_models(models, X_train, y_train, models_path):
     for model_name, model_instance in models.items():
