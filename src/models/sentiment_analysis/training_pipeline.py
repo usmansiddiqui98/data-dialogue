@@ -2,8 +2,8 @@ import os
 from sys import platform
 
 import pandas as pd
-from tqdm.auto import tqdm
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score
+from tqdm.auto import tqdm
 
 from src.data.make_dataset import main as make_dataset
 from src.models.sentiment_analysis.log_reg import LogReg
