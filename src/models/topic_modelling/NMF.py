@@ -48,7 +48,7 @@ class NMFModel:
             topic_terms[i] = topic_descr
         self.topic_df = pd.DataFrame({'Top_Topic_Terms': topic_terms})
         self.labels = self.document_weights.argmax(axis=1)
-        self.labels = pd.merge(self.labels.to_frame(name='Topic_idx'),
+        self.labels = pd.merge(pd.DataFrame(self.labels, columns = ['Topic_idx']),
                                self.topic_df,
                                left_on='Topic_idx',
                                right_index=True,
