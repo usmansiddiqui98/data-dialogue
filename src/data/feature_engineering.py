@@ -9,7 +9,6 @@ from src.utils.feature_engineering_helpers import (
     get_subjectivity,
     num_typos,
     pos_tags,
-    uppercase_list,
     uppercase_ratio,
 )
 
@@ -60,15 +59,23 @@ class FeatureEngineer:
     def add_features(self):
         new_df = self.pre_processed_df.copy()
         new_df["Lowercase Count"] = new_df["text"].apply(count_lower)
+        print("[FE] finished lowercase count...")
         new_df["Uppercase Count"] = new_df["text"].apply(count_upper)
+        print("[FE] finished uppercase count...")
         new_df["Uppercase Ratio"] = new_df["text"].apply(uppercase_ratio)
+        print("[FE] finished uppercase ratio...")
         new_df["Punc Count"] = new_df["text"].apply(count_punc)
+        print("[FE] finished punc count...")
         new_df["pos_tags"] = new_df["cleaned_text"].apply(pos_tags)
+        print("[FE] finished pos tags...")
         new_df = FeatureEngineer.pos_tag_count(new_df)
         new_df = FeatureEngineer.tokenized_untokenized_count(new_df)
         new_df["num_words_misspelled"] = new_df["text"].apply(num_typos)
+        print("[FE] finished num words misspelled...")
         new_df["polarity"] = new_df["cleaned_text"].apply(compound_polarity_score)
+        print("[FE] finished polarity...")
         new_df["subjectivity"] = new_df["cleaned_text"].apply(get_subjectivity)
+        print("[FE] finished subjectivity...")
         new_df = self.add_pos_neg_count(new_df)
         # lower case all column names
         new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]

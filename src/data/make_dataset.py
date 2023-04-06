@@ -15,9 +15,11 @@ def main(input_filepath, train_split_output_filepath=None, test_split_output_fil
     preprocessor = Preprocessor(input_filepath)
     preprocessor.clean_csv()
     pre_processed_df = preprocessor.clean_df
+    print("[PP] Preprocessing complete")
     feature_engineer = FeatureEngineer(pre_processed_df)
     feature_engineer.add_features()
     feature_engineered_df = feature_engineer.feature_engineered_df
+    print("[FE] finished adding features...")
     # Separate target variable (y) and features (X)
     X = feature_engineered_df.drop(["sentiment", "time"], axis=1)
     y = feature_engineered_df["sentiment"]
