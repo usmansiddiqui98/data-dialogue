@@ -106,7 +106,6 @@ def count_punc(sentence):
 
 
 def pos_tags(sentence):
-    # print("CALLING POS TAGS METHOD ON SENTENCE")
     tokenized_sentence = nltk.word_tokenize(sentence.lower())
     tagged = nltk.pos_tag(tokenized_sentence)
     return tagged
