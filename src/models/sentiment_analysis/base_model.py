@@ -1,31 +1,23 @@
+import os
+
 from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 class BaseModel:
-    def __init__(self, vectorizer=None, dim_reducer=None):
-        self.vectorizer = vectorizer or TfidfVectorizer()
-        self.dim_reducer = dim_reducer
+    def __init__(self, models_path):
+        self.model_dir = None
+        self.models_path = models_path
 
-    def fit_transform(self, X):
-        X_vectorized = self.vectorizer.fit_transform(X)
-        if self.dim_reducer is not None:
-            return self.dim_reducer.fit_transform(X_vectorized)
-        else:
-            return X_vectorized
+    def save(self, model_name):
+        self.model_dir = os.path.join(self.models_path, model_name)
 
-    def process(self, X):
-        X_vectorized = self.vectorizer.transform(X)
-        if self.dim_reducer is not None:
-            return self.dim_reducer.transform(X_vectorized)
-        else:
-            return X_vectorized
+    def load(self, model_name):
+        self.model_dir = os.path.join(self.models_path, model_name)
 
     def fit(self, X_train, y_train):
         raise NotImplementedError("Subclasses should implement this method")
 
     def predict(self, X):
-        raise NotImplementedError("Subclasses should implement this method")
-
-    def evaluate(self, X_test, y_test):
+        # "predicted_sentiment_probability", "predicted_sentiment"
         raise NotImplementedError("Subclasses should implement this method")
