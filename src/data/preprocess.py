@@ -212,3 +212,10 @@ class Preprocessor:
         # lower case all column names
         new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]
         self.clean_df = new_df
+
+    def clean_test_csv(self):
+        new_df = self.dirty_df.copy()
+        new_df["cleaned_text"] = new_df["Text"].apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
+        # lower case all column names
+        new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]
+        self.clean_df = new_df
