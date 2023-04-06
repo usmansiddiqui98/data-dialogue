@@ -1,6 +1,94 @@
+import os
+import time
+from sys import platform
+
+import pandas as pd
 import streamlit as st
+
+from src.data.feature_engineering import FeatureEngineer
+from src.data.preprocess import Preprocessor
+from src.models.sentiment_analysis.xg_boost import XgBoost
+
+best_model = "xg_boost"
+
+
+# depending on best_model, load the model and predict on the test data
+if "file_uploaded" not in st.session_state:
+    st.session_state.file_uploaded = False
+if "form_submitted" not in st.session_state:
+    st.session_state.form_submitted = False
+if "output_df" not in st.session_state:
+    st.session_state.output_df = False
+
+
+def run_scoring_pipeline(input_df):
+    """Run the scoring pipeline."""
+    # Add progress bar
+    progress_bar = st.progress(0)
+    for i in range(0, 10):
+        time.sleep(0.1)
+        progress_bar.progress(i + 1, text="Preprocessing...")
+    preprocessor = Preprocessor(input_df)
+    preprocessor.clean_test_csv()
+    progress_bar.progress(20, text="Preprocessing done!")
+    progress_bar.progress(30, text="Feature Engineering in progress...")
+    pre_processed_df = preprocessor.clean_df
+    feature_engineer = FeatureEngineer(pre_processed_df)
+    feature_engineer.add_features()
+    feature_engineered_df = feature_engineer.feature_engineered_df
+    progress_bar.progress(60, text="Feature Engineering Done!")
+
+    time_col = feature_engineered_df.time
+    X_test = feature_engineered_df.drop(["time"], axis=1)
+
+    if platform == "win32":
+        models_path = "..\\..\\..\\models\\sentiment_analysis"
+    else:
+        print("entering else block")
+        models_path = "models/sentiment_analysis"
+
+    model = XgBoost(models_path)
+    progress_bar.progress(70, text="Loading Model...")
+    model.load(best_model)
+    progress_bar.progress(80, text="Model Loaded!")
+    pred = model.predict(X_test)
+    progress_bar.progress(100, text="Prediction Done!")
+    # The output file should be named "reviews_test_predictions_<your_group_name>.csv ,
+    # and it should have columns - "Text", Time", "predicted_sentiment_probability", "predicted_sentiment".
+
+    output = pd.DataFrame(
+        {
+            "Text": X_test.text,
+            "Time": time_col,
+            "predicted_sentiment_probability": pred["predicted_sentiment_probability"],
+            "predicted_sentiment": pred["predicted_sentiment"],
+        }
+    )
+
+    # output.to_csv("reviews_test_predictions_data-dialogue.csv", index=False)
+
+    return output
 
 
 def display():
-    st.title("Sentiment Analysis")
-    st.markdown("This page is under construction. Please check back later.")
+    st.title("Sentiment Analysis Scoring Pipeline")
+    uploaded_file = st.file_uploader("Upload a CSV file with columns 'Time' and 'Text'", type="csv")
+    if uploaded_file is not None:
+        # Check if uploaded file has "Time" and "Text" columns
+        input_df = pd.read_csv(uploaded_file)
+        cols = input_df.columns.to_series().tolist()
+        if cols != ["Time", "Text"]:
+            st.error("Invalid CSV format. Required columns: Time, Text")
+        st.session_state.file_uploaded = True
+        if st.session_state.file_uploaded:
+            output_df = run_scoring_pipeline(input_df)
+            st.session_state.output_df = True
+            st.success("Scoring pipeline completed. Here is your output.")
+        if st.session_state.output_df and st.session_state.file_uploaded:
+            st.dataframe(output_df)
+            st.download_button(
+                label="Download output file",
+                data=output_df.to_csv(index=False).encode(),
+                file_name="reviews_test_predictions_data-dialogue.csv",
+                mime="text/csv",
+            )
