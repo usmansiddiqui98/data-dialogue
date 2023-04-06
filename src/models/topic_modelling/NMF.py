@@ -15,6 +15,7 @@ class NMFModel:
         self.labels = None
         self.X = None
         self.document_weights = None
+        self.label_df = None
 
     # Define method to fit and transform the data
     def fit_transform(self):
@@ -47,10 +48,6 @@ class NMFModel:
                 topic_descr = topic_descr + words[fid] + " "
             topic_terms[i] = topic_descr
         self.topic_df = pd.DataFrame({'Top_Topic_Terms': topic_terms})
-        self.labels = self.document_weights.argmax(axis=1)
-        self.labels = pd.merge(pd.DataFrame(self.labels, columns = ['Topic_idx']),
-                               self.topic_df,
-                               left_on='Topic_idx',
-                               right_index=True,
-                               how='left')
-        return self.labels
+        self.df['Topic_idx'] = self.document_weights.argmax(axis=1)
+        self.label_df = pd.merge(self.df, self.topic_df, left_on='Topic_idx', right_index=True, how='left')
+        return self.label_df
