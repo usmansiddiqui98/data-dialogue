@@ -57,18 +57,18 @@ def find_best_model(models, models_path, X_test, y_test):
 if __name__ == "__main__":
     # Load the data
 
-    train = pd.read_csv("../../../data/processed/train_final_processed_reviews.csv", index_col="Unnamed: 0")
-    test = pd.read_csv("../../../data/processed/test_final_processed_reviews.csv", index_col="Unnamed: 0")
-    X_train = train.drop("sentiment", axis=1)
-    X_test = test.drop("sentiment", axis=1)
-    y_train = train.sentiment.tolist()
-    y_test = test.sentiment.tolist()
+    # train = pd.read_csv("../../../data/processed/train_final_processed_reviews.csv", index_col="Unnamed: 0")
+    # test = pd.read_csv("../../../data/processed/test_final_processed_reviews.csv", index_col="Unnamed: 0")
+    # X_train = train.drop("sentiment", axis=1)
+    # X_test = test.drop("sentiment", axis=1)
+    # y_train = train.sentiment.tolist()
+    # y_test = test.sentiment.tolist()
 
-    # X_train, X_test, y_train, y_test = make_dataset(
-    #     "../../../data/raw/reviews.csv",
-    #     train_split_output_filepath="../../../data/processed/train_final_processed_reviews.csv",
-    #     test_split_output_filepath="../../../data/processed/test_final_processed_reviews.csv",
-    # )
+    X_train, X_test, y_train, y_test = make_dataset(
+        "../../../data/raw/reviews.csv",
+        train_split_output_filepath="../../../data/processed/train_final_processed_reviews.csv",
+        test_split_output_filepath="../../../data/processed/test_final_processed_reviews.csv",
+    )
 
     if platform == "win32":
         models_path = "..\\..\\..\\models\\sentiment_analysis"

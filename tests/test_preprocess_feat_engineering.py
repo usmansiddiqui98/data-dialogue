@@ -152,16 +152,16 @@ def test_clean():
     text = Preprocessor.clean_sentence(
         "This is a very healthy dog food. Good for their digestion. Also good for small puppies. "
         "My dog eats her required amount at every feeding.",
-        stopwords
+        stopwords,
     )
-    assert text == 'very healthy dog food good digestion good small puppy my dog eats require amount feeding'
+    assert text == "very healthy dog food good digestion good small puppy my dog eats require amount feeding"
 
 
 def test_clean_csv():
     assert (
-        pre_processed_df["cleaned_text"][1] == 'very pleased natural balance dog food our dog issue dog food past '
-                                               'someone recommend natural balance grain free possible allergic grain '
-                                               'switch not issue helpful different kibble size large small sized dog'
+        pre_processed_df["cleaned_text"][1] == "very pleased natural balance dog food our dog issue dog food past "
+        "someone recommend natural balance grain free possible allergic grain "
+        "switch not issue helpful different kibble size large small sized dog"
     )
 
 

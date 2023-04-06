@@ -144,7 +144,7 @@ stopwords = [
     "however",
     "just",
     "quite",
-    "i"
+    "i",
 ]
 
 stopwords = list(stopwords)
@@ -169,6 +169,7 @@ class Preprocessor:
                 return wordnet.ADV
             else:
                 return None
+
         lemmatizer = WordNetLemmatizer()
         sentence = re.sub(r"<.*?>|Length::\d+:\d+Mins", " ", sentence)  # remove tags
         sentence = contractions.fix(sentence)  # resolve contractions
