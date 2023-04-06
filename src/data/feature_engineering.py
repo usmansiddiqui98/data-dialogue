@@ -1,6 +1,6 @@
 import nltk
 
-from src.utils.feature_engineering import (
+from src.utils.feature_engineering_helpers import (
     compound_polarity_score,
     count_lower,
     count_pos_neg_neutral,
@@ -61,7 +61,6 @@ class FeatureEngineer:
         new_df = self.pre_processed_df.copy()
         new_df["Lowercase Count"] = new_df["text"].apply(count_lower)
         new_df["Uppercase Count"] = new_df["text"].apply(count_upper)
-        new_df["Uppercase Words"] = new_df["text"].apply(uppercase_list)
         new_df["Uppercase Ratio"] = new_df["text"].apply(uppercase_ratio)
         new_df["Punc Count"] = new_df["text"].apply(count_punc)
         new_df["pos_tags"] = new_df["cleaned_text"].apply(pos_tags)

@@ -1,19 +1,23 @@
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+import os
+
+from sklearn.decomposition import TruncatedSVD
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 class BaseModel:
-    def __init__(self):
-        self.model = None
+    def __init__(self, models_path):
+        self.model_dir = None
+        self.models_path = models_path
 
-    def train(self, X_train, y_train):
-        raise NotImplementedError
+    def save(self, model_name):
+        self.model_dir = os.path.join(self.models_path, model_name)
 
-    def predict(self, X_test):
-        return self.model.predict(X_test)
+    def load(self, model_name):
+        self.model_dir = os.path.join(self.models_path, model_name)
 
-    def evaluate(self, X_test, y_test):
-        f1 = f1_score(y_test, self.predict(X_test), average="weighted")
-        precision = precision_score(y_test, self.predict(X_test), average="weighted")
-        recall = recall_score(y_test, self.predict(X_test), average="weighted")
-        accuracy = accuracy_score(y_test, self.predict(X_test))
-        return f1, precision, recall, accuracy
+    def fit(self, X_train, y_train):
+        raise NotImplementedError("Subclasses should implement this method")
+
+    def predict(self, X):
+        # "predicted_sentiment_probability", "predicted_sentiment"
+        raise NotImplementedError("Subclasses should implement this method")
