@@ -34,7 +34,10 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Data
+/data/*
+/models/*
 *.csv
+*.pkl
 
 # Unit test / coverage reports
 htmlcov/
@@ -88,3 +91,4 @@ target/
 
 # Mypy cache
 .mypy_cache/
+
