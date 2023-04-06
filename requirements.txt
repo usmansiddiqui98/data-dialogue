@@ -20,6 +20,7 @@ textblob
 scipy
 plotly
 matplotlib
+joblib
 seaborn
 # Testing packages
 pytest
