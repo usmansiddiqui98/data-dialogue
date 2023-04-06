@@ -151,10 +151,8 @@ stopwords = list(stopwords)
 
 
 class Preprocessor:
-    def __init__(self, dirty_file_path):
-        self.dirty_file_path = dirty_file_path
-        self.dirty_df = pd.read_csv(dirty_file_path)
-        self.clean_df = None
+    def __init__(self, dirty_df):
+        self.dirty_df = dirty_df
 
     @staticmethod
     def clean_sentence(sentence, stop_words):  # takes in single string, returns a cleaned string

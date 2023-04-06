@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import pandas as pd
 from dotenv import find_dotenv, load_dotenv
 from sklearn.model_selection import train_test_split
 
@@ -7,12 +8,12 @@ from src.data.feature_engineering import FeatureEngineer
 from src.data.preprocess import Preprocessor
 
 
-def main(input_filepath, train_split_output_filepath=None, test_split_output_filepath=None):
+def main(input_df, train_split_output_filepath=None, test_split_output_filepath=None):
     """Runs data processing scripts to turn raw data from (../raw) into
     cleaned data ready to be analyzed (saved in ../processed).
     """
 
-    preprocessor = Preprocessor(input_filepath)
+    preprocessor = Preprocessor(input_df)
     preprocessor.clean_csv()
     pre_processed_df = preprocessor.clean_df
     print("[PP] Preprocessing complete")
@@ -45,7 +46,7 @@ if __name__ == "__main__":
     project_dir = Path(__file__).resolve().parents[2]
     load_dotenv(find_dotenv())
     # relative dir
-    input_file = "../../data/raw/reviews.csv"
+    input_df = pd.read_csv("../../data/raw/reviews.csv")
     train_output_file = "../../data/processed/train_final_processed_reviews.csv"
     test_output_file = "../../data/processed/test_final_processed_reviews.csv"
-    X_train, X_test, y_train, y_test = main(input_file, train_output_file, test_output_file)
+    X_train, X_test, y_train, y_test = main(input_df, train_output_file, test_output_file)
