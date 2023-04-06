@@ -25,7 +25,7 @@ class NMFModel:
         self.X = self.vectorizer.fit_transform(self.df["cleaned_text"])
         self.model = NMF(n_components=self.n_components, random_state=5)
         self.model.fit(self.X)
-        self.document_weights = self.model.transform(self.df["cleaned_text"])
+        self.document_weights = self.model.transform(self.vectorizer.transform(self.df["cleaned_text"]))
 
     # Define method to get the top terms for each topic
     def get_topic_terms(self, n_top_words=10):
