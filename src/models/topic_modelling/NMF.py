@@ -19,10 +19,9 @@ class NMFModel:
 
     # Define method to fit and transform the data
     def fit_transform(self):
-        self.vectorizer = TfidfVectorizer(stop_words='english',
-                                          max_features=self.max_features,
-                                          max_df=self.max_df,
-                                          smooth_idf=True)
+        self.vectorizer = TfidfVectorizer(
+            stop_words="english", max_features=self.max_features, max_df=self.max_df, smooth_idf=True
+        )
         self.X = self.vectorizer.fit_transform(self.df["cleaned_text"])
         self.model = NMF(n_components=self.n_components, random_state=5)
         self.model.fit(self.X)
@@ -34,20 +33,20 @@ class NMFModel:
         components_df = pd.DataFrame(self.model.components_, columns=words)
         for topic in range(components_df.shape[0]):
             tmp = components_df.iloc[topic]
-            print(f'For topic {topic + 1} the words with the highest value are:')
+            print(f"For topic {topic + 1} the words with the highest value are:")
             print(tmp.nlargest(n_top_words))
-            print('\n')
+            print("\n")
 
     # Define method to label the topics for each data point
     def get_labels(self, n_top_words=5):
         words = self.vectorizer.get_feature_names_out()
         topic_terms = {}
         for i, topic_vec in enumerate(self.model.components_):
-            topic_descr = ''
-            for fid in topic_vec.argsort()[-1:-n_top_words - 1:-1]:
+            topic_descr = ""
+            for fid in topic_vec.argsort()[-1 : -n_top_words - 1 : -1]:
                 topic_descr = topic_descr + words[fid] + " "
             topic_terms[i] = topic_descr
-        self.topic_df = pd.DataFrame({'Top_Topic_Terms': topic_terms})
-        self.df['Topic_idx'] = self.document_weights.argmax(axis=1)
-        self.label_df = pd.merge(self.df, self.topic_df, left_on='Topic_idx', right_index=True, how='left')
+        self.topic_df = pd.DataFrame({"Top_Topic_Terms": topic_terms})
+        self.df["Topic_idx"] = self.document_weights.argmax(axis=1)
+        self.label_df = pd.merge(self.df, self.topic_df, left_on="Topic_idx", right_index=True, how="left")
         return self.label_df
