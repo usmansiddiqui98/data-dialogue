@@ -39,7 +39,7 @@ class NMFModel:
 
     # Define method to label the topics for each data point
     def get_labels(self, n_top_words=5):
-        words = self.vectorizer.get_feature_names()
+        words = self.vectorizer.get_feature_names_out()
         topic_terms = {}
         for i, topic_vec in enumerate(self.model.components_):
             topic_descr = ''
