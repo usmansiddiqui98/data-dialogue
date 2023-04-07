@@ -41,3 +41,4 @@ keras
 pyLDAvis
 xgboost
 jovian
+tqdm

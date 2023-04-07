@@ -151,10 +151,8 @@ stopwords = list(stopwords)
 
 
 class Preprocessor:
-    def __init__(self, dirty_file_path):
-        self.dirty_file_path = dirty_file_path
-        self.dirty_df = pd.read_csv(dirty_file_path)
-        self.clean_df = None
+    def __init__(self, dirty_df):
+        self.dirty_df = dirty_df
 
     @staticmethod
     def clean_sentence(sentence, stop_words):  # takes in single string, returns a cleaned string
@@ -209,6 +207,13 @@ class Preprocessor:
         new_df = self.dirty_df.copy()
         new_df["cleaned_text"] = new_df["Text"].apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
         new_df["Sentiment"] = new_df["Sentiment"].apply(lambda x: 1 if x == "positive" else 0)
+        # lower case all column names
+        new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]
+        self.clean_df = new_df
+
+    def clean_test_csv(self):
+        new_df = self.dirty_df.copy()
+        new_df["cleaned_text"] = new_df["Text"].apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
         # lower case all column names
         new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]
         self.clean_df = new_df

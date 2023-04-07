@@ -1,11 +1,13 @@
 import os
 
+import pandas as pd
+
 from src.data.feature_engineering import FeatureEngineer
 from src.data.preprocess import Preprocessor
 
 fname = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "raw", "reviews.csv"))
-
-preprocessor = Preprocessor(fname)
+input_df = pd.read_csv(fname)
+preprocessor = Preprocessor(input_df)
 preprocessor.clean_csv()
 pre_processed_df = preprocessor.clean_df.head(25)
 feature_engineer = FeatureEngineer(pre_processed_df)
