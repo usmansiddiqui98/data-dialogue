@@ -22,6 +22,9 @@ plotly
 matplotlib
 joblib
 seaborn
+modin
+ray
+nlpaug
 # Testing packages
 pytest
 pytest-cov
