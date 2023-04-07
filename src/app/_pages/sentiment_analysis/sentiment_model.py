@@ -7,8 +7,9 @@ import streamlit as st
 from src.data.feature_engineering import FeatureEngineer
 from src.data.preprocess import Preprocessor
 from src.models.sentiment_analysis.pre_trained.seibert import Seibert
+from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 
-best_model = "seibert"
+best_model = "xg_boost_svd"
 
 if "output_df" not in st.session_state:
     st.session_state.output_df = None
@@ -36,10 +37,9 @@ def run_scoring_pipeline(input_df):
     if platform == "win32":
         models_path = "..\\..\\..\\models\\sentiment_analysis"
     else:
-        print("entering else block")
         models_path = "models/sentiment_analysis"
 
-    model = Seibert(models_path)
+    model = XgBoostSvd(models_path)
     progress_bar.progress(70, text="Loading Model...")
     model.load(best_model)
     progress_bar.progress(80, text="Model Loaded!")
