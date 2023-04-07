@@ -7,9 +7,9 @@ import streamlit as st
 
 from src.data.feature_engineering import FeatureEngineer
 from src.data.preprocess import Preprocessor
-from src.models.sentiment_analysis.xg_boost import XgBoost
+from src.models.sentiment_analysis.pre_trained.seibert import Seibert
 
-best_model = "xg_boost"
+best_model = "seibert"
 
 
 # depending on best_model, load the model and predict on the test data
@@ -47,7 +47,7 @@ def run_scoring_pipeline(input_df):
         print("entering else block")
         models_path = "models/sentiment_analysis"
 
-    model = XgBoost(models_path)
+    model = Seibert(models_path)
     progress_bar.progress(70, text="Loading Model...")
     model.load(best_model)
     progress_bar.progress(80, text="Model Loaded!")
