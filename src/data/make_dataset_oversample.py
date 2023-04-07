@@ -1,86 +1,101 @@
+import os.path
 from pathlib import Path
 
-from dotenv import find_dotenv, load_dotenv
-import os.path
+import modin.pandas as pd
 import nlpaug.augmenter.word as naw
-from tqdm import tqdm
 import numpy as np
-import pandas as pd
+import ray
+from dotenv import find_dotenv, load_dotenv
 from sklearn.model_selection import train_test_split
+from tqdm import tqdm
 
 from src.data.feature_engineering import FeatureEngineer
 from src.data.feature_engineering_optimised import FeatureEngineerOptimised
 from src.data.preprocess import Preprocessor
 
-def bert_aug(Xy_train,TOPK=20, ACT = 'insert'):
-    #TOPK: default=100
-    #ACT: default="substitute" 
-    samples = abs(Xy_train.Sentiment.value_counts()[0] - Xy_train.Sentiment.value_counts()[1]) #count the number of samples to match majority class
+ray.init(ignore_reinit_error=True)
+
+
+def bert_aug(Xy_train, TOPK=20, ACT="insert"):
+    # count the number of samples to match majority class
+    samples = abs(Xy_train.Sentiment.value_counts()[0] - Xy_train.Sentiment.value_counts()[1])
     aug_bert = naw.ContextualWordEmbsAug(
-        model_path='distilbert-base-uncased', 
-        #device='cuda',
-        action=ACT, top_k=TOPK)
-    aug_bert.aug_p=0.2
-    new_text=[]
-    ##selecting the minority class samples
-    df_n=Xy_train[Xy_train.Sentiment=='negative'].reset_index(drop=True)
-    ## data augmentation loop
-    for i in tqdm(np.random.randint(0,len(df_n),samples)):
-            text = df_n.iloc[i]['Text']
-            augmented_text = aug_bert.augment(text)
-            new_text.append(augmented_text[0])
-    ## dataframe
-    new=pd.DataFrame({'Text':new_text,'Sentiment':'negative'})
-    new.index = list(range(Xy_train.shape[0]+1,Xy_train.shape[0]+1+samples)) #assign new index values from training set
-    new_Xy_train = pd.concat([Xy_train,new]) #combine ori training df and new samples
+        model_path="distilbert-base-uncased",
+        # device='cuda',
+        action=ACT,
+        top_k=TOPK,
+    )
+    aug_bert.aug_p = 0.2
+    new_text = []
+    # selecting the minority class samples
+    df_n = Xy_train[Xy_train.Sentiment == "negative"].reset_index(drop=True)
+    # data augmentation loop
+    for i in tqdm(np.random.randint(0, len(df_n), samples)):
+        text = df_n.iloc[i]["Text"]
+        augmented_text = aug_bert.augment(text)
+        new_text.append(augmented_text[0])
+    # dataframe
+    new = pd.DataFrame({"Text": new_text, "Sentiment": "negative"})
+    # assign new index values from training set
+    new.index = list(range(Xy_train.shape[0] + 1, Xy_train.shape[0] + 1 + samples))
+    new_Xy_train = pd.concat([Xy_train, new])  # combine ori training df and new samples
     return new_Xy_train
 
-def main(input_filepath, train_split_output_filepath=None, test_split_output_filepath=None, oversample=False, generate_oversample=False):
+
+def main(
+    input_filepath,
+    train_split_output_filepath=None,
+    test_split_output_filepath=None,
+    oversample=False,
+    generate_oversample=False,
+):
     """Runs data processing scripts to turn raw data from (../raw) into
     cleaned data ready to be analyzed (saved in ../processed).
     """
+    print("new modin w ray!")
     raw_reviews = pd.read_csv(input_filepath)
-    #train-test split
-    train, test= train_test_split(raw_reviews, test_size=0.2, random_state=4263, stratify=raw_reviews['Sentiment'])
+    # train-test split
+    train, test = train_test_split(raw_reviews, test_size=0.2, random_state=4263, stratify=raw_reviews["Sentiment"])
     num_test_rows = test.shape[0]
 
-    #stack test set below train set
-    raw_reviews_train_above_test = pd.concat([train,test], axis=0)
-    new_filepath = input_filepath.replace('reviews', 'reviews_train_above_test')
-    raw_reviews_train_above_test = raw_reviews_train_above_test.to_csv(new_filepath,index=False)
+    # stack test set below train set
+    raw_reviews_train_above_test = pd.concat([train, test], axis=0)
+    new_filepath = input_filepath.replace("reviews", "reviews_train_above_test")
+    raw_reviews_train_above_test = raw_reviews_train_above_test.to_csv(new_filepath, index=False)
 
-    #generate oversample with raw reviews
-    if oversample and generate_oversample: #need time to generate (~2hrs) 
+    # generate oversample with raw reviews
+    if oversample and generate_oversample:  # need time to generate (~2hrs)
         print("starting oversampling")
         new_Xy_train = bert_aug(train)
-        #combine back new train and old test set to proceed for cleaning & FE
-        raw_reviews_oversample = pd.concat([new_Xy_train,test],axis=0)
-        new_filepath = input_filepath.replace('reviews', 'reviews_oversample')
-        raw_reviews_oversample.to_csv(new_filepath,index=False) #save the new oversampled reviews
+        # combine back new train and old test set to proceed for cleaning & FE
+        raw_reviews_oversample = pd.concat([new_Xy_train, test], axis=0)
+        new_filepath = input_filepath.replace("reviews", "reviews_oversample")
+        raw_reviews_oversample.to_csv(new_filepath, index=False)  # save the new oversampled reviews
 
-    elif oversample: #already generated
+    elif oversample:  # already generated
         print("new updated script!")
-        new_filepath = input_filepath.replace('reviews', 'reviews_oversample')
-        #check if file exists
-        if os.path.isfile(new_filepath) == False:
-            #if never generated before, print error message
+        new_filepath = input_filepath.replace("reviews", "reviews_oversample")
+        # check if file exists
+        if os.path.isfile(new_filepath) is False:
+            # if never generated before, print error message
             print("oversampled file not generated, please change input param: generate_oversample=True")
 
-    #do preprocessing for new raw file
-    preprocessor = Preprocessor(new_filepath)
+    # do preprocessing for new raw file
+    raw_reviews = pd.read_csv(new_filepath)
+    preprocessor = Preprocessor(raw_reviews)
     preprocessor.clean_csv()
     pre_processed_df = preprocessor.clean_df
-    feature_engineer = FeatureEngineerOptimised(pre_processed_df) #FeatureEngineer changed
+    feature_engineer = FeatureEngineerOptimised(pre_processed_df)  # FeatureEngineer changed
     feature_engineer.add_features()
     feature_engineered_df = feature_engineer.feature_engineered_df
-    #removed index (Unnamed) col
-    feature_engineered_df = feature_engineered_df.loc[:, ~feature_engineered_df.columns.str.match('unnamed')]
+    # removed index (Unnamed) col
+    feature_engineered_df = feature_engineered_df.loc[:, ~feature_engineered_df.columns.str.match("unnamed")]
     # Separate target variable (y) and features (X)
     X = feature_engineered_df.drop(["sentiment", "time"], axis=1)
     y = feature_engineered_df["sentiment"]
 
-    X_train = X[:-num_test_rows] #Remove the bottom subset of the dataset -> this was the test set
-    X_test = X[-num_test_rows:] #get bottom subset
+    X_train = X[:-num_test_rows]  # Remove the bottom subset of the dataset -> this was the test set
+    X_test = X[-num_test_rows:]  # get bottom subset
     y_train = y[:-num_test_rows]
     y_test = y[-num_test_rows:]
 

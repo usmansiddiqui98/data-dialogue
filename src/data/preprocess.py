@@ -1,11 +1,14 @@
 import re
 
 import contractions
+import modin.pandas as pd
 import nltk
-import pandas as pd
+import ray
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
+
+ray.init(ignore_reinit_error=True)
 
 # necessary package downloads
 nltk.download("averaged_perceptron_tagger")
