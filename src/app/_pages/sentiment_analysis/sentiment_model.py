@@ -1,4 +1,3 @@
-import os
 import time
 from sys import platform
 
@@ -11,19 +10,12 @@ from src.models.sentiment_analysis.xg_boost import XgBoost
 
 best_model = "xg_boost"
 
-
-# depending on best_model, load the model and predict on the test data
-if "file_uploaded" not in st.session_state:
-    st.session_state.file_uploaded = False
-if "form_submitted" not in st.session_state:
-    st.session_state.form_submitted = False
 if "output_df" not in st.session_state:
-    st.session_state.output_df = False
+    st.session_state.output_df = None
 
 
 def run_scoring_pipeline(input_df):
     """Run the scoring pipeline."""
-    # Add progress bar
     progress_bar = st.progress(0)
     for i in range(0, 10):
         time.sleep(0.1)
@@ -72,23 +64,33 @@ def run_scoring_pipeline(input_df):
 
 def display():
     st.title("Sentiment Analysis Scoring Pipeline")
+
     uploaded_file = st.file_uploader("Upload a CSV file with columns 'Time' and 'Text'", type="csv")
+
     if uploaded_file is not None:
-        # Check if uploaded file has "Time" and "Text" columns
         input_df = pd.read_csv(uploaded_file)
-        cols = input_df.columns.to_series().tolist()
+
+        # Check if uploaded file has "Time" and "Text" columns
+        cols = list(input_df.columns)
         if cols != ["Time", "Text"]:
             st.error("Invalid CSV format. Required columns: Time, Text")
-        st.session_state.file_uploaded = True
-        if st.session_state.file_uploaded:
-            output_df = run_scoring_pipeline(input_df)
-            st.session_state.output_df = True
-            st.success("Scoring pipeline completed. Here is your output.")
-        if st.session_state.output_df and st.session_state.file_uploaded:
+        else:
+            if "output_df" not in st.session_state:
+                output_df = run_scoring_pipeline(input_df)
+                st.session_state.output_df = output_df
+                st.success("Scoring pipeline completed. Here is your output.")
+            else:
+                output_df = st.session_state.output_df
+
             st.dataframe(output_df)
-            st.download_button(
+
+            dl = st.download_button(
                 label="Download output file",
                 data=output_df.to_csv(index=False).encode(),
                 file_name="reviews_test_predictions_data-dialogue.csv",
                 mime="text/csv",
             )
+
+            if dl:
+                del st.session_state.output_df
+                st.success("File downloaded successfully!")
