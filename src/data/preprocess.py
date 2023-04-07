@@ -207,7 +207,7 @@ class Preprocessor:
         self.clean_df["cleaned_text_512"] = self.clean_df["cleaned_text"].apply(truncate_to_512)
 
     def clean_csv(self):
-        new_df = self.dirty_df.copy()
+        new_df = self.dirty_df
         new_df["cleaned_text"] = new_df["Text"].apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
         new_df["Sentiment"] = new_df["Sentiment"].apply(lambda x: 1 if x == "positive" else 0)
         # lower case all column names

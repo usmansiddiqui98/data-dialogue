@@ -5,6 +5,7 @@ from dotenv import find_dotenv, load_dotenv
 from sklearn.model_selection import train_test_split
 
 from src.data.feature_engineering import FeatureEngineer
+from src.data.feature_engineering_optimised import FeatureEngineerOptimised
 from src.data.preprocess import Preprocessor
 
 
@@ -17,7 +18,7 @@ def main(input_df, train_split_output_filepath=None, test_split_output_filepath=
     preprocessor.clean_csv()
     pre_processed_df = preprocessor.clean_df
     print("[PP] Preprocessing complete")
-    feature_engineer = FeatureEngineer(pre_processed_df)
+    feature_engineer = FeatureEngineerOptimised(pre_processed_df)
     feature_engineer.add_features()
     feature_engineered_df = feature_engineer.feature_engineered_df
     print("[FE] finished adding features...")
