@@ -20,15 +20,7 @@ def test_python_version():
 
 
 # List of package names to exclude
-exclude_packages = [
-    "re",
-    "os",
-    "sys",
-    "math",
-    "random",
-    "logging",
-    "string",
-]
+exclude_packages = ["re", "os", "sys", "math", "random", "logging", "string", "pickle"]
 
 
 def test_development_environment():
