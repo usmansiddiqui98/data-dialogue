@@ -53,4 +53,3 @@ def test_development_environment():
                                 assert (
                                     package in package_names
                                 ), f"Package {package} used in {filepath} is not listed in {req_file_path}"
-
