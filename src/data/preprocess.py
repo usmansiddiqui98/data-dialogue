@@ -2,15 +2,15 @@ import re
 
 import contractions
 import nltk
-import pandas as pd
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
+from pandarallel import pandarallel
 
 # necessary package downloads
-nltk.download("averaged_perceptron_tagger")
-nltk.download("punkt")
-nltk.download("wordnet")
+nltk.download("averaged_perceptron_tagger", quiet=True)
+nltk.download("punkt", quiet=True)
+nltk.download("wordnet", quiet=True)
 
 stopwords = [
     "a",
@@ -151,6 +151,8 @@ stopwords = list(stopwords)
 
 
 class Preprocessor:
+    pandarallel.initialize(progress_bar=False, verbose=0)
+
     def __init__(self, dirty_df):
         self.dirty_df = dirty_df
 
@@ -205,15 +207,15 @@ class Preprocessor:
 
     def clean_csv(self):
         new_df = self.dirty_df.copy()
-        new_df["cleaned_text"] = new_df["Text"].apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
-        new_df["Sentiment"] = new_df["Sentiment"].apply(lambda x: 1 if x == "positive" else 0)
+        new_df["cleaned_text"] = new_df["Text"].parallel_apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
+        new_df["Sentiment"] = new_df["Sentiment"].parallel_apply(lambda x: 1 if x == "positive" else 0)
         # lower case all column names
         new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]
         self.clean_df = new_df
 
     def clean_test_csv(self):
         new_df = self.dirty_df.copy()
-        new_df["cleaned_text"] = new_df["Text"].apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
+        new_df["cleaned_text"] = new_df["Text"].parallel_apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
         # lower case all column names
         new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]
         self.clean_df = new_df
