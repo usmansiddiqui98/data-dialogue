@@ -16,7 +16,7 @@ if platform == "win32":
 else:
     models_path = "models/sentiment_analysis"
 
-model = XgBoostSvd(models_path)
+model = Seibert(models_path)
 # ________CHANGE THIS TO CHANGE MODEL_______
 
 
@@ -51,7 +51,7 @@ def run_scoring_pipeline(input_df):
 
     progress_bar.progress(70, text="Loading Model...")
     model.load(best_model)
-    progress_bar.progress(80, text="Model Loaded!")
+    progress_bar.progress(80, text="Making Predictions...")
     pred = model.predict(X_test)
     end = time.time()
     total_time = end - start
@@ -88,21 +88,25 @@ def display():
             st.error("Invalid CSV format. Required columns: Time, Text")
         else:
             if "output_df" not in st.session_state:
+                st.session_state.output_df = None
+
+            output_df = st.session_state.output_df
+
+            if output_df is None:
                 output_df = run_scoring_pipeline(input_df)
                 st.session_state.output_df = output_df
                 st.success("Scoring pipeline completed. Here is your output.")
-            else:
-                output_df = st.session_state.output_df
 
             st.dataframe(output_df)
 
-            dl = st.download_button(
-                label="Download output file",
-                data=output_df.to_csv(index=False).encode(),
-                file_name="reviews_test_predictions_data-dialogue.csv",
-                mime="text/csv",
-            )
+            if output_df is not None:
+                dl = st.download_button(
+                    label="Download output file",
+                    data=output_df.to_csv(index=False).encode(),
+                    file_name="reviews_test_predictions_data-dialogue.csv",
+                    mime="text/csv",
+                )
 
-            if dl:
-                del st.session_state.output_df
-                st.success("File downloaded successfully!")
+                if dl:
+                    del st.session_state.output_df
+                    st.success("File downloaded successfully!")
