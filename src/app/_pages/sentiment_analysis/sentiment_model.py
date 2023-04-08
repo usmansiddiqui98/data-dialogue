@@ -6,9 +6,10 @@ import streamlit as st
 
 from src.data.feature_engineering import FeatureEngineer
 from src.data.preprocess import Preprocessor
+from src.models.sentiment_analysis.log_reg import LogReg
 from src.models.sentiment_analysis.pre_trained.seibert import Seibert
-from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 from src.models.sentiment_analysis.xg_boost import XgBoost
+from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 
 # ________CHANGE THIS TO CHANGE MODEL_______
 best_model = "xg_boost_svd"
@@ -21,10 +22,11 @@ else:
     models_path = "models/sentiment_analysis"
 
 model_classes = {
-    "seibert": Seibert,
-    "xg_boost_svd": XgBoostSvd,
     "xg_boost": XgBoost,
-    # Add more models here if needed
+    "xg_boost_svd": XgBoostSvd,
+    "log_reg": LogReg,
+    "seibert": Seibert,
+    # Add other model instances here
 }
 
 # Use the best_model variable to create the corresponding model object
