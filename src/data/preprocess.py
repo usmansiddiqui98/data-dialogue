@@ -192,18 +192,16 @@ class Preprocessor:
         return lemmatized_sentence
         # return stemmed_sentence
 
-    def add_cleaned_text_512(self):
-        def truncate_to_512(sentence):
-            words = word_tokenize(sentence)
-            pos_tagged = nltk.pos_tag(words)
-            nouns_adjectives = [word for word, tag in pos_tagged if tag.startswith("N") or tag.startswith("J")]
-
-            truncated = (
-                words[:512] if len(nouns_adjectives) >= 512 else nouns_adjectives + words[len(nouns_adjectives) : 512]
-            )
-            return " ".join(truncated)
-
-        self.clean_df["cleaned_text_512"] = self.clean_df["cleaned_text"].apply(truncate_to_512)
+    def truncate_to_512(sentence):
+        words = word_tokenize(sentence)
+        pos_tagged = nltk.pos_tag(words)
+        nouns_adjectives = [word for word, tag in pos_tagged if tag.startswith("N") or tag.startswith("J")]
+        remaining = [word for word in words if word not in nouns_adjectives]
+        if len(nouns_adjectives) <= 512:
+            combined = nouns_adjectives + remaining[: 512 - len(nouns_adjectives)]
+        else:
+            combined = nouns_adjectives[:512]
+        return " ".join(combined)
 
     def clean_csv(self):
         new_df = self.dirty_df.copy()
