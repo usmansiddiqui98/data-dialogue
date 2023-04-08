@@ -77,9 +77,9 @@ class FeatureEngineer:
         new_df = FeatureEngineer.tokenized_untokenized_count(new_df)
         new_df["num_words_misspelled"] = new_df["text"].parallel_apply(num_typos)
         print("[FE] finished num words misspelled...")
-        new_df["polarity"] = new_df["cleaned_text"].parallel_apply(compound_polarity_score)
+        new_df["polarity"] = new_df["text"].parallel_apply(compound_polarity_score)
         print("[FE] finished polarity...")
-        new_df["subjectivity"] = new_df["cleaned_text"].parallel_apply(get_subjectivity)
+        new_df["subjectivity"] = new_df["text"].parallel_apply(get_subjectivity)
         print("[FE] finished subjectivity...")
         new_df = self.add_pos_neg_count(new_df)
         # lower case all column names
