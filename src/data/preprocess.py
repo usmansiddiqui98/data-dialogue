@@ -197,10 +197,8 @@ class Preprocessor:
         pos_tagged = nltk.pos_tag(words)
         nouns_adjectives = [word for word, tag in pos_tagged if tag.startswith("N") or tag.startswith("J")]
         remaining = [word for word in words if word not in nouns_adjectives]
-        # # Calculate char count
-        # char_count = sum(len(word) for word in nouns_adjectives)
-        if len(nouns_adjectives) < 512:
-            combined = nouns_adjectives + remaining[:511 - len(nouns_adjectives)]
+        if len(nouns_adjectives) <= 512:
+            combined = nouns_adjectives + remaining[: 512 - len(nouns_adjectives)]
         else:
             combined = nouns_adjectives[:512]
         return " ".join(combined)

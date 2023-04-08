@@ -15,7 +15,6 @@ feature_engineer.add_features()
 feature_engineered_df = feature_engineer.feature_engineered_df
 
 
-
 def test_add_features():
     assert feature_engineered_df["lowercase_count"][22] == 351
     assert feature_engineered_df["uppercase_count"][22] == 2
