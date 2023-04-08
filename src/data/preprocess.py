@@ -205,7 +205,7 @@ class Preprocessor:
     def clean_csv(self):
         new_df = self.dirty_df.copy()
         new_df["cleaned_text"] = new_df["Text"].parallel_apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
-        new_df["cleaned_text"] = new_df["cleaned_text"].parallel_apply(lambda x: Preprocessor.truncate_to_512(x))
+        new_df["cleaned_text_512"] = new_df["cleaned_text"].parallel_apply(lambda x: Preprocessor.truncate_to_512(x))
         new_df["Sentiment"] = new_df["Sentiment"].parallel_apply(lambda x: 1 if x == "positive" else 0)
         # lower case all column names
         new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]
@@ -214,6 +214,7 @@ class Preprocessor:
     def clean_test_csv(self):
         new_df = self.dirty_df.copy()
         new_df["cleaned_text"] = new_df["Text"].parallel_apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
+        new_df["cleaned_text_512"] = new_df["cleaned_text"].parallel_apply(lambda x: Preprocessor.truncate_to_512(x))
         # lower case all column names
         new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]
         self.clean_df = new_df
