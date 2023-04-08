@@ -15,7 +15,7 @@ from src.utils.feature_engineering_helpers import (
 
 
 class FeatureEngineer:
-    pandarallel.initialize(progress_bar=False)
+    pandarallel.initialize(progress_bar=False, verbose=0)
 
     def __init__(self, pre_processed_df):
         self.pre_processed_df = pre_processed_df

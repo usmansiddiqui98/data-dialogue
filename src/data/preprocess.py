@@ -8,9 +8,9 @@ from nltk.tokenize import word_tokenize
 from pandarallel import pandarallel
 
 # necessary package downloads
-nltk.download("averaged_perceptron_tagger")
-nltk.download("punkt")
-nltk.download("wordnet")
+nltk.download("averaged_perceptron_tagger", quiet=True)
+nltk.download("punkt", quiet=True)
+nltk.download("wordnet", quiet=True)
 
 stopwords = [
     "a",
@@ -151,7 +151,7 @@ stopwords = list(stopwords)
 
 
 class Preprocessor:
-    pandarallel.initialize(progress_bar=False)
+    pandarallel.initialize(progress_bar=False, verbose=0)
 
     def __init__(self, dirty_df):
         self.dirty_df = dirty_df
