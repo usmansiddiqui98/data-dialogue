@@ -12,7 +12,7 @@ gensim
 contractions
 bertopic
 scikit-learn
-pandas
+pandas ==  1.5.3
 numpy
 pyspellchecker
 vaderSentiment

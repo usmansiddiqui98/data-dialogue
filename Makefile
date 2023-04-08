@@ -1,11 +1,8 @@
-.PHONY:  sync_data_to_s3 sync_data_from_s3
-
 #################################################################################
 # GLOBALS                                                                       #
 #################################################################################
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-BUCKET = [OPTIONAL] your-bucket-for-syncing-data (do not include 's3://')
 PROFILE = default
 PROJECT_NAME = data-dialogue
 PYTHON_INTERPRETER = $(shell conda run -n $(PROJECT_NAME) which python3)

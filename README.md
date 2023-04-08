@@ -17,6 +17,7 @@ Whether for a B2B or B2C company, relevance and longevity in the industry depend
 ## To change the model run by our Scoring Pipeline:
 1. Go to `src/app/_pages/sentiment_analysis/sentiment_model.py`
 2. Change the `best_model` variable to the name of the model you want to use. The model names are the same as the names of the files in `src/models/sentiment_analysis/`
+
 Project Organization
 ------------
 
