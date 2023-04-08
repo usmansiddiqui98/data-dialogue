@@ -1,3 +1,4 @@
+import time
 from pathlib import Path
 
 import pandas as pd
@@ -49,4 +50,8 @@ if __name__ == "__main__":
     input_df = pd.read_csv("../../data/raw/reviews.csv")
     train_output_file = "../../data/processed/train_final_processed_reviews.csv"
     test_output_file = "../../data/processed/test_final_processed_reviews.csv"
+    start = time.time()
     X_train, X_test, y_train, y_test = main(input_df, train_output_file, test_output_file)
+    end = time.time()
+    total_time = end - start
+    print("\n" + "Preprocessing and Feature Engineering finished in " + str(round(total_time)) + "s")

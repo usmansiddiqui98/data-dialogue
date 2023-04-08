@@ -1,8 +1,8 @@
-import src.app._pages.topic_modelling.human_feedback as human_feedback
+import src.app._pages.topic_modelling.bert_topic as bert_topic
 import src.app.navigation as navigation
 
 router = {
-    "Feedback": human_feedback,
+    "BERTopic": bert_topic,
 }
 
 
