@@ -17,6 +17,7 @@ if "output_df" not in st.session_state:
 
 def run_scoring_pipeline(input_df):
     """Run the scoring pipeline."""
+    start = time.time()
     progress_bar = st.progress(0)
     for i in range(0, 10):
         time.sleep(0.1)
@@ -31,11 +32,16 @@ def run_scoring_pipeline(input_df):
     feature_engineered_df = feature_engineer.feature_engineered_df
     progress_bar.progress(60, text="Feature Engineering Done!")
 
+    end = time.time()
+    total_time = end - start
+    print("\n" + "Preprocessing and Feature Engineering finished in " + str(round(total_time)) + "s")
+
     time_col = feature_engineered_df.time
     X_test = feature_engineered_df.drop(["time"], axis=1)
 
+
     if platform == "win32":
-        models_path = "..\\..\\..\\models\\sentiment_analysis"
+        models_path = "models\\sentiment_analysis"
     else:
         models_path = "models/sentiment_analysis"
 
