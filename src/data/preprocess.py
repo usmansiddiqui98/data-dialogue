@@ -196,16 +196,18 @@ class Preprocessor:
         words = word_tokenize(sentence)
         pos_tagged = nltk.pos_tag(words)
         nouns_adjectives = [word for word, tag in pos_tagged if tag.startswith("N") or tag.startswith("J")]
-
-        truncated = (
-            words[:512] if len(nouns_adjectives) >= 512 else nouns_adjectives + words[len(nouns_adjectives) : 512]
-        )
-        return " ".join(truncated)
+        remaining = [word for word in words if word not in nouns_adjectives]
+        # # Calculate char count
+        # char_count = sum(len(word) for word in nouns_adjectives)
+        if len(nouns_adjectives) < 512:
+            combined = nouns_adjectives + remaining[:511 - len(nouns_adjectives)]
+        else:
+            combined = nouns_adjectives[:512]
+        return " ".join(combined)
 
     def clean_csv(self):
         new_df = self.dirty_df.copy()
         new_df["cleaned_text"] = new_df["Text"].parallel_apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
-        new_df["cleaned_text_512"] = new_df["cleaned_text"].parallel_apply(lambda x: Preprocessor.truncate_to_512(x))
         new_df["Sentiment"] = new_df["Sentiment"].parallel_apply(lambda x: 1 if x == "positive" else 0)
         # lower case all column names
         new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]
@@ -214,7 +216,6 @@ class Preprocessor:
     def clean_test_csv(self):
         new_df = self.dirty_df.copy()
         new_df["cleaned_text"] = new_df["Text"].parallel_apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
-        new_df["cleaned_text_512"] = new_df["cleaned_text"].parallel_apply(lambda x: Preprocessor.truncate_to_512(x))
         # lower case all column names
         new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]
         self.clean_df = new_df
