@@ -10,13 +10,13 @@ from src.models.sentiment_analysis.pre_trained.seibert import Seibert
 from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 
 # ________CHANGE THIS TO CHANGE MODEL_______
-best_model = "seibert"
+best_model = "xg_boost_svd"
 if platform == "win32":
     models_path = "models\\sentiment_analysis"
 else:
     models_path = "models/sentiment_analysis"
 
-model = Seibert(models_path)
+model = XgBoostSvd(models_path)
 # ________CHANGE THIS TO CHANGE MODEL_______
 
 
