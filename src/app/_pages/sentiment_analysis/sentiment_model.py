@@ -9,7 +9,16 @@ from src.data.preprocess import Preprocessor
 from src.models.sentiment_analysis.pre_trained.seibert import Seibert
 from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 
-best_model = "xg_boost_svd"
+# ________CHANGE THIS TO CHANGE MODEL_______
+best_model = "seibert"
+if platform == "win32":
+    models_path = "models\\sentiment_analysis"
+else:
+    models_path = "models/sentiment_analysis"
+
+model = XgBoostSvd(models_path)
+# ________CHANGE THIS TO CHANGE MODEL_______
+
 
 if "output_df" not in st.session_state:
     st.session_state.output_df = None
@@ -30,27 +39,24 @@ def run_scoring_pipeline(input_df):
     feature_engineer = FeatureEngineer(pre_processed_df)
     feature_engineer.add_features()
     feature_engineered_df = feature_engineer.feature_engineered_df
-    progress_bar.progress(60, text="Feature Engineering Done!")
-
-    end = time.time()
-    total_time = end - start
-    print("\n" + "Preprocessing and Feature Engineering finished in " + str(round(total_time)) + "s")
+    fe_end = time.time()
+    total_time_fe = fe_end - start
+    progress_bar.progress(
+        60, text="Preprocessing and Feature Engineering finished in " + str(round(total_time_fe)) + "s"
+    )
+    print("\n" + "Preprocessing and Feature Engineering finished in " + str(round(total_time_fe)) + "s")
 
     time_col = feature_engineered_df.time
     X_test = feature_engineered_df.drop(["time"], axis=1)
 
-
-    if platform == "win32":
-        models_path = "models\\sentiment_analysis"
-    else:
-        models_path = "models/sentiment_analysis"
-
-    model = XgBoostSvd(models_path)
     progress_bar.progress(70, text="Loading Model...")
     model.load(best_model)
     progress_bar.progress(80, text="Model Loaded!")
     pred = model.predict(X_test)
-    progress_bar.progress(100, text="Prediction Done!")
+    end = time.time()
+    total_time = end - start
+    progress_bar.progress(100, text="Prediction Done in " + str(round(total_time)) + "s")
+
     # The output file should be named "reviews_test_predictions_<your_group_name>.csv ,
     # and it should have columns - "Text", Time", "predicted_sentiment_probability", "predicted_sentiment".
 
