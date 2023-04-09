@@ -5,7 +5,7 @@ import pandas as pd
 
 from src.data.feature_engineering import FeatureEngineer
 from src.data.preprocess import Preprocessor
-from src.models.sentiment_analysis.pre_trained.seibert import Seibert
+from src.models.sentiment_analysis.pre_trained.siebert import Siebert
 
 input_filepath = "../../../data/raw/reviews_test.csv"
 df = pd.read_csv(input_filepath)
@@ -24,9 +24,9 @@ if platform == "win32":
 else:
     models_path = "../../../models/sentiment_analysis"
 
-best_model = "seibert"
+best_model = "siebert"
 
-model = Seibert(models_path)
+model = Siebert(models_path)
 model.load(best_model)
 pred = model.predict(X_test)
 

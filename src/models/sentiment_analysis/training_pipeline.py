@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 
 from src.data.make_dataset import main as make_dataset
 from src.models.sentiment_analysis.log_reg import LogReg
-from src.models.sentiment_analysis.pre_trained.seibert import Seibert
+from src.models.sentiment_analysis.pre_trained.siebert import Siebert
 from src.models.sentiment_analysis.xg_boost import XgBoost
 from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 
@@ -90,7 +90,7 @@ if __name__ == "__main__":
         "xg_boost": XgBoost(models_path),
         "xg_boost_svd": XgBoostSvd(models_path),
         "log_reg": LogReg(models_path),
-        # "seibert": Seibert(models_path)
+        "siebert": Siebert(models_path)
         # Add other model instances here
     }
 
