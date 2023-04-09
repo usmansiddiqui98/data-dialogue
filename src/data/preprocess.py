@@ -3,7 +3,7 @@ import re
 import contractions
 import modin.pandas as pd
 import nltk
-import pandas as pd
+from pandarallel import pandarallel
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
