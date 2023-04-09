@@ -12,7 +12,7 @@ from src.models.sentiment_analysis.xg_boost import XgBoost
 from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 
 # ________CHANGE THIS TO CHANGE MODEL_______
-best_model = "siebert"
+best_model = "xg_boost_svd"
 # ________CHANGE THIS TO CHANGE MODEL_______
 
 
@@ -25,7 +25,7 @@ model_classes = {
     "xg_boost": XgBoost,
     "xg_boost_svd": XgBoostSvd,
     "log_reg": LogReg,
-    "siebert": Siebert,
+    # "siebert": Siebert,
     # Add other model instances here
 }
 
