@@ -90,7 +90,7 @@ if __name__ == "__main__":
         "xg_boost": XgBoost(models_path),
         "xg_boost_svd": XgBoostSvd(models_path),
         "log_reg": LogReg(models_path),
-        "siebert": Siebert(models_path)
+        # "siebert": Siebert(models_path)
         # Add other model instances here
     }
 
