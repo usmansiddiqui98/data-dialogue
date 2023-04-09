@@ -45,3 +45,4 @@ pyLDAvis
 xgboost
 jovian
 tqdm
+pandarallel

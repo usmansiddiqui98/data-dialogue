@@ -1,4 +1,3 @@
-import os
 import time
 from sys import platform
 
@@ -7,23 +6,27 @@ import streamlit as st
 
 from src.data.feature_engineering import FeatureEngineer
 from src.data.preprocess import Preprocessor
-from src.models.sentiment_analysis.xg_boost import XgBoost
+from src.models.sentiment_analysis.pre_trained.seibert import Seibert
+from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 
-best_model = "xg_boost"
+# ________CHANGE THIS TO CHANGE MODEL_______
+best_model = "xg_boost_svd"
+if platform == "win32":
+    models_path = "models\\sentiment_analysis"
+else:
+    models_path = "models/sentiment_analysis"
+
+model = XgBoostSvd(models_path)
+# ________CHANGE THIS TO CHANGE MODEL_______
 
 
-# depending on best_model, load the model and predict on the test data
-if "file_uploaded" not in st.session_state:
-    st.session_state.file_uploaded = False
-if "form_submitted" not in st.session_state:
-    st.session_state.form_submitted = False
 if "output_df" not in st.session_state:
-    st.session_state.output_df = False
+    st.session_state.output_df = None
 
 
 def run_scoring_pipeline(input_df):
     """Run the scoring pipeline."""
-    # Add progress bar
+    start = time.time()
     progress_bar = st.progress(0)
     for i in range(0, 10):
         time.sleep(0.1)
@@ -36,23 +39,24 @@ def run_scoring_pipeline(input_df):
     feature_engineer = FeatureEngineer(pre_processed_df)
     feature_engineer.add_features()
     feature_engineered_df = feature_engineer.feature_engineered_df
-    progress_bar.progress(60, text="Feature Engineering Done!")
+    fe_end = time.time()
+    total_time_fe = fe_end - start
+    progress_bar.progress(
+        60, text="Preprocessing and Feature Engineering finished in " + str(round(total_time_fe)) + "s"
+    )
+    print("\n" + "Preprocessing and Feature Engineering finished in " + str(round(total_time_fe)) + "s")
 
     time_col = feature_engineered_df.time
     X_test = feature_engineered_df.drop(["time"], axis=1)
 
-    if platform == "win32":
-        models_path = "..\\..\\..\\models\\sentiment_analysis"
-    else:
-        print("entering else block")
-        models_path = "models/sentiment_analysis"
-
-    model = XgBoost(models_path)
     progress_bar.progress(70, text="Loading Model...")
     model.load(best_model)
-    progress_bar.progress(80, text="Model Loaded!")
+    progress_bar.progress(80, text="Making Predictions...")
     pred = model.predict(X_test)
-    progress_bar.progress(100, text="Prediction Done!")
+    end = time.time()
+    total_time = end - start
+    progress_bar.progress(100, text="Prediction Done in " + str(round(total_time)) + "s")
+
     # The output file should be named "reviews_test_predictions_<your_group_name>.csv ,
     # and it should have columns - "Text", Time", "predicted_sentiment_probability", "predicted_sentiment".
 
@@ -72,23 +76,37 @@ def run_scoring_pipeline(input_df):
 
 def display():
     st.title("Sentiment Analysis Scoring Pipeline")
+
     uploaded_file = st.file_uploader("Upload a CSV file with columns 'Time' and 'Text'", type="csv")
+
     if uploaded_file is not None:
-        # Check if uploaded file has "Time" and "Text" columns
         input_df = pd.read_csv(uploaded_file)
-        cols = input_df.columns.to_series().tolist()
+
+        # Check if uploaded file has "Time" and "Text" columns
+        cols = list(input_df.columns)
         if cols != ["Time", "Text"]:
             st.error("Invalid CSV format. Required columns: Time, Text")
-        st.session_state.file_uploaded = True
-        if st.session_state.file_uploaded:
-            output_df = run_scoring_pipeline(input_df)
-            st.session_state.output_df = True
-            st.success("Scoring pipeline completed. Here is your output.")
-        if st.session_state.output_df and st.session_state.file_uploaded:
+        else:
+            if "output_df" not in st.session_state:
+                st.session_state.output_df = None
+
+            output_df = st.session_state.output_df
+
+            if output_df is None:
+                output_df = run_scoring_pipeline(input_df)
+                st.session_state.output_df = output_df
+                st.success("Scoring pipeline completed. Here is your output.")
+
             st.dataframe(output_df)
-            st.download_button(
-                label="Download output file",
-                data=output_df.to_csv(index=False).encode(),
-                file_name="reviews_test_predictions_data-dialogue.csv",
-                mime="text/csv",
-            )
+
+            if output_df is not None:
+                dl = st.download_button(
+                    label="Download output file",
+                    data=output_df.to_csv(index=False).encode(),
+                    file_name="reviews_test_predictions_data-dialogue.csv",
+                    mime="text/csv",
+                )
+
+                if dl:
+                    del st.session_state.output_df
+                    st.success("File downloaded successfully!")

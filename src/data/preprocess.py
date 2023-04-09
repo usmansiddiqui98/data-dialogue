@@ -3,17 +3,15 @@ import re
 import contractions
 import modin.pandas as pd
 import nltk
-import ray
+import pandas as pd
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 
-ray.init(ignore_reinit_error=True)
-
 # necessary package downloads
-nltk.download("averaged_perceptron_tagger")
-nltk.download("punkt")
-nltk.download("wordnet")
+nltk.download("averaged_perceptron_tagger", quiet=True)
+nltk.download("punkt", quiet=True)
+nltk.download("wordnet", quiet=True)
 
 stopwords = [
     "a",
@@ -154,6 +152,8 @@ stopwords = list(stopwords)
 
 
 class Preprocessor:
+    pandarallel.initialize(progress_bar=False, verbose=0)
+
     def __init__(self, dirty_df):
         self.dirty_df = dirty_df
 
@@ -193,21 +193,19 @@ class Preprocessor:
         return lemmatized_sentence
         # return stemmed_sentence
 
-    def add_cleaned_text_512(self):
-        def truncate_to_512(sentence):
-            words = word_tokenize(sentence)
-            pos_tagged = nltk.pos_tag(words)
-            nouns_adjectives = [word for word, tag in pos_tagged if tag.startswith("N") or tag.startswith("J")]
-
-            truncated = (
-                words[:512] if len(nouns_adjectives) >= 512 else nouns_adjectives + words[len(nouns_adjectives) : 512]
-            )
-            return " ".join(truncated)
-
-        self.clean_df["cleaned_text_512"] = self.clean_df["cleaned_text"].apply(truncate_to_512)
+    def truncate_to_512(sentence):
+        words = word_tokenize(sentence)
+        pos_tagged = nltk.pos_tag(words)
+        nouns_adjectives = [word for word, tag in pos_tagged if tag.startswith("N") or tag.startswith("J")]
+        remaining = [word for word in words if word not in nouns_adjectives]
+        if len(nouns_adjectives) <= 512:
+            combined = nouns_adjectives + remaining[: 512 - len(nouns_adjectives)]
+        else:
+            combined = nouns_adjectives[:512]
+        return " ".join(combined)
 
     def clean_csv(self):
-        new_df = self.dirty_df
+        new_df = self.dirty_df.copy()
         new_df["cleaned_text"] = new_df["Text"].apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
         new_df["Sentiment"] = new_df["Sentiment"].apply(lambda x: 1 if x == "positive" else 0)
         # lower case all column names
@@ -216,7 +214,7 @@ class Preprocessor:
 
     def clean_test_csv(self):
         new_df = self.dirty_df.copy()
-        new_df["cleaned_text"] = new_df["Text"].apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
+        new_df["cleaned_text"] = new_df["Text"].parallel_apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
         # lower case all column names
         new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]
         self.clean_df = new_df

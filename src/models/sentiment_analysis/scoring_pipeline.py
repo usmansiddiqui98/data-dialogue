@@ -5,11 +5,11 @@ import pandas as pd
 
 from src.data.feature_engineering import FeatureEngineer
 from src.data.preprocess import Preprocessor
-from src.models.sentiment_analysis.xg_boost import XgBoost
+from src.models.sentiment_analysis.pre_trained.seibert import Seibert
 
 input_filepath = "../../../data/raw/reviews_test.csv"
-
-preprocessor = Preprocessor(input_filepath)
+df = pd.read_csv(input_filepath)
+preprocessor = Preprocessor(df)
 preprocessor.clean_test_csv()
 pre_processed_df = preprocessor.clean_df
 feature_engineer = FeatureEngineer(pre_processed_df)
@@ -24,9 +24,9 @@ if platform == "win32":
 else:
     models_path = "../../../models/sentiment_analysis"
 
-best_model = "xg_boost"
+best_model = "seibert"
 
-model = XgBoost(models_path)
+model = Seibert(models_path)
 model.load(best_model)
 pred = model.predict(X_test)
 

@@ -6,7 +6,7 @@ from spellchecker import SpellChecker
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-nltk.download("averaged_perceptron_tagger")
+nltk.download("averaged_perceptron_tagger", quiet=True)
 
 
 def num_typos(sentence):
