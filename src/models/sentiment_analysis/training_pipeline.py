@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 
 from src.data.make_dataset import main as make_dataset
 from src.models.sentiment_analysis.log_reg import LogReg
-from src.models.sentiment_analysis.pre_trained.seibert import Seibert
+from src.models.sentiment_analysis.pre_trained.siebert import Siebert
 from src.models.sentiment_analysis.xg_boost import XgBoost
 from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 
@@ -60,9 +60,12 @@ def find_best_model(models, models_path, X_test, y_test):
 
 
 if __name__ == "__main__":
+    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+
     # Load the data
-    train_filepath = "../../../data/processed/train_final_processed_reviews.csv"
-    test_filepath = "../../../data/processed/test_final_processed_reviews.csv"
+    train_filepath = os.path.join(BASE_DIR, "data/processed/train_final_processed_reviews.csv")
+
+    test_filepath = os.path.join(BASE_DIR, "data/processed/test_final_processed_reviews.csv")
 
     if os.path.exists(train_filepath) and os.path.exists(test_filepath):
         train = pd.read_csv(train_filepath, index_col="Unnamed: 0")
@@ -72,7 +75,7 @@ if __name__ == "__main__":
         y_train = train.sentiment.tolist()
         y_test = test.sentiment.tolist()
     else:
-        data = pd.read_csv("../../../data/raw/reviews.csv")
+        data = pd.read_csv(os.path.join(BASE_DIR, "data/raw/reviews.csv"))
         X_train, X_test, y_train, y_test = make_dataset(
             data,
             train_split_output_filepath=train_filepath,
@@ -82,12 +85,12 @@ if __name__ == "__main__":
     if platform == "win32":
         models_path = "..\\..\\..\\models\\sentiment_analysis"
     else:
-        models_path = "../../../models/sentiment_analysis"
+        models_path = os.path.join(BASE_DIR, "models/sentiment_analysis")
     models = {
         "xg_boost": XgBoost(models_path),
         "xg_boost_svd": XgBoostSvd(models_path),
         "log_reg": LogReg(models_path),
-        # "seibert": Seibert(models_path)
+        # "siebert": Siebert(models_path)
         # Add other model instances here
     }
 
