@@ -2,6 +2,10 @@ import re
 
 import contractions
 import nltk
+<<<<<<< Updated upstream
+=======
+import pandas as pd
+>>>>>>> Stashed changes
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize

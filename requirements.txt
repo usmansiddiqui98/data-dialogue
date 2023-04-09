@@ -22,6 +22,10 @@ plotly
 matplotlib
 joblib
 seaborn
+<<<<<<< Updated upstream
+=======
+nlpaug
+>>>>>>> Stashed changes
 # Testing packages
 pytest
 pytest-cov
