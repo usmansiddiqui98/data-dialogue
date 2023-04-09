@@ -6,18 +6,31 @@ import streamlit as st
 
 from src.data.feature_engineering import FeatureEngineer
 from src.data.preprocess import Preprocessor
-from src.models.sentiment_analysis.pre_trained.seibert import Seibert
+from src.models.sentiment_analysis.log_reg import LogReg
+from src.models.sentiment_analysis.pre_trained.siebert import Siebert
+from src.models.sentiment_analysis.xg_boost import XgBoost
 from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 
 # ________CHANGE THIS TO CHANGE MODEL_______
 best_model = "xg_boost_svd"
+# ________CHANGE THIS TO CHANGE MODEL_______
+
+
 if platform == "win32":
     models_path = "models\\sentiment_analysis"
 else:
     models_path = "models/sentiment_analysis"
 
-model = XgBoostSvd(models_path)
-# ________CHANGE THIS TO CHANGE MODEL_______
+model_classes = {
+    "xg_boost": XgBoost,
+    "xg_boost_svd": XgBoostSvd,
+    "log_reg": LogReg,
+    # "siebert": Siebert,
+    # Add other model instances here
+}
+
+# Use the best_model variable to create the corresponding model object
+model = model_classes[best_model](models_path)
 
 
 if "output_df" not in st.session_state:

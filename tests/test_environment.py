@@ -30,6 +30,10 @@ def test_development_environment():
     # Check that all packages in src are listed in requirements.txt
     with open(req_file_path) as f:
         requirements = f.read().splitlines()
+
+    # Extract package names without version numbers
+    package_names = [re.split("==|>=|<=|>|<", req)[0] for req in requirements]
+
     for root, dirs, files in os.walk("src"):
         for file in files:
             if file.endswith(".py"):
@@ -47,5 +51,5 @@ def test_development_environment():
                                 and package not in exclude_packages
                             ):
                                 assert (
-                                    package in requirements
+                                    package in package_names
                                 ), f"Package {package} used in {filepath} is not listed in {req_file_path}"

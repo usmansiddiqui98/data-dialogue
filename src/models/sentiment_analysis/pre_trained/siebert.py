@@ -4,7 +4,7 @@ from transformers import pipeline
 from src.models.sentiment_analysis.base_model import BaseModel
 
 
-class Seibert(BaseModel):
+class Siebert(BaseModel):
     def __init__(self, models_path):
         super().__init__(models_path)
         if torch.cuda.is_available():

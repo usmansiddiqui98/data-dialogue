@@ -1,8 +1,8 @@
+import os
 import time
 from pathlib import Path
 
 import pandas as pd
-from dotenv import find_dotenv, load_dotenv
 from sklearn.model_selection import train_test_split
 
 from src.data.feature_engineering import FeatureEngineer
@@ -46,11 +46,10 @@ if __name__ == "__main__":
     log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     # not used in this stub but often useful for finding various files
     project_dir = Path(__file__).resolve().parents[2]
-    load_dotenv(find_dotenv())
     # relative dir
-    input_df = pd.read_csv("../../data/raw/reviews.csv")
-    train_output_file = "../../data/processed/train_final_processed_reviews.csv"
-    test_output_file = "../../data/processed/test_final_processed_reviews.csv"
+    input_df = pd.read_csv(os.path.join(project_dir, "data/raw/reviews.csv"))
+    train_output_file = os.path.join(project_dir, "data/processed/train_final_processed_reviews.csv")
+    test_output_file = os.path.join(project_dir, "data/processed/test_final_processed_reviews.csv")
     start = time.time()
     X_train, X_test, y_train, y_test = main(input_df, train_output_file, test_output_file)
     end = time.time()

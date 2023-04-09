@@ -1,11 +1,8 @@
-.PHONY:  sync_data_to_s3 sync_data_from_s3
-
 #################################################################################
 # GLOBALS                                                                       #
 #################################################################################
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-BUCKET = [OPTIONAL] your-bucket-for-syncing-data (do not include 's3://')
 PROFILE = default
 PROJECT_NAME = data-dialogue
 PYTHON_INTERPRETER = python3
@@ -75,10 +72,9 @@ format:
 test:
 	pytest tests --cov-report term-missing --cov=tests/
 
-## Make Dataset
-.PHONY: data
-data: requirements
-	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/processed
+.PHONY: training_pipeline
+training_pipeline:
+	$(PYTHON_INTERPRETER) $(PROJECT_DIR)/src/models/sentiment_analysis/training_pipeline.py
 
 ## Delete all compiled Python files
 .PHONY: clean
@@ -90,21 +86,6 @@ clean:
 run:
 	streamlit run src/app/main.py
 
-## Upload Data to S3
-sync_data_to_s3:
-ifeq (default,$(PROFILE))
-	aws s3 sync data/ s3://$(BUCKET)/data/
-else
-	aws s3 sync data/ s3://$(BUCKET)/data/ --profile $(PROFILE)
-endif
-
-## Download Data from S3
-sync_data_from_s3:
-ifeq (default,$(PROFILE))
-	aws s3 sync s3://$(BUCKET)/data/ data/
-else
-	aws s3 sync s3://$(BUCKET)/data/ data/ --profile $(PROFILE)
-endif
 
 ## Set up python interpreter environment
 create_environment:
