@@ -5,7 +5,7 @@
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PROFILE = default
 PROJECT_NAME = data-dialogue
-PYTHON_INTERPRETER = $(shell ./get_python_interpreter.sh)
+PYTHON_INTERPRETER = python3
 
 ifeq (,$(shell which conda))
 HAS_CONDA=False
@@ -89,7 +89,6 @@ run:
 
 ## Set up python interpreter environment
 create_environment:
-	chmod +x get_python_interpreter.sh
 ifeq (True,$(HAS_CONDA))
 		@echo ">>> Detected conda, creating conda environment."
 ifeq (3,$(findstring 3,$(PYTHON_INTERPRETER)))
