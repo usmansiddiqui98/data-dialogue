@@ -6,6 +6,7 @@ from sklearn import model_selection, svm
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.ensemble import BaggingClassifier
 
 from src.models.sentiment_analysis.base_model import BaseModel
 
@@ -14,7 +15,11 @@ class SVM(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.vectorizer = TfidfVectorizer()
-        self.model = svm.SVC(C=1.0, kernel="linear", gamma=1, probability=True)
+        self.model = BaggingClassifier(svm.SVC(C=1.0, kernel="linear", gamma=1, probability=True, random_state=4243),
+                                       max_samples=0.3,
+                                       n_estimators=10,
+                                       n_jobs=-1,
+                                       random_state=42)
 
     def fit(self, X_train, y_train):
         X_train_bow = self.vectorizer.fit_transform(X_train["cleaned_text"])
@@ -22,7 +27,6 @@ class SVM(BaseModel):
         X_train_clean = X_train.drop(["cleaned_text", "text"], axis=1)
         X_train_concat = pd.concat([X_train_clean, X_train_bow], axis=1)
         X_train_concat = X_train_concat.loc[:, ~X_train_concat.columns.duplicated()].copy()
-
         self.model.fit(X_train_concat, y_train)
 
     def save(self, model_name):
