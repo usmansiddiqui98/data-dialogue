@@ -1,15 +1,15 @@
 import torch
 import torch.nn as nn
-from src.models.sentiment_analysis.base_model import BaseModel
 from collections import Counter
 import numpy as np
 from torch.utils.data import TensorDataset, DataLoader
+
+from src.models.sentiment_analysis.base_model import BaseModel
 
 
 class SentimentLSTM(nn.Module):
     def __init__(self, no_layers, vocab_size, hidden_dim, embedding_dim, output_dim):
         super(SentimentLSTM, self).__init__()
-
         self.no_layers = no_layers
         self.output_dim = output_dim
         self.hidden_dim = hidden_dim
@@ -54,11 +54,10 @@ class SentimentLSTM(nn.Module):
 
 class BasicLSTM(BaseModel):
     onehot_dict = {}
+
     def __init__(self, models_path):
         super().__init__(models_path)
-        self.model = SentimentLSTM(
-            no_layers=2, vocab_size=2001, hidden_dim=256, embedding_dim=64, output_dim=1
-        )
+        self.model = SentimentLSTM(no_layers=2, vocab_size=2001, hidden_dim=256, embedding_dim=64, output_dim=1)
 
     def data_preparation(self, x_train):
         if len(self.onehot_dict) == 0:
@@ -90,10 +89,10 @@ class BasicLSTM(BaseModel):
         features = np.zeros((len(sents), seq_len), dtype=int)
         for i, rev in enumerate(sents):
             if len(rev) != 0:
-                features[i, -len(rev) :] = np.array(rev, dtype="object")[:seq_len]
+                features[i, -len(rev):] = np.array(rev, dtype="object")[:seq_len]
         return features
 
-    def LSTMData(self, x, y):
+    def lstmdata(self, x, y):
         x_pad = self.padding(x)
         return TensorDataset(torch.from_numpy(x_pad), torch.from_numpy(np.asarray(y)))
 
@@ -101,7 +100,7 @@ class BasicLSTM(BaseModel):
         criterion = nn.BCELoss()
         optimizer = torch.optim.Adam(self.model.parameters(), lr=learning_rate)
         train = self.data_preparation(train_data["cleaned_text"])
-        dataset = self.LSTMData(train, train_labels)
+        dataset = self.lstmdata(train, train_labels)
         data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, drop_last=True)
         print("Training begins")
         for epoch in range(num_epochs):
@@ -110,7 +109,7 @@ class BasicLSTM(BaseModel):
             self.model.train()
             for inputs, labels in data_loader:
                 h = tuple([each.data for each in h])
-                self.model.zero_grad()  # optimizer.zero_grad()
+                self.model.zero_grad()
                 outputs, h = self.model(inputs, h)
                 loss = criterion(outputs.squeeze(), labels.float())
                 loss.backward()
@@ -128,7 +127,6 @@ class BasicLSTM(BaseModel):
             batch_size = 1
             h = self.model.init_hidden(batch_size)
             output, h = self.model(inputs, h)
-
             pred = output.item()
             label = 1 if pred > 0.5 else 0
             results.append(label)
