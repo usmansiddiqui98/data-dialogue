@@ -3,10 +3,10 @@ import pickle
 
 import pandas as pd
 from sklearn import model_selection, svm
+from sklearn.ensemble import BaggingClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.ensemble import BaggingClassifier
 
 from src.models.sentiment_analysis.base_model import BaseModel
 
@@ -15,11 +15,13 @@ class SVM(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.vectorizer = TfidfVectorizer()
-        self.model = BaggingClassifier(svm.SVC(C=1.0, kernel="linear", gamma=1, probability=True, random_state=4243),
-                                       max_samples=0.3,
-                                       n_estimators=10,
-                                       n_jobs=-1,
-                                       random_state=42)
+        self.model = BaggingClassifier(
+            svm.SVC(C=1.0, kernel="linear", gamma=1, probability=True, random_state=4243),
+            max_samples=0.3,
+            n_estimators=10,
+            n_jobs=-1,
+            random_state=42,
+        )
 
     def fit(self, X_train, y_train):
         X_train_bow = self.vectorizer.fit_transform(X_train["cleaned_text"])
