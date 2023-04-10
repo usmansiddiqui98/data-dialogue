@@ -10,7 +10,7 @@ from src.models.sentiment_analysis.log_reg import LogReg
 from src.models.sentiment_analysis.pre_trained.siebert import Siebert
 from src.models.sentiment_analysis.xg_boost import XgBoost
 from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
-from src.models.sentiment_analysis.LSTM import BasicLSTM
+from src.models.sentiment_analysis.lstm import BasicLSTM
 
 
 def train_models(models, X_train, y_train, models_path):
@@ -93,7 +93,7 @@ if __name__ == "__main__":
         "log_reg": LogReg(models_path),
         # "siebert": Siebert(models_path)
         # Add other model instances here
-        "LSTM": BasicLSTM(models_path)
+        "lstm": BasicLSTM(models_path),
     }
 
     # Train the models and save them

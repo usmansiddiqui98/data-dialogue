@@ -1,8 +1,9 @@
+from collections import Counter
+
+import numpy as np
 import torch
 import torch.nn as nn
-from collections import Counter
-import numpy as np
-from torch.utils.data import TensorDataset, DataLoader
+from torch.utils.data import DataLoader, TensorDataset
 
 from src.models.sentiment_analysis.base_model import BaseModel
 
@@ -14,38 +15,27 @@ class SentimentLSTM(nn.Module):
         self.output_dim = output_dim
         self.hidden_dim = hidden_dim
         self.vocab_size = vocab_size
-
-        # embedding layer
         self.embedding = nn.Embedding(vocab_size, embedding_dim)
-        # LSTM
         self.lstm = nn.LSTM(
             input_size=embedding_dim, hidden_size=self.hidden_dim, num_layers=no_layers, batch_first=True
         )
-        # dropout layers
         self.dropout = nn.Dropout(0.3)
-        # linear and Sigmoid layer
         self.fc = nn.Linear(self.hidden_dim, self.output_dim)
         self.sig = nn.Sigmoid()
 
     def forward(self, x, hidden):
-        # we just passed a batch
-        batch_size = x.size(0)  # batch size -> B
-        # embed shape -> [B, max_len, embed_dim]
+        batch_size = x.size(0)
         embeds = self.embedding(x)
         lstm_out, hidden = self.lstm(embeds, hidden)
         lstm_out = lstm_out.contiguous().view(-1, self.hidden_dim)
-        # drop out and fully connected
         out = self.dropout(lstm_out)
         out = self.fc(out)
-        # sigmoid
         sig_out = self.sig(out)
-        # reshape to batch size first
         sig_out = sig_out.view(batch_size, -1)
         sig_out = sig_out[:, -1]
         return sig_out, hidden
 
     def init_hidden(self, batch_size):
-        # create hidden state and cell state tensors with size [no_layers x batch_size x hidden_dim]
         hidden_state = torch.zeros((self.no_layers, batch_size, self.hidden_dim))
         cell_state = torch.zeros((self.no_layers, batch_size, self.hidden_dim))
         hidden = (hidden_state, cell_state)
@@ -53,7 +43,7 @@ class SentimentLSTM(nn.Module):
 
 
 class BasicLSTM(BaseModel):
-    onehot_dict = {}
+    onehot_dict = {}  # type: dict[str, int]
 
     def __init__(self, models_path):
         super().__init__(models_path)
@@ -72,12 +62,10 @@ class BasicLSTM(BaseModel):
             # Tokenization
             corpus = Counter(word_list)
             corpus_ = sorted(corpus.items(), key=lambda x: x[1], reverse=True)[:2000]
-
             self.onehot_dict = {w[0]: i + 1 for i, w in enumerate(corpus_)}
             print("Done creating dictionary")
         else:
             print("Using existing one hot dictionary to tokenise words")
-
         final_list_train = []
         for sent in x_train:
             final_list_train.append(
@@ -89,7 +77,7 @@ class BasicLSTM(BaseModel):
         features = np.zeros((len(sents), seq_len), dtype=int)
         for i, rev in enumerate(sents):
             if len(rev) != 0:
-                features[i, -len(rev):] = np.array(rev, dtype="object")[:seq_len]
+                features[i, -len(rev) :] = np.array(rev, dtype="object")[:seq_len]
         return features
 
     def lstmdata(self, x, y):
@@ -131,6 +119,4 @@ class BasicLSTM(BaseModel):
             label = 1 if pred > 0.5 else 0
             results.append(label)
             prob.append(pred)
-
-        # Return predicted class and probability
         return {"predicted_sentiment": results, "predicted_sentiment_probability": prob}
