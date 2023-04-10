@@ -53,7 +53,6 @@ class BasicLSTM(BaseModel):
         if len(self.onehot_dict) == 0:
             global onehot_dict
             # Getting unique words in x_train
-            print("Creating a one hot dictionary containing top 2000 words based on frequency")
             word_list = []
             for sent in x_train:
                 for word in sent:
@@ -63,9 +62,6 @@ class BasicLSTM(BaseModel):
             corpus = Counter(word_list)
             corpus_ = sorted(corpus.items(), key=lambda x: x[1], reverse=True)[:2000]
             self.onehot_dict = {w[0]: i + 1 for i, w in enumerate(corpus_)}
-            print("Done creating dictionary")
-        else:
-            print("Using existing one hot dictionary to tokenise words")
         final_list_train = []
         for sent in x_train:
             final_list_train.append(
@@ -84,15 +80,13 @@ class BasicLSTM(BaseModel):
         x_pad = self.padding(x)
         return TensorDataset(torch.from_numpy(x_pad), torch.from_numpy(np.asarray(y)))
 
-    def fit(self, train_data, train_labels, num_epochs=5, batch_size=50, learning_rate=0.001):
+    def fit(self, train_data, train_labels, num_epochs=1, batch_size=50, learning_rate=0.001):
         criterion = nn.BCELoss()
         optimizer = torch.optim.Adam(self.model.parameters(), lr=learning_rate)
         train = self.data_preparation(train_data["cleaned_text"])
         dataset = self.lstmdata(train, train_labels)
         data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, drop_last=True)
-        print("Training begins")
         for epoch in range(num_epochs):
-            print("Epoch: " + str(epoch))
             h = self.model.init_hidden(batch_size)
             self.model.train()
             for inputs, labels in data_loader:
