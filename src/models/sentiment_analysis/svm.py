@@ -14,7 +14,7 @@ class SVM(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.vectorizer = TfidfVectorizer()
-        self.model = svm.SVC(C=1.0, kernel="linear", degree=3, gamma="auto", probability=True)
+        self.model = svm.SVC(C=1.0, kernel="linear", gamma=1, probability=True)
 
     def fit(self, X_train, y_train):
         X_train_bow = self.vectorizer.fit_transform(X_train["cleaned_text"])
