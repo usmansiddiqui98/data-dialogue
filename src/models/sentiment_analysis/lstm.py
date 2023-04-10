@@ -1,5 +1,5 @@
-import numpy as np
 from collections import Counter
+import numpy as np
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
