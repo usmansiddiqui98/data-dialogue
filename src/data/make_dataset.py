@@ -9,7 +9,7 @@ from src.data.feature_engineering import FeatureEngineer
 from src.data.preprocess import Preprocessor
 
 
-def main(input_df, train_split_output_filepath=None, test_split_output_filepath=None):
+def main(input_df, train_split_output_filepath=None, test_split_output_filepath=None, oversample=False):
     """Runs data processing scripts to turn raw data from (../raw) into
     cleaned data ready to be analyzed (saved in ../processed).
     """
@@ -26,7 +26,14 @@ def main(input_df, train_split_output_filepath=None, test_split_output_filepath=
     X = feature_engineered_df.drop(["sentiment", "time"], axis=1)
     y = feature_engineered_df["sentiment"]
     # train test split and write splits to csv
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=4263, stratify=y)
+    if oversample:  # alr split beforehand
+        num_test_rows = 1089
+        X_train = X[:-num_test_rows]  # Remove the bottom subset of the dataset (test set)
+        X_test = X[-num_test_rows:]  # get bottom subset
+        y_train = y[:-num_test_rows]
+        y_test = y[-num_test_rows:]
+    else:
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=4263, stratify=y)
     X_train.reset_index(drop=True, inplace=True)
     X_test.reset_index(drop=True, inplace=True)
     y_train.reset_index(drop=True, inplace=True)
