@@ -68,14 +68,12 @@ if __name__ == "__main__":
 
     # Load the data
     train_filepath = os.path.join(BASE_DIR, "data/processed/train_final_processed_reviews.csv")
-    train_oversample_filepath = os.path.join(
-        BASE_DIR, "data/processed/train_oversample_final_processed_reviews.csv"
-    ) 
+    train_oversample_filepath = os.path.join(BASE_DIR, "data/processed/train_oversample_final_processed_reviews.csv")
 
     test_filepath = os.path.join(BASE_DIR, "data/processed/test_final_processed_reviews.csv")
 
     if os.path.exists(train_filepath) and os.path.exists(test_filepath) and os.path.exists(train_oversample_filepath):
-        train = pd.read_csv(train_filepath, index_col="Unnamed: 0") 
+        train = pd.read_csv(train_filepath, index_col="Unnamed: 0")
         train_os = pd.read_csv(train_oversample_filepath, index_col="Unnamed: 0")
         test = pd.read_csv(test_filepath, index_col="Unnamed: 0")
         X_train = train.drop("sentiment", axis=1)
@@ -87,7 +85,9 @@ if __name__ == "__main__":
     else:  # generate the files
         data = pd.read_csv(os.path.join(BASE_DIR, "data/raw/reviews.csv"))
         oversample_filepath = os.path.join(BASE_DIR, "data/raw/reviews_oversample.csv")
-        if not os.path.exists(oversample_filepath):  # already generated, note: will take ~2hrs to generate the oversample
+        if not os.path.exists(
+            oversample_filepath
+        ):  # already generated, note: will take ~2hrs to generate the oversample
             generate_oversample(raw_df=data, oversample_filepath=oversample_filepath)
         data_os = pd.read_csv(oversample_filepath)
         # without oversample
