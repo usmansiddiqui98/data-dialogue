@@ -1,4 +1,5 @@
 import argparse
+import os
 
 import pandas as pd
 
@@ -14,7 +15,10 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    data = pd.read_csv("../../../data/raw/reviews.csv", parse_dates=["Time"])
+    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+
+    filepath = os.path.join(BASE_DIR, "data/raw/reviews.csv")
+    data = pd.read_csv(filepath, parse_dates=["Time"])
     preprocessor = Preprocessor(data)
     preprocessor.clean_csv()
     pre_processed_df = preprocessor.clean_df
@@ -48,11 +52,29 @@ if __name__ == "__main__":
     # reset the index to turn the MultiIndex into columns
     topics_df = topics_df.reset_index()
 
-    if args.model == "lda":
-        topics_df = topics_df.rename(columns={"value": "probability"})
-    elif args.model == "lsa":
-        topics_df = topics_df.rename(columns={"value": "svd_score"})
-    elif args.model == "nmf":
-        topics_df = topics_df.rename(columns={"value": "tfidf_score"})
+    if args.model in ["lda", "lsa", "nmf"]:
+        if args.model == "lda":
+            score_col = "probability"
+        elif args.model == "lsa":
+            score_col = "svd_score"
+        else:
+            score_col = "tfidf_score"
 
-    topics_df.to_csv(f"topic_modelling_{args.model}.csv", index=False)
+        topics_df = topics_df.rename(columns={"value": score_col})
+
+        pivoted_df = topics_df.pivot_table(
+            index="topic",
+            columns=topics_df.groupby(["topic"]).cumcount() + 1,
+            values=["word", score_col],
+            aggfunc="first",
+        ).reset_index()
+
+        pivoted_df.columns = ["_".join(map(str, col)).strip() for col in pivoted_df.columns.values]
+        pivoted_df = pivoted_df.rename(columns={"topic_": "topic_id"})
+
+        column_order = ["topic_id"]
+        for i in range(1, len(pivoted_df.columns[2:]), 1):
+            column_order += [f"word_{i // 2 + 1}", f"{score_col}_{i // 2 + 1}"]
+
+    pivoted_df = pivoted_df.reindex(columns=column_order)
+    pivoted_df.to_csv(f"topic_modelling_{args.model}.csv", index=False)
