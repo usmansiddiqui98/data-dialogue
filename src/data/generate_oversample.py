@@ -4,9 +4,9 @@ from pathlib import Path
 import nlpaug.augmenter.word as naw
 import numpy as np
 import pandas as pd
-import tqdm as tqdm
 from dotenv import find_dotenv, load_dotenv
 from sklearn.model_selection import train_test_split
+from tqdm import tqdm
 
 
 def bert_aug(Xy_train, TOPK=20, ACT="insert"):
