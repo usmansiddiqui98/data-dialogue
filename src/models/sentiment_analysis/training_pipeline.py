@@ -56,6 +56,14 @@ def find_best_model(models, models_path, X_test, y_test):
                 best_model = model_instance
                 best_model_name = model_name
 
+        # Create the model's directory if it doesn't exist
+        BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+        best_model_dir = os.path.join(BASE_DIR, "models/sentiment_analysis/best_model")
+        os.makedirs(best_model_dir, exist_ok=True)
+        # Write the best model name to a txt file
+        with open(os.path.join(best_model_dir, "best_model_name.txt"), "w") as f:
+            f.write(best_model_name)
+
     return best_model, best_model_name, best_accuracy
 
 
