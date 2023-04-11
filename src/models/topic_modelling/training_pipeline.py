@@ -92,5 +92,5 @@ if __name__ == "__main__":
 
     # pre_processed_df = pd.read_csv("../../../data/processed/clean_reviews_w_topics.csv", parse_dates=["time"])
     topics_dict = run_training_pipeline(model_choice, pre_processed_df)
-    pivoted_df = topics_dict_to_df(topics_dict)
+    pivoted_df = topics_dict_to_df(model_choice, topics_dict)
     pivoted_df.to_csv(f"topic_modelling_{model_choice}.csv", index=False)
