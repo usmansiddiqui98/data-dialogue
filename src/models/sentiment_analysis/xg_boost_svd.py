@@ -22,9 +22,7 @@ class XgBoostSvd(BaseModel):
             "n_estimators": 500,
             "subsample": 0.5,
         }
-        self.model = XGBClassifier(
-            use_label_encoder=False, eval_metric="mlogloss", **self.tuned_parameters, random_state=4265,scale_pos_weight=4
-        )
+        self.model = XGBClassifier(eval_metric="mlogloss", **self.tuned_parameters, random_state=4265)
 
     def fit(self, X_train, y_train):
         # X_train_processed = self.fit_transform(X_train)
