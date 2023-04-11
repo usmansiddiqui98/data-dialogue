@@ -22,7 +22,7 @@ plotly
 matplotlib
 joblib
 seaborn
-argparse
+nlpaug
 # Testing packages
 pytest
 pytest-cov
