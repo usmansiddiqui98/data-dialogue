@@ -1,19 +1,12 @@
 import pandas as pd
 
-from src.data.preprocess import Preprocessor
 from src.models.topic_modelling.bert_topic import BertTopic
 from src.models.topic_modelling.LDA import LDAGensim
 from src.models.topic_modelling.LSA import LSAModel
 from src.models.topic_modelling.NMF import NMFModel
 
-if __name__ == "__main__":
-    model_choice = input("Choose which topic model to run (lda, lsa, nmf, bertopic): ")
 
-    data = pd.read_csv("../../../data/raw/reviews.csv", parse_dates=["Time"])
-    preprocessor = Preprocessor(data)
-    preprocessor.clean_csv()
-    pre_processed_df = preprocessor.clean_df
-
+def run_training_pipeline(model_choice, pre_processed_df):
     if model_choice:
         if model_choice == "lda":
             lda_model = LDAGensim(pre_processed_df, tags=["NOUN"])
@@ -28,15 +21,14 @@ if __name__ == "__main__":
             print("Running NMF Model...")
             nmf_model.fit_transform()
             topics_dict = nmf_model.get_topic_terms()
-        elif model_choice == "bertopic":
-            bertopic_model = BertTopic(pre_processed_df, preprocessor)
-            print("Running BertTopic Model...")
-            bertopic_model.prepare_embeddings()
-            bertopic_model.run_bertopic()
-            topics_dict = bertopic_model.get_topics()
+        # elif model_choice == "bertopic":
+        #     bertopic_model = BertTopic(pre_processed_df)
+        #     print("Running BertTopic Model...")
+        #     bertopic_model.prepare_embeddings()
+        #     bertopic_model.run_bertopic()
+        #     topics_dict = bertopic_model.get_topics()
     else:
         raise ValueError("Please specify a model to run.")
-
 
     topics_df = pd.DataFrame.from_dict(
         {(i, j): topics_dict[i][j] for i in topics_dict.keys() for j in topics_dict[i].keys()},
@@ -56,7 +48,14 @@ if __name__ == "__main__":
         topics_df = topics_df.rename(columns={"value": "svd_score"})
     elif model_choice == "nmf":
         topics_df = topics_df.rename(columns={"value": "tfidf_score"})
-    elif model_choice == "bertopic":
-        topics_df = topics_df.rename(columns={"value": "probability"})
+    # elif model_choice == "bertopic":
+    #     topics_df = topics_df.rename(columns={"value": "probability"})
+    return topics_df
 
+
+if __name__ == "__main__":
+    model_choice = input("Choose which topic model to run (lda, lsa, nmf, bertopic): ")
+
+    pre_processed_df = pd.read_csv("../../../data/processed/clean_reviews_w_topics.csv", parse_dates=["time"])
+    topics_df = run_training_pipeline(model_choice, pre_processed_df)
     topics_df.to_csv(f"topic_modelling_{model_choice}.csv", index=False)

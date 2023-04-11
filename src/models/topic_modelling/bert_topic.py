@@ -1,9 +1,10 @@
+import os
+import pickle
+
 from bertopic import BERTopic
 from hdbscan import HDBSCAN
 from sentence_transformers import SentenceTransformer
 from umap import UMAP
-import os
-import pickle
 
 
 class BertTopic:
@@ -21,15 +22,15 @@ class BertTopic:
 
         if os.path.exists(embeddings_file):
             print("Loading existing embeddings...")
-            with open(embeddings_file, 'rb') as pkl:
+            with open(embeddings_file, "rb") as pkl:
                 self.embeddings = pickle.load(pkl)
         else:
             print("Creating new embeddings...")
             sentence_model = SentenceTransformer("all-MiniLM-L12-v2")
-            self.embeddings = sentence_model.encode(self.pre_processed_df['cleaned_text'], show_progress_bar=True)
+            self.embeddings = sentence_model.encode(self.pre_processed_df["cleaned_text"], show_progress_bar=True)
 
             # save embeddings
-            with open(embeddings_file, 'wb') as pkl:
+            with open(embeddings_file, "wb") as pkl:
                 pickle.dump(self.embeddings, pkl)
 
     def run_bertopic(self):
