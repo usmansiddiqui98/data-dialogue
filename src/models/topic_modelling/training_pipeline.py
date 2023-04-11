@@ -33,6 +33,10 @@ def run_training_pipeline(model_choice, pre_processed_df):
     else:
         raise ValueError("Please specify a model to run.")
 
+    return topics_dict
+
+
+def topics_dict_to_df(model_choice, topics_dict):
     topics_df = pd.DataFrame.from_dict(
         {(i, j): topics_dict[i][j] for i in topics_dict.keys() for j in topics_dict[i].keys()},
         orient="index",
@@ -67,12 +71,13 @@ def run_training_pipeline(model_choice, pre_processed_df):
     pivoted_df = pivoted_df.rename(columns={"topic_": "topic_id"})
 
     column_order = ["topic_id"]
-    for i in range(1, len(pivoted_df.columns[2:]), 1):
+    for i in range(1, len(pivoted_df.columns[2:]), 2):
         column_order += [f"word_{i // 2 + 1}", f"{score_col}_{i // 2 + 1}"]
 
     pivoted_df = pivoted_df.reindex(columns=column_order)
 
     return pivoted_df
+
 
 if __name__ == "__main__":
     model_choice = input("Choose which topic model to run (lda, lsa, nmf, bertopic): ")
@@ -85,6 +90,7 @@ if __name__ == "__main__":
     preprocessor.clean_csv()
     pre_processed_df = preprocessor.clean_df
 
-    #pre_processed_df = pd.read_csv("../../../data/processed/clean_reviews_w_topics.csv", parse_dates=["time"])
-    pivoted_df = run_training_pipeline(model_choice, pre_processed_df)
+    # pre_processed_df = pd.read_csv("../../../data/processed/clean_reviews_w_topics.csv", parse_dates=["time"])
+    topics_dict = run_training_pipeline(model_choice, pre_processed_df)
+    pivoted_df = topics_dict_to_df(topics_dict)
     pivoted_df.to_csv(f"topic_modelling_{model_choice}.csv", index=False)
