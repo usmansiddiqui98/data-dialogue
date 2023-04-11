@@ -31,11 +31,14 @@ class NMFModel:
     def get_topic_terms(self, n_top_words=10):
         words = self.vectorizer.get_feature_names_out()
         components_df = pd.DataFrame(self.model.components_, columns=words)
+        topics_dict = {}
         for topic in range(components_df.shape[0]):
             tmp = components_df.iloc[topic]
-            print(f"For topic {topic + 1} the words with the highest value are:")
-            print(tmp.nlargest(n_top_words))
-            print("\n")
+            topic_dict = {}
+            for i, val in tmp.nlargest(n_top_words).items():
+                topic_dict[i] = val
+            topics_dict[topic] = topic_dict
+        return topics_dict
 
     # Define method to label the topics for each data point
     def get_labels(self, n_top_words=5):
