@@ -119,8 +119,7 @@ if __name__ == "__main__":
         # "xg_boost": XgBoost(models_path),
         # "xg_boost_svd": XgBoostSvd(models_path),
         # "log_reg": LogReg(models_path),
-        # "bert_fined_tuned": BertFineTuned(os.path.join(BASE_DIR, "src/models/sentiment_analysis/pre_trained"))
-        "bert_fined_tuned": BertFineTuned(os.path.join(models_path, "bert_fined_tuned"))
+        "bert_fine_tuned": BertFineTuned(models_path),
         # "siebert": Siebert(models_path)
         # Add other model instances here
     }

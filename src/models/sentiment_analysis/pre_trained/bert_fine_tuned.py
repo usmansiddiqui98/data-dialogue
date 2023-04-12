@@ -66,10 +66,11 @@ class BertFineTuned(BaseModel):
     def __init__(self, models_path):
         super().__init__(models_path)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.PATH = os.path.join(models_path, "bert_state_dict.pt")
         self.tokenizer = BertTokenizer.from_pretrained("bert-base-cased")
         self.saved_model = None
         self.batch_size = 16
+        self.model_dir = os.path.join(self.models_path, "bert_fine_tuned")
+        self.model_path = os.path.join(self.model_dir, "bert_state_dict_new_raw.pt")
 
     def save(self, model_name):
         pass
@@ -83,13 +84,13 @@ class BertFineTuned(BaseModel):
     def predict(self, x_test):
         # Build a BERT based tokenizer
         x_test = x_test.text.to_list()
-        test_dataset = BERTDataset(x_test, self.tokenizer, 216)
+        test_dataset = BERTDataset(x_test, self.tokenizer, 512)
 
         test_dataloader = DataLoader(test_dataset, batch_size=self.batch_size, num_workers=0)
 
         class_names = ["0", "1"]
         self.saved_model = SentimentClassifier(len(class_names))
-        self.saved_model.load_state_dict(torch.load(self.PATH, map_location=self.device))
+        self.saved_model.load_state_dict(torch.load(self.model_path, map_location=self.device))
         self.saved_model = self.saved_model.to(self.device)
 
         self.saved_model.eval()
