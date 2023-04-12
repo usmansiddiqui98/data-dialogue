@@ -36,7 +36,7 @@ class BERTDataset:
             # pad_to_max_length=True,
             return_attention_mask=True,
             return_tensors="pt",
-            truncation=True
+            truncation=True,
         )
 
         return {
