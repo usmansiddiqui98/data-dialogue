@@ -1,11 +1,15 @@
+import logging
 import os
+
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
+from transformers import BertModel, BertTokenizer
+
 from src.models.sentiment_analysis.base_model import BaseModel
-from transformers import (BertModel, BertTokenizer)
-import warnings
-warnings.filterwarnings('ignore')
+
+logging.basicConfig(level=logging.ERROR)
+
 
 class BERTDataset:
     # Constructor Function
@@ -60,7 +64,7 @@ class BertFineTuned(BaseModel):
     def __init__(self, models_path):
         super().__init__(models_path)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.PATH = os.path.join(models_path, 'bert_state_dict.pt')
+        self.PATH = os.path.join(models_path, "bert_state_dict.pt")
         self.tokenizer = BertTokenizer.from_pretrained("bert-base-cased")
         self.saved_model = None
         self.batch_size = 16
@@ -98,10 +102,7 @@ class BertFineTuned(BaseModel):
                 attention_mask = d["attention_mask"].to(self.device)
 
                 # Get outputs
-                outputs = self.saved_model(
-                    input_ids=input_ids,
-                    attention_mask=attention_mask
-                )
+                outputs = self.saved_model(input_ids=input_ids, attention_mask=attention_mask)
                 _, preds = torch.max(outputs, dim=1)
 
                 review_texts.extend(texts)

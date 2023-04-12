@@ -8,10 +8,11 @@ from tqdm.auto import tqdm
 from src.data.generate_oversample import generate_oversample
 from src.data.make_dataset import main as make_dataset
 from src.models.sentiment_analysis.log_reg import LogReg
+from src.models.sentiment_analysis.pre_trained.bert_fine_tuned import BertFineTuned
 from src.models.sentiment_analysis.pre_trained.siebert import Siebert
 from src.models.sentiment_analysis.xg_boost import XgBoost
 from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
-from src.models.sentiment_analysis.pre_trained.bert_fine_tuned import BertFineTuned
+
 
 def train_models(models, X_train, y_train, X_train_os, y_train_os, models_path):
     for model_name, model_instance in tqdm(models.items(), desc="Training models"):
@@ -118,7 +119,8 @@ if __name__ == "__main__":
         "xg_boost": XgBoost(models_path),
         "xg_boost_svd": XgBoostSvd(models_path),
         "log_reg": LogReg(models_path),
-        "bert_fined_tuned": BertFineTuned(os.path.join(BASE_DIR, "src/models/sentiment_analysis/pre_trained"))
+        # "bert_fined_tuned": BertFineTuned(os.path.join(BASE_DIR, "src/models/sentiment_analysis/pre_trained"))
+        "bert_fined_tuned": BertFineTuned(os.path.join(models_path, "bert_fined_tuned"))
         # "siebert": Siebert(models_path)
         # Add other model instances here
     }
