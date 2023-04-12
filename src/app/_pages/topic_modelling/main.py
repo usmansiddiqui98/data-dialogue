@@ -1,9 +1,7 @@
-import src.app._pages.topic_modelling.bert_topic as bert_topic
+import src.app._pages.topic_modelling.evaluation as evaluation
 import src.app.navigation as navigation
 
-router = {
-    "BERTopic": bert_topic,
-}
+router = {"Evaluation": evaluation}
 
 
 def display():

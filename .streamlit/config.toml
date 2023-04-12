@@ -17,3 +17,15 @@ textColor = "#222"
 
 # Font family for all text in the app, except code blocks. One of "sans serif", "serif", or "monospace".
 font = "sans serif"
+
+[browser]
+
+serverAddress = "localhost"
+
+serverPort = 8501
+
+[server]
+
+headless = true
+
+port = 8501
