@@ -32,10 +32,11 @@ class BERTDataset:
             add_special_tokens=True,
             max_length=self.max_len,
             return_token_type_ids=False,
-            padding="longest",
+            padding="max_length",
+            # pad_to_max_length=True,
             return_attention_mask=True,
             return_tensors="pt",
-            truncation=True,
+            truncation=True
         )
 
         return {
@@ -83,6 +84,7 @@ class BertFineTuned(BaseModel):
         # Build a BERT based tokenizer
         x_test = x_test.text.to_list()
         test_dataset = BERTDataset(x_test, self.tokenizer, 216)
+
         test_dataloader = DataLoader(test_dataset, batch_size=self.batch_size, num_workers=0)
 
         class_names = ["0", "1"]
