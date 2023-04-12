@@ -15,17 +15,21 @@ class Naivebayes(BaseModel):
     A class to train and predict positive and negative sentiment of texts using (Multinomial) Naive Bayes model.
     Naive Bayes classifiers are a collection of classification algorithms based on Bayes Theorem.
 
-    Attributes:
-        vectorizer: Initialises TfidfVectorizer to convert a collection of raw text to a matrix of TF-IDF features.
-        scalar: Initialises MinMaxScaler(feature_range=(0, 1)) as model does not take in negative values.
-        tuned_parameters: The optimal parameters obtained after performing GridSearchCV.
-        model: The Naive Bayes model that takes in tuned parameters.
+    Parameters
+    ----------
+    *args
+        The variable arguments
+    **kwargs
+        The arbitrary keyword arguments
 
-    Methods:
-        fit(X_train, y_train): Trains the Naive Bayes model with the training set.
-        save(model_name): Save Naive Bayes model and the vectorizer as pickle files.
-        load(model_name): Load the saved Naive Bayes model and vectorizer.
-        predict(X_test): Naive Bayes model predicts sentiment & probability of sentiment on unseen X_test.
+    Attributes
+    ----------
+    vectorizer : sklearn.feature_extraction.text.TfidfVectorizer
+        Initialises TfidfVectorizer to convert a collection of raw text to a matrix of TF-IDF features.
+    scalar : sklearn.preprocessing.MinMaxScaler
+        Transform features by scaling each feature to a range of 0 to 1 as Naive Bayes does not take in negative values.
+    model : sklearn.naive_bayes.MultinomialNB
+        Naive Bayes classifier that takes in tuned parameters.
     """
 
     def __init__(self, *args, **kwargs):
@@ -37,13 +41,16 @@ class Naivebayes(BaseModel):
 
     def fit(self, X_train, y_train):
         """
-        Generates the TF-IDF features by taking in 'cleaned_text' in X_train.
-        Scales the feature engineered features to values 0 to 1 using MinMaxScaler
-        Fits the TF-IDF and scaled feature engineered features into the Naive Bayes model and trains it.
+        Function to generate the TF-IDF features by taking in 'cleaned_text' in X_train.
+        Scales the feature engineered features to values 0 to 1 using MinMaxScaler.
+        Fits the TF-IDF and feature engineered features into the SVM model and trains it.
 
-        Args:
-            X_train (pandas.DataFrame): The input data consisting of review texts and feature engineered features.
-            y_train (pandas.DataFrame): The sentiment of X_train.
+        Parameters
+        ----------
+        X_train : pandas.DataFrame
+            The input data consisting of review texts and feature engineered features.
+        y_train : pandas.DataFrame
+            The sentiment of X_train.
         """
         X_train_bow = self.vectorizer.fit_transform(X_train["cleaned_text"])
         X_train_bow = pd.DataFrame(X_train_bow.toarray(), columns=self.vectorizer.get_feature_names_out())
@@ -59,8 +66,10 @@ class Naivebayes(BaseModel):
         """
         Save Naive Bayes model and the vectorizer as pickle files.
 
-        Args:
-            model_name (str): The name of the Naive Bayes model to be saved.
+        Parameters
+        ----------
+        model_name : str
+            The name of the Naive Bayes model to be saved.
         """
         self.model_dir = os.path.join(self.models_path, model_name)
 
@@ -74,8 +83,10 @@ class Naivebayes(BaseModel):
         """
         Load Naive Bayes model and the vectorizer pickle files.
 
-        Args:
-            model_name (str): The name of the Naive Bayes model to be loaded.
+        Parameters
+        ----------
+        model_name : str
+            The name of the Naive Bayes model to be loaded.
         """
         self.model_dir = os.path.join(self.models_path, model_name)
 
@@ -90,16 +101,19 @@ class Naivebayes(BaseModel):
         Generates the TF-IDF features by taking in 'cleaned_text' in X_test.
         Naive Bayes model predicts sentiment & probability of sentiment on unseen data (TF-IDF and scaled feature engineered features of X_test).
 
-        Args:
-            X_train (pandas.DataFrame): The input data consisting of review texts and feature engineered features.
-            y_train (pandas.DataFrame): The sentiment of X_train.
+        Parameters
+        ----------
+        X_test : pandas.DataFrame
+            The test data consisting of review texts and feature engineered features.
 
-        Returns:
-            A dictionary consisting of:
-                Key1: Predicted sentiment (Str)
-                Value1: List of sentiments
-                Key2: Probability of predicted sentiment (Str)
-                Value2: List of probabilities of predicted sentiment
+        Returns
+        -------
+        dict [str, List]
+            The key-value pairs are as follows:
+            Key 1: "predicted_sentiment"
+            Value 1: List of sentiments
+            Key 2: "predicted_sentiment_probability"
+            Value 2: List of probabilities of predicted sentiment
         """
         X_test_bow = self.vectorizer.transform(X_test["cleaned_text"])
         X_test_bow = pd.DataFrame(X_test_bow.toarray(), columns=self.vectorizer.get_feature_names_out())
