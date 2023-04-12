@@ -3,6 +3,7 @@ import streamlit as st
 
 def display():
     # Explain what the application is about
+    st.header("Welcome to Data Dialogue!")
     st.subheader("What is Data Dialogue?")
     st.markdown(
         "Whether for a B2B or B2C company,"
@@ -18,5 +19,11 @@ def display():
     )
 
     st.markdown("---")
+    st.subheader("Spaces:")
+    st.markdown("#### Sentiment Analysis")
+    st.markdown("We have developed a tool to predict the sentiment of the given reviews of your products.")
+    st.markdown("#### Topic Modelling")
+    st.markdown("We also have a tool to predict the topics of the given reviews of your products.")
+    st.markdown("---")
     # instructions
-    st.markdown("To continue, please select a page from the sidebar...")
+    st.markdown("To continue, please select a **space** from the sidebar...")

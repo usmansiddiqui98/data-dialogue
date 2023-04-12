@@ -12,7 +12,9 @@ from src.models.sentiment_analysis.xg_boost import XgBoost
 from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 
 # ________CHANGE THIS TO CHANGE MODEL_______
-best_model = "xg_boost_svd"
+with open("models/sentiment_analysis/best_model/best_model_name.txt") as f:
+    best_model_name = f.readlines()
+best_model = best_model_name[0].strip()
 # ________CHANGE THIS TO CHANGE MODEL_______
 
 
@@ -62,13 +64,13 @@ def run_scoring_pipeline(input_df):
     time_col = feature_engineered_df.time
     X_test = feature_engineered_df.drop(["time"], axis=1)
 
-    progress_bar.progress(70, text="Loading Model...")
+    progress_bar.progress(70, text=f"Loading {best_model.title()}...")
     model.load(best_model)
-    progress_bar.progress(80, text="Making Predictions...")
+    progress_bar.progress(80, text=f"Making Predictions {best_model.title()}...")
     pred = model.predict(X_test)
     end = time.time()
     total_time = end - start
-    progress_bar.progress(100, text="Prediction Done in " + str(round(total_time)) + "s")
+    progress_bar.progress(100, text=f"Prediction Done using {best_model.title()} in " + str(round(total_time)) + "s")
 
     # The output file should be named "reviews_test_predictions_<your_group_name>.csv ,
     # and it should have columns - "Text", Time", "predicted_sentiment_probability", "predicted_sentiment".
