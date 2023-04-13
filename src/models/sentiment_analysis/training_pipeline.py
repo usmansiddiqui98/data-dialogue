@@ -117,11 +117,11 @@ if __name__ == "__main__":
     else:
         models_path = os.path.join(BASE_DIR, "models/sentiment_analysis")
     models = {
-        # "xg_boost": XgBoost(models_path),
-        # "xg_boost_svd": XgBoostSvd(models_path),
-        # "log_reg": LogReg(models_path),
+        "xg_boost": XgBoost(models_path),
+        "xg_boost_svd": XgBoostSvd(models_path),
+        "log_reg": LogReg(models_path),
         "bert_fine_tuned": BertFineTuned(models_path),
-        # "siebert": Siebert(models_path),
+        "siebert": Siebert(models_path),
         "lstm": BasicLSTM(models_path),
         # Add other model instances here
     }
