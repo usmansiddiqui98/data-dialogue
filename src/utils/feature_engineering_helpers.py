@@ -36,18 +36,18 @@ def num_typos(sentence):
 
 def compound_polarity_score(sentence):
     """
-        Calculate the compound polarity score of a sentence using VaderSentiment.
+    Calculate the compound polarity score of a sentence using VaderSentiment.
 
-        Parameters
-        ----------
-        sentence : str
-            The sentence to be analyzed.
+    Parameters
+    ----------
+    sentence : str
+        The sentence to be analyzed.
 
-        Returns
-        -------
-        float
-            The compound polarity score of the sentence.
-        """
+    Returns
+    -------
+    float
+        The compound polarity score of the sentence.
+    """
     sid_obj = SentimentIntensityAnalyzer()
     score = sid_obj.polarity_scores(sentence)["compound"]
     return score
@@ -55,35 +55,35 @@ def compound_polarity_score(sentence):
 
 def get_subjectivity(sentence):
     """
-        Calculate the subjectivity score of a sentence using TextBlob.
+    Calculate the subjectivity score of a sentence using TextBlob.
 
-        Parameters
-        ----------
-        sentence : str
-            The sentence to be analyzed.
+    Parameters
+    ----------
+    sentence : str
+        The sentence to be analyzed.
 
-        Returns
-        -------
-        float
-            The subjectivity score of the sentence.
-        """
+    Returns
+    -------
+    float
+        The subjectivity score of the sentence.
+    """
     return round(TextBlob(sentence).sentiment.subjectivity, 6)
 
 
 def count_pos_neg_neutral(sentence):
     """
-       Count the number of positive, negative, and neutral words in a sentence using VaderSentiment.
+    Count the number of positive, negative, and neutral words in a sentence using VaderSentiment.
 
-       Parameters
-       ----------
-       sentence : str
-           The sentence to be analyzed.
+    Parameters
+    ----------
+    sentence : str
+        The sentence to be analyzed.
 
-       Returns
-       -------
-       list
-           A list of three integers representing the count of positive, negative, and neutral words in the sentence.
-       """
+    Returns
+    -------
+    list
+        A list of three integers representing the count of positive, negative, and neutral words in the sentence.
+    """
 
     text_split = sentence.split()
     sid = SentimentIntensityAnalyzer()
@@ -105,18 +105,18 @@ def count_pos_neg_neutral(sentence):
 
 def count_lower(sentence):
     """
-       Count the number of lowercase words in a sentence.
+    Count the number of lowercase words in a sentence.
 
-       Parameters
-       ----------
-       sentence : str
-           The sentence to be analyzed.
+    Parameters
+    ----------
+    sentence : str
+        The sentence to be analyzed.
 
-       Returns
-       -------
-       int
-           The number of lowercase words in the sentence.
-       """
+    Returns
+    -------
+    int
+        The number of lowercase words in the sentence.
+    """
     words = nltk.word_tokenize(sentence)
     count = 0
     for word in words:
@@ -128,18 +128,18 @@ def count_lower(sentence):
 # Define function to count number of uppercase
 def count_upper(sentence):
     """
-        Count the number of uppercase words in a sentence.
+    Count the number of uppercase words in a sentence.
 
-        Parameters
-        ----------
-        sentence : str
-            The sentence to be analyzed.
+    Parameters
+    ----------
+    sentence : str
+        The sentence to be analyzed.
 
-        Returns
-        -------
-        int
-            The number of uppercase words in the sentence.
-        """
+    Returns
+    -------
+    int
+        The number of uppercase words in the sentence.
+    """
     words = nltk.word_tokenize(sentence)
     count = 0
     for word in words:
@@ -177,18 +177,18 @@ def uppercase_list(sentence):
 # Define function to get uppercase:total tokens ratio
 def uppercase_ratio(sentence):
     """
-        Get the ratio of uppercase words to total tokens in a sentence.
+    Get the ratio of uppercase words to total tokens in a sentence.
 
-        Parameters
-        ----------
-        sentence : str
-            Input sentence.
+    Parameters
+    ----------
+    sentence : str
+        Input sentence.
 
-        Returns
-        -------
-        float
-            The ratio of uppercase words to total tokens, rounded to 6 decimal places.
-        """
+    Returns
+    -------
+    float
+        The ratio of uppercase words to total tokens, rounded to 6 decimal places.
+    """
     words = nltk.word_tokenize(sentence)
     count = 0
     for word in words:
@@ -203,18 +203,18 @@ def uppercase_ratio(sentence):
 # Define function to count number of punctuations
 def count_punc(sentence):
     """
-       Count the number of punctuations in a sentence.
+    Count the number of punctuations in a sentence.
 
-       Parameters
-       ----------
-       sentence : str
-           Input sentence.
+    Parameters
+    ----------
+    sentence : str
+        Input sentence.
 
-       Returns
-       -------
-       int
-           The number of punctuations in the sentence.
-       """
+    Returns
+    -------
+    int
+        The number of punctuations in the sentence.
+    """
     words = nltk.word_tokenize(sentence)
     count = 0
     for word in words:
@@ -225,18 +225,18 @@ def count_punc(sentence):
 
 def pos_tags(sentence):
     """
-       Get the part-of-speech (POS) tags of the words in a sentence.
+    Get the part-of-speech (POS) tags of the words in a sentence.
 
-       Parameters
-       ----------
-       sentence : str
-           Input sentence.
+    Parameters
+    ----------
+    sentence : str
+        Input sentence.
 
-       Returns
-       -------
-       list of tuples
-           A list of tuples, where each tuple contains a word and its corresponding POS tag.
-       """
+    Returns
+    -------
+    list of tuples
+        A list of tuples, where each tuple contains a word and its corresponding POS tag.
+    """
     tokenized_sentence = nltk.word_tokenize(sentence.lower())
     tagged = nltk.pos_tag(tokenized_sentence)
     return tagged

@@ -30,6 +30,7 @@ class FeatureEngineer:
         The feature-engineered data. Initialized to None.
 
     """
+
     pandarallel.initialize(progress_bar=False, verbose=0)
 
     def __init__(self, pre_processed_df):
@@ -40,17 +41,17 @@ class FeatureEngineer:
     def pos_tag_count(pre_processed_df):
         """Count the number of verbs, nouns, and cardinal digits in each review.
 
-               Parameters
-               ----------
-               pre_processed_df : pandas.DataFrame
-                   The pre-processed text data.
+        Parameters
+        ----------
+        pre_processed_df : pandas.DataFrame
+            The pre-processed text data.
 
-               Returns
-               -------
-               pandas.DataFrame
-                   The data with three new columns, indicating the number of verbs, nouns, and cardinal digits in each review.
+        Returns
+        -------
+        pandas.DataFrame
+            The data with three new columns, indicating the number of verbs, nouns, and cardinal digits in each review.
 
-               """
+        """
         # extract verbs
         df = pre_processed_df.copy()
         df["verbs"] = df["pos_tags"].parallel_apply(
