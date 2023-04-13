@@ -2,6 +2,7 @@ import logging
 import os
 
 import torch
+import transformers.utils.logging
 from torch import nn
 from torch.utils.data import DataLoader
 from transformers import BertModel, BertTokenizer
@@ -9,6 +10,7 @@ from transformers import BertModel, BertTokenizer
 from src.models.sentiment_analysis.base_model import BaseModel
 
 logging.basicConfig(level=logging.ERROR)
+transformers.utils.logging.set_verbosity_error()
 
 
 class BERTDataset:
