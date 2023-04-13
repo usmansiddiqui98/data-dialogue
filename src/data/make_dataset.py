@@ -26,9 +26,14 @@ def main(input_df, train_split_output_filepath=None, test_split_output_filepath=
 
     Returns
     -------
-    tuple
-        A tuple of the preprocessed and feature engineered training features (X_train), test features (X_test),
-        training target variable (y_train), and test target variable (y_test).
+        pandas.DataFrame: X_train
+            Preprocessed and feature engineered training feature matrix.
+        pandas.DataFrame: X_test
+            Preprocessed and feature engineered test feature matrix.
+        pandas.DataFrame: y_train
+            Training target labels.
+        pandas.DataFrame: y_test
+            Test target labels.
 
     """
 
