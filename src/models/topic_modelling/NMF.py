@@ -11,12 +11,12 @@ class NMFModel:
     ----------
     df : pd.DataFrame
         The data that the model will be trained on.
-    n_components : int, optional
-        The number of topics that will be generated, default is 10.
-    max_features : int, optional
-        The maximum number of features that will be used to represent the text, default is 1000.
-    max_df : float, optional
-        The maximum document frequency of the words that will be used to represent the text, default is 0.5.
+    n_components : int, optional, default: 10
+        The number of topics that will be generated.
+    max_features : int, optional, default: 1000
+        The maximum number of features that will be used to represent the text.
+    max_df : float, optional, default: 0.5
+        The maximum document frequency of the words that will be used to represent the text.
     vectorizer : TfidfVectorizer
         A vectorizer used to convert text to a matrix of TF-IDF features.
     model : NMF
@@ -32,20 +32,30 @@ class NMFModel:
     label_df : pd.DataFrame
         A dataframe with the original data and topic labels.
 
+    Methods
+    -------
+    fit_transform()
+        Fit and transform the data to get the document weights.
+    get_topic_terms(n_top_words=10)
+        Get the top terms for each topic.
+    get_labels(n_top_words=5)
+        Label the topics for each data point in the input DataFrame.
     """
 
     def __init__(self, df, n_components=10, max_features=1000, max_df=0.5):
         """
+        Initializes the NMFModel object.
+
         Parameters
         ----------
         df : pd.DataFrame
             The data that the model will be trained on.
-        n_components : int, optional
-            The number of topics that will be generated, default is 10.
-        max_features : int, optional
-            The maximum number of features that will be used to represent the text, default is 1000.
-        max_df : float, optional
-            The maximum document frequency of the words that will be used to represent the text, default is 0.5.
+        n_components : int, optional, default: 10
+            The number of topics that will be generated.
+        max_features : int, optional, default: 1000
+            The maximum number of features that will be used to represent the text.
+        max_df : float, optional, default: 0.5
+            The maximum document frequency of the words that will be used to represent the text.
         """
         self.df = df
         self.n_components = n_components
