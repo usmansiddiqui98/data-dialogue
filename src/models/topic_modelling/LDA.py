@@ -8,28 +8,43 @@ class LDAGensim:
     """
     A class for performing LDA topic modeling using the Gensim library.
 
-    Attributes:
-        df (pandas.DataFrame): The input dataframe containing text data to perform LSA.
-        num_topics (int): The number of topics to extract (default: 10).
-        tags (list): A list of part-of-speech tags to use for lemmatization (default: None).
-        id2word (gensim.corpora.Dictionary): The Gensim dictionary object representing the corpus vocabulary.
-        corpus (list): The Gensim corpus object representing the tokenized documents.
-        lda_model (gensim.models.ldamodel.LdaModel): The Gensim LDA model object.
+    Attributes
+    ----------
+    df : pandas.DataFrame
+        The input dataframe containing text data to perform LSA.
+    num_topics : int, optional, default: 10
+        The number of topics to extract.
+    tags : list, optional, default: None
+        A list of part-of-speech tags to use for lemmatization.
+    id2word : gensim.corpora.Dictionary
+        The Gensim dictionary object representing the corpus vocabulary.
+    corpus : list
+        The Gensim corpus object representing the tokenized documents.
+    lda_model : gensim.models.ldamodel.LdaModel
+        The Gensim LDA model object.
 
-    Methods:
-        lemmatization(texts, tags): Lemmatizes input texts using spaCy.
-        get_topics(passes): Perform Latent Dirichlet Allocation on the input text data and return a dictionary of topics.
+    Methods
+    -------
+    lemmatization(texts, tags)
+        Lemmatizes input texts using spaCy.
+    get_topics(passes=10)
+        Perform Latent Dirichlet Allocation on the input text data and return a dictionary of topics.
     """
 
     def __init__(self, df, num_topics=10, tags=None):
         """
         Initializes the LDAGensim object.
 
-        Args:
-            df (pandas.DataFrame): The input data as a pandas DataFrame.
-            num_topics (int): The number of topics to extract (default: 10).
-            tags (list): A list of part-of-speech tags to use for lemmatization (default: None).
+        Parameters
+        ----------
+        df : pandas.DataFrame
+            The input data as a pandas DataFrame.
+        num_topics : int, optional, default: 10
+            The number of topics to extract.
+        tags : list, optional, default: None
+            A list of part-of-speech tags to use for lemmatization.
         """
+
         self.df = df
         self.num_topics = num_topics
         self.tags = tags
@@ -42,12 +57,17 @@ class LDAGensim:
         """
         Lemmatizes input texts using spaCy.
 
-        Args:
-            texts (list): A list of tokenized texts to lemmatize.
-            tags (list): A list of part-of-speech tags to use for lemmatization.
+        Parameters
+        ----------
+        texts : list
+            A list of tokenized texts to lemmatize.
+        tags : list
+            A list of part-of-speech tags to use for lemmatization.
 
-        Returns:
-        list: A list of lemmatized texts.
+        Returns
+        -------
+        list
+            A list of lemmatized texts.
         """
         output = []
         nlp = spacy.load("en_core_web_sm")
@@ -60,11 +80,15 @@ class LDAGensim:
         """
         Extracts LDA topics from the input data using the Gensim library.
 
-        Args:
-            passes (int): The number of passes to use for training the LDA model (default: 10).
+        Parameters
+        ----------
+        passes : int, optional, default: 10
+            The number of passes to use for training the LDA model.
 
-        Returns:
-            dict: A dictionary of topic words and their weights for each topic.
+        Returns
+        -------
+        dict
+            A dictionary of topic words and their weights for each topic.
         """
         if not self.tags:
             reviews = [word_tokenize(review) for review in self.df["cleaned_text"]]
