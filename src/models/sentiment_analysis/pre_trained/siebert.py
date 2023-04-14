@@ -93,6 +93,10 @@ class Siebert(BaseModel):
                 {"predicted_sentiment": List of predicted sentiment labels,
                  "predicted_sentiment_probability": List of predicted sentiment probabilities}
         """
+        if torch.cuda.is_available():
+            print("Siebert predicting on GPU")
+        else:
+            print("Siebert predicting on CPU")
         x_test = x_test.text.to_list()
         x_test = [x[:512] if len(x) > 512 else x for x in x_test]
         sentiment_analysis = pipeline(
