@@ -10,8 +10,31 @@ from src.data.preprocess import Preprocessor
 
 
 def main(input_df, train_split_output_filepath=None, test_split_output_filepath=None, oversample=False):
-    """Runs data processing scripts to turn raw data from (../raw) into
-    cleaned data ready to be analyzed (saved in ../processed).
+    """
+    Main function for preprocessing and feature engineering of input data using our Preprocessor and FeatureEngineer classes, and writing of train/test splits to CSV files.
+
+    Parameters
+    ----------
+    input_df : pandas.DataFrame
+        The input data to be preprocessed and feature engineered.
+    train_split_output_filepath : str, optional
+        The output file path for the preprocessed and feature engineered training set CSV file.
+    test_split_output_filepath : str, optional
+        The output file path for the preprocessed and feature engineered test set CSV file.
+    oversample : bool, optional
+        Whether to the input data has been oversampled.
+
+    Returns
+    -------
+        pandas.DataFrame: X_train
+            Preprocessed and feature engineered training feature matrix.
+        pandas.DataFrame: X_test
+            Preprocessed and feature engineered test feature matrix.
+        pandas.DataFrame: y_train
+            Training target labels.
+        pandas.DataFrame: y_test
+            Test target labels.
+
     """
 
     preprocessor = Preprocessor(input_df)
