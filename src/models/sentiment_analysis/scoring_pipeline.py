@@ -1,14 +1,18 @@
 import os
 import time
-import torch
 from sys import platform
 
 import pandas as pd
+import torch
 
 from src.data.feature_engineering import FeatureEngineer
 from src.data.preprocess import Preprocessor
 from src.models.sentiment_analysis.log_reg import LogReg
+from src.models.sentiment_analysis.lstm import BasicLSTM
+from src.models.sentiment_analysis.naive_bayes import Naivebayes
+from src.models.sentiment_analysis.pre_trained.bert_fine_tuned import BertFineTuned
 from src.models.sentiment_analysis.pre_trained.siebert import Siebert
+from src.models.sentiment_analysis.svm import SVM
 from src.models.sentiment_analysis.xg_boost import XgBoost
 from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 
@@ -43,22 +47,16 @@ def run_scoring_pipeline(input_df):
     else:
         models_path = "models/sentiment_analysis"
 
-    if torch.cuda.is_available():
-        model_classes = {
-            "xg_boost": XgBoost,
-            "xg_boost_svd": XgBoostSvd,
-            "log_reg": LogReg,
-            "siebert": Siebert,
-            # Add other model instances here
-        }
-    else:
-        model_classes = {
-            "xg_boost": XgBoost,
-            "xg_boost_svd": XgBoostSvd,
-            "log_reg": LogReg,
-            # Add other model instances here
-        }
-
+    model_classes = {
+        "xg_boost": XgBoost(models_path),
+        "xg_boost_svd": XgBoostSvd(models_path),
+        "log_reg": LogReg(models_path),
+        "svm": SVM(models_path),
+        "naive_bayes": Naivebayes(models_path),
+        "bert_fine_tuned": BertFineTuned(models_path),
+        "siebert": Siebert(models_path),
+        "lstm": BasicLSTM(models_path),
+    }
 
     # Use the best_model variable to create the corresponding model object
     model = model_classes[best_model](models_path)

@@ -173,12 +173,9 @@ if __name__ == "__main__":
             "log_reg": LogReg(models_path),
             "svm": SVM(models_path),
             "naive_bayes": Naivebayes(models_path),
-            "bert_fine_tuned": BertFineTuned(models_path),
-            "siebert": Siebert(models_path),
             "lstm": BasicLSTM(models_path),
             # Add other model instances here
         }
-
 
     # Train the models and save them
     train_models(models, X_train, y_train, X_train_os, y_train_os, models_path)
