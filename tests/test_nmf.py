@@ -1,10 +1,10 @@
 import os
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import pytest
-from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import NMF
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 from src.models.topic_modelling.NMF import NMFModel
 
