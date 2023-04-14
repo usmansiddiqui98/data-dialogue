@@ -7,10 +7,12 @@ from xgboost import XGBClassifier
 from src.models.sentiment_analysis.xg_boost import XgBoost
 from sklearn.metrics import accuracy_score
 
+
 @pytest.fixture
 def model():
-    # Load and return the trained model here
     return XgBoost(models_path="/test_files")
+
+
 @pytest.fixture
 def get_data():
     train_fname = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test_files", "train_reviews.csv"))

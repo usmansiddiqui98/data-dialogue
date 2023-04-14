@@ -7,10 +7,12 @@ from sklearn.metrics import accuracy_score
 
 from src.models.sentiment_analysis.lstm import SentimentLSTM, BasicLSTM
 
+
 @pytest.fixture
 def model():
-    # Load and return the trained model here
     return BasicLSTM(models_path="/test_files")
+
+
 @pytest.fixture
 def get_data():
     train_fname = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test_files", "train_reviews.csv"))
@@ -23,6 +25,18 @@ def get_data():
     X_test = test_df.drop(["sentiment"], axis=1)
     y_test = test_df["sentiment"]
     return X_train, y_train, X_test, y_test
+
+
+def test_data_preparation(model, get_data):
+    X_train, y_train, X_test, y_test = get_data
+    final_list_train = model.data_preparation(X_train)
+    assert final_list_train is not None
+
+
+def test_padding(model, get_data):
+    X_train, y_train, X_test, y_test = get_data
+    features = model.padding(model.data_preparation(X_train))
+    assert features is not None
 
 
 def test_fit(model, get_data):
