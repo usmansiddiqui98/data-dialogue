@@ -13,7 +13,27 @@ from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 
 
 def run_scoring_pipeline(input_df):
-    """Run the scoring pipeline."""
+    """
+    Execute the sentiment analysis scoring pipeline on the input DataFrame.
+
+    The pipeline consists of the following steps:
+    1. Preprocessing the input data.
+    2. Feature engineering.
+    3. Model selection and loading.
+    4. Prediction using the best model.
+    5. Saving the predicted sentiment and sentiment probabilities in an output DataFrame.
+
+    Parameters
+    ----------
+    input_df : pandas.DataFrame
+        The input DataFrame containing the raw reviews data.
+
+    Returns
+    -------
+    output : pandas.DataFrame
+        The output DataFrame containing the predicted sentiment and sentiment probabilities for each review.
+    """
+
     # ________CHANGE THIS TO CHANGE MODEL_______
     with open("models/sentiment_analysis/best_model/best_model_name.txt") as f:
         best_model_name = f.readlines()
