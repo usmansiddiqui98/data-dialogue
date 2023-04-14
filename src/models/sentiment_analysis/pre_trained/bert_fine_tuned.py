@@ -71,7 +71,6 @@ class BERTDataset:
         """
         review = str(self.reviews[item])
 
-        # Encoded format to be returned
         encoding = self.tokenizer.encode_plus(
             review,
             add_special_tokens=True,
@@ -136,7 +135,7 @@ class SentimentClassifier(nn.Module):
             The output tensor after passing through the model.
         """
         _, pooled_output = self.bert(input_ids=input_ids, attention_mask=attention_mask, return_dict=False)
-        #  Add a dropout layer
+
         output = self.drop(pooled_output)
         return self.out(output)
 
@@ -241,7 +240,7 @@ class BertFineTuned(BaseModel):
         dict
             A dictionary containing the predicted sentiment and predicted sentiment probability.
         """
-        # Build a BERT based tokenizer
+
         x_test = x_test.text.to_list()
         test_dataset = BERTDataset(x_test, self.tokenizer, 512)
 
@@ -264,7 +263,7 @@ class BertFineTuned(BaseModel):
                 input_ids = d["input_ids"].to(self.device)
                 attention_mask = d["attention_mask"].to(self.device)
 
-                # Get outputs
+          
                 outputs = self.saved_model(input_ids=input_ids, attention_mask=attention_mask)
                 _, preds = torch.max(outputs, dim=1)
 
