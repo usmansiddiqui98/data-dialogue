@@ -28,18 +28,15 @@ class BertTopic:
         An instance of BERTopic model for generating topics.
     """
 
-    def __init__(self, data, preprocessor):
+    def __init__(self, data):
         """
         Constructs all necessary attributes for the BertTopic object.
 
         Parameters:
             data (pandas.DataFrame):
                 The input data as a pandas dataframe.
-            preprocessor (Preprocessor):
-                An instance of Preprocessor class used for text pre-processing.
         """
         self.data = data
-        self.preprocessor = preprocessor
         self.embeddings = None
         self.topics = None
         self.probabilities = None
@@ -50,7 +47,7 @@ class BertTopic:
         Generates BERT embeddings for input data and saves them to a file for future use.
         """
         BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
-        embeddings_file = os.path.join(BASE_DIR, "models/topic_modelling/bert_topic/BERTopic_embeddings.pickle")
+        embeddings_file = os.path.join(BASE_DIR, "data/embeddings/BERTopic_embeddings.pickle")
 
         if os.path.exists(embeddings_file):
             print("Loading existing embeddings...")
@@ -59,7 +56,7 @@ class BertTopic:
         else:
             print("Creating new embeddings...")
             sentence_model = SentenceTransformer("all-MiniLM-L12-v2")
-            self.embeddings = sentence_model.encode(self.pre_processed_df["cleaned_text"], show_progress_bar=True)
+            self.embeddings = sentence_model.encode(self.df["cleaned_text"], show_progress_bar=True)
 
             # save embeddings
             with open(embeddings_file, "wb") as pkl:
@@ -78,9 +75,7 @@ class BertTopic:
             calculate_probabilities=True,
             nr_topics="auto",
         )
-        self.topics, self.probabilities = self.topic_model.fit_transform(
-            self.preprocessor.clean_df["cleaned_text"], self.embeddings
-        )
+        self.topics, self.probabilities = self.topic_model.fit_transform(self.df["cleaned_text"], self.embeddings)
 
     def get_topics(self):
         """

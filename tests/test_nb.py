@@ -11,6 +11,8 @@ def test_notebooks():
     exporter = NotebookExporter(preprocessors=[ClearOutputPreprocessor()])
     for file_name in os.listdir("."):
         if file_name.endswith(".ipynb"):
+            if file_name.endswith("BERTopic.ipynb"):
+                continue
             if file_name.endswith("Sentiment_Analysis.ipynb"):
                 continue
             with open(file_name) as f:

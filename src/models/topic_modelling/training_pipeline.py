@@ -9,11 +9,13 @@ from src.models.topic_modelling.LSA import LSAModel
 from src.models.topic_modelling.NMF import NMFModel
 
 
-def run_training_pipeline(model_choice, pre_processed_df):
+def run_training_pipeline(model_choice, pre_processed_df, num_topics=10, tags=None):
     """
     Train the specified topic modeling algorithm on the given pre-processed DataFrame.
 
     Parameters:
+        num_topics (int): Number of topics
+        tags (list): Nouns, Adjectives and Verbs
         model_choice (str): The topic modeling algorithm to use, options are: "lda", "lsa", "nmf", "bertopic".
         pre_processed_df (pd.DataFrame): The pre-processed input data to train the topic modeling algorithm on.
 
@@ -26,11 +28,11 @@ def run_training_pipeline(model_choice, pre_processed_df):
     """
     if model_choice:
         if model_choice == "lda":
-            lda_model = LDAGensim(pre_processed_df, tags=["NOUN"])
+            lda_model = LDAGensim(pre_processed_df, num_topics=num_topics, tags=tags)
             print("Running LDA Model...")
             topics_dict = lda_model.get_topics()
         elif model_choice == "lsa":
-            lsa_model = LSAModel(pre_processed_df, tags=["NOUN"])
+            lsa_model = LSAModel(pre_processed_df, num_topics=num_topics, tags=tags)
             print("Running LSA Model...")
             topics_dict = lsa_model.get_topics()
         elif model_choice == "nmf":
@@ -38,12 +40,12 @@ def run_training_pipeline(model_choice, pre_processed_df):
             print("Running NMF Model...")
             nmf_model.fit_transform()
             topics_dict = nmf_model.get_topic_terms()
-        # elif model_choice == "bertopic":
-        #     bertopic_model = BertTopic(pre_processed_df)
-        #     print("Running BertTopic Model...")
-        #     bertopic_model.prepare_embeddings()
-        #     bertopic_model.run_bertopic()
-        #     topics_dict = bertopic_model.get_topics()
+        elif model_choice == "bertopic":
+            bertopic_model = BertTopic(pre_processed_df)
+            print("Running BertTopic Model...")
+            bertopic_model.prepare_embeddings()
+            bertopic_model.run_bertopic()
+            topics_dict = bertopic_model.get_topics()
     else:
         raise ValueError("Please specify a model to run.")
 
@@ -79,8 +81,8 @@ def topics_dict_to_df(model_choice, topics_dict):
         score_col = "svd_score"
     elif model_choice == "nmf":
         score_col = "tfidf_score"
-    # elif model_choice == "bertopic":
-    #     score_col = "probability"
+    elif model_choice == "bertopic":
+        score_col = "probability"
 
     topics_df = topics_df.rename(columns={"value": score_col})
 
