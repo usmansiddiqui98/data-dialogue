@@ -16,14 +16,14 @@ class Naivebayes(BaseModel):
     Naive Bayes classifiers are a collection of classification algorithms based on Bayes Theorem.
 
     Parameters
-    ----------
+
     *args
         The variable arguments
     **kwargs
         The arbitrary keyword arguments
 
     Attributes
-    ----------
+
     vectorizer : sklearn.feature_extraction.text.TfidfVectorizer
         Initialises TfidfVectorizer to convert a collection of raw text to a matrix of TF-IDF features.
     scalar : sklearn.preprocessing.MinMaxScaler
@@ -46,7 +46,7 @@ class Naivebayes(BaseModel):
         Fits the TF-IDF and feature engineered features into the SVM model and trains it.
 
         Parameters
-        ----------
+
         X_train : pandas.DataFrame
             The input data consisting of review texts and feature engineered features.
         y_train : pandas.DataFrame
@@ -67,7 +67,7 @@ class Naivebayes(BaseModel):
         Save Naive Bayes model and the vectorizer as pickle files.
 
         Parameters
-        ----------
+
         model_name : str
             The name of the Naive Bayes model to be saved.
         """
@@ -84,7 +84,7 @@ class Naivebayes(BaseModel):
         Load Naive Bayes model and the vectorizer pickle files.
 
         Parameters
-        ----------
+
         model_name : str
             The name of the Naive Bayes model to be loaded.
         """
@@ -101,19 +101,16 @@ class Naivebayes(BaseModel):
         Generates the TF-IDF features by taking in 'cleaned_text' in X_test.
         Naive Bayes model predicts sentiment & probability of sentiment on unseen data (TF-IDF and scaled feature engineered features of X_test).
 
-        Parameters
-        ----------
+        Parameters:
+
         X_test : pandas.DataFrame
             The test data consisting of review texts and feature engineered features.
 
-        Returns
-        -------
-        dict [str, List]
-            The key-value pairs are as follows:
-            Key 1: "predicted_sentiment"
-            Value 1: List of sentiments
-            Key 2: "predicted_sentiment_probability"
-            Value 2: List of probabilities of predicted sentiment
+        Returns:
+
+            dict: Dictionary containing predicted sentiment labels and probabilities.
+                {"predicted_sentiment": List of predicted sentiment labels,
+                 "predicted_sentiment_probability": List of predicted sentiment probabilities}
         """
         X_test_bow = self.vectorizer.transform(X_test["cleaned_text"])
         X_test_bow = pd.DataFrame(X_test_bow.toarray(), columns=self.vectorizer.get_feature_names_out())

@@ -72,9 +72,17 @@ format:
 test:
 	pytest tests --cov-report term-missing --cov=tests/
 
-.PHONY: training_pipeline
-training_pipeline:
+.PHONY: train_sentiment
+train_sentiment:
 	$(PYTHON_INTERPRETER) $(PROJECT_DIR)/src/models/sentiment_analysis/training_pipeline.py
+
+.PHONY: score_sentiment
+score_sentiment:
+	$(PYTHON_INTERPRETER) $(PROJECT_DIR)/src/models/sentiment_analysis/scoring_pipeline.py
+
+.PHONY: train_topic
+train_topic:
+	$(PYTHON_INTERPRETER) $(PROJECT_DIR)/src/models/topic_modelling/training_pipeline.py
 
 ## Delete all compiled Python files
 .PHONY: clean

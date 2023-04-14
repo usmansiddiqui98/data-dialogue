@@ -20,8 +20,6 @@ font = "sans serif"
 
 [browser]
 
-serverAddress = "localhost"
-
 serverPort = 8501
 
 [server]
