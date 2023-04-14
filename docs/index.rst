@@ -7,9 +7,10 @@ Data Dialogue Documentation!
 ==============================================
 
 Contents:
+^^^^^^^^^
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    getting-started
    commands
@@ -20,7 +21,7 @@ Contents:
 
 
 Indices and tables
-==================
+^^^^^^^^^^^^^^^^^^
 
 * :ref:`genindex`
 * :ref:`modindex`
