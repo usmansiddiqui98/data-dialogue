@@ -9,8 +9,10 @@ from src.data.generate_oversample import generate_oversample
 from src.data.make_dataset import main as make_dataset
 from src.models.sentiment_analysis.log_reg import LogReg
 from src.models.sentiment_analysis.lstm import BasicLSTM
+from src.models.sentiment_analysis.naive_bayes import Naivebayes
 from src.models.sentiment_analysis.pre_trained.bert_fine_tuned import BertFineTuned
 from src.models.sentiment_analysis.pre_trained.siebert import Siebert
+from src.models.sentiment_analysis.svm import SVM
 from src.models.sentiment_analysis.xg_boost import XgBoost
 from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 
@@ -105,6 +107,7 @@ if __name__ == "__main__":
             data, train_split_output_filepath=train_filepath, test_split_output_filepath=test_filepath
         )
         # with oversample
+        print("Proceeding with FE on oversampled data...")
         X_train_os, X_test, y_train_os, y_test = make_dataset(
             data_os,
             train_split_output_filepath=train_oversample_filepath,
@@ -120,10 +123,11 @@ if __name__ == "__main__":
         "xg_boost": XgBoost(models_path),
         "xg_boost_svd": XgBoostSvd(models_path),
         "log_reg": LogReg(models_path),
+        "svm": SVM(models_path),
+        "naive_bayes": Naivebayes(models_path),
         "bert_fine_tuned": BertFineTuned(models_path),
         "siebert": Siebert(models_path),
         "lstm": BasicLSTM(models_path),
-        # Add other model instances here
     }
 
     # Train the models and save them

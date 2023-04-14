@@ -12,7 +12,7 @@ class XgBoost(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.vectorizer = TfidfVectorizer()
-        self.model = XGBClassifier(use_label_encoder=False, eval_metric="mlogloss", random_state=4265)
+        self.model = XGBClassifier(eval_metric="mlogloss", random_state=4265)
 
     def fit(self, X_train, y_train):
         # X_train_processed = self.fit_transform(X_train)
