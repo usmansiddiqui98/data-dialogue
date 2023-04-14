@@ -48,14 +48,14 @@ def run_scoring_pipeline(input_df):
         models_path = "models/sentiment_analysis"
 
     model_classes = {
-        "xg_boost": XgBoost(models_path),
-        "xg_boost_svd": XgBoostSvd(models_path),
-        "log_reg": LogReg(models_path),
-        "svm": SVM(models_path),
-        "naive_bayes": Naivebayes(models_path),
-        "bert_fine_tuned": BertFineTuned(models_path),
-        "siebert": Siebert(models_path),
-        "lstm": BasicLSTM(models_path),
+        "xg_boost": XgBoost,
+        "xg_boost_svd": XgBoostSvd,
+        "log_reg": LogReg,
+        "svm": SVM,
+        "naive_bayes": Naivebayes,
+        "bert_fine_tuned": BertFineTuned,
+        "siebert": Siebert,
+        "lstm": BasicLSTM,
     }
 
     # Use the best_model variable to create the corresponding model object
