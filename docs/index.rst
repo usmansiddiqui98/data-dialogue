@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-nlp_4263 documentation!
+Data Dialogue Documentation!
 ==============================================
 
 Contents:
@@ -13,6 +13,9 @@ Contents:
 
    getting-started
    commands
+   models
+   pipelines
+   data
 
 
 

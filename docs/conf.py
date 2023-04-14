@@ -26,7 +26,13 @@ import sys
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = []
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.napoleon',
+]
+
+autodoc_typehints = 'description'
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -41,7 +47,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'nlp_4263'
+project = u'Data Dialogue'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -91,7 +97,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+html_theme = 'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -164,7 +170,7 @@ html_static_path = ['_static']
 # html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'nlp-dsa4263doc'
+htmlhelp_basename = 'data-dialogue doc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -184,8 +190,8 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
     ('index',
-     'nlp-dsa4263.tex',
-     u'nlp_4263 Documentation',
+     'data-dialogue.tex',
+     u'data-dialogue Documentation',
      u"Usman Siddiqui", 'manual'),
 ]
 
@@ -215,7 +221,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'nlp-dsa4263', u'nlp_4263 Documentation',
+    ('index', 'data-dialogue', u'data-dialogue Documentation',
      [u"Usman Siddiqui"], 1)
 ]
 
@@ -229,8 +235,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'nlp-dsa4263', u'nlp_4263 Documentation',
-     u"Usman Siddiqui", 'nlp_4263',
+    ('index', 'data-dialogue', u'data-dialogue Documentation',
+     u"Usman Siddiqui", 'data-dialogue',
      'Whether for a B2B or B2C company, relevance and longevity in the industry depends on how well the products answer the needs of the customers. However, when the time comes for the companies to demonstrate that understanding — during a sales conversation, customer service interaction, or through the product itself — how can companies evaluate how they measure up?', 'Miscellaneous'),
 ]
 
