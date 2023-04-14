@@ -180,18 +180,18 @@ class BertFineTuned(BaseModel):
 
     def save(self, model_name):
         """
-         Save the model under the given model_name in the models_path directory.
-         This method is not implemented since Siebert uses a pre-trained model.
+        Save the model under the given model_name in the models_path directory.
+        This method is not implemented since Siebert uses a pre-trained model.
 
-         Parameters
-         ----------
-         model_name : str
-             Name of the model to be saved.
+        Parameters
+        ----------
+        model_name : str
+            Name of the model to be saved.
 
-         Returns
-         -------
-         None
-         """
+        Returns
+        -------
+        None
+        """
         pass
 
     def load(self, model_name):
