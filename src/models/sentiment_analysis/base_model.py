@@ -41,7 +41,7 @@ class BaseModel:
         Load the fitted model with model name. Implemented in model subclass.
 
         Parameters
-        ----------
+
         model_name : str
             The name of the model to be loaded.
         """
@@ -52,14 +52,14 @@ class BaseModel:
         Fits the model. Implemented in model subclass.
 
         Parameters
-        ----------
+
         X_train : pandas.DataFrame
             The input data consisting of review texts and feature engineered features.
         y_train : pandas.DataFrame
             The sentiment of X_train.
 
         Raises
-        ------
+
         NotImplementedError
             Raised if fit method in subclass is not implemented.
         """
@@ -70,12 +70,12 @@ class BaseModel:
         Generates model prediction. Implemented in model subclass.
 
         Parameters
-        ----------
+
         X : pandas.DataFrame
              The test data consisting of review texts and feature engineered features.
 
         Raises
-        ------
+
         NotImplementedError
             Raised if predict method in subclass is not implemented.
         """

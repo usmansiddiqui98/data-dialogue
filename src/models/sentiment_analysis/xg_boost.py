@@ -9,14 +9,42 @@ from src.models.sentiment_analysis.base_model import BaseModel
 
 
 class XgBoost(BaseModel):
+    """
+    XgBoost class for sentiment analysis using XGBoost classifier.
+
+    Attributes
+    vectorizer : TfidfVectorizer
+        TfidfVectorizer object for text vectorization.
+    model : XGBClassifier
+        XGBoost classifier object for sentiment analysis.
+    """
+
     def __init__(self, *args, **kwargs):
+        """
+        Initialize XgBoost model.
+
+        Parameters
+        *args : tuple
+            Positional arguments to be passed to the parent class.
+        **kwargs : dict
+            Keyword arguments to be passed to the parent class.
+
+        """
         super().__init__(*args, **kwargs)
         self.vectorizer = TfidfVectorizer()
         self.model = XGBClassifier(eval_metric="mlogloss", random_state=4265)
 
     def fit(self, X_train, y_train):
-        # X_train_processed = self.fit_transform(X_train)
+        """
+        Fit the XgBoost model to the training data.
 
+        Parameters
+        X_train : DataFrame
+            Training data containing text and label columns.
+        y_train : Series or array-like
+            Labels for the training data.
+
+        """
         vectorizer = self.vectorizer
         X_train.reset_index(drop=True, inplace=True)
         X_train_tfidf = vectorizer.fit_transform(X_train["cleaned_text"])
@@ -28,7 +56,14 @@ class XgBoost(BaseModel):
         self.model.fit(X_train_concat, y_train)
 
     def save(self, model_name):
-        # Save the model, vectorizer to pickle files
+        """
+        Save the trained XgBoost model and vectorizer to pickle files.
+
+        Parameters
+        model_name : str
+            Name of the model to be saved.
+
+        """
         self.model_dir = os.path.join(self.models_path, model_name)
 
         with open(os.path.join(self.model_dir, "model.pkl"), "wb") as f:
@@ -37,7 +72,14 @@ class XgBoost(BaseModel):
             pickle.dump(self.vectorizer, f)
 
     def load(self, model_name):
-        # Load model, vectorizer
+        """
+        Load the trained XgBoost model and vectorizer from pickle files.
+
+        Parameters
+        model_name : str
+            Name of the model to be loaded.
+
+        """
         self.model_dir = os.path.join(self.models_path, model_name)
 
         with open(os.path.join(self.model_dir, "model.pkl"), "rb") as f:
@@ -46,6 +88,17 @@ class XgBoost(BaseModel):
             self.vectorizer = pickle.load(f)
 
     def predict(self, X_test):
+        """
+        Predict sentiment labels and probabilities for a given test dataset using the trained model.
+
+        Parameters
+            X_test (pd.DataFrame): Test dataset containing features for prediction.
+
+        Returns
+            dict: Dictionary containing predicted sentiment labels and probabilities.
+                {"predicted_sentiment": List of predicted sentiment labels,
+                 "predicted_sentiment_probability": List of predicted sentiment probabilities}
+        """
         vectorizer = self.vectorizer
         X_test.reset_index(drop=True, inplace=True)
         X_test_tfidf = vectorizer.transform(X_test["cleaned_text"])
