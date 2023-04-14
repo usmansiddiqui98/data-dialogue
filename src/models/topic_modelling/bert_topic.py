@@ -10,7 +10,7 @@ from umap import UMAP
 class BertTopic:
     def __init__(self, df):
         self.df = df
-        #self.preprocessor = preprocessor
+        # self.preprocessor = preprocessor
         self.embeddings = None
         self.topics = None
         self.probabilities = None
@@ -43,9 +43,7 @@ class BertTopic:
             calculate_probabilities=True,
             nr_topics="auto",
         )
-        self.topics, self.probabilities = self.topic_model.fit_transform(
-            self.df["cleaned_text"], self.embeddings
-        )
+        self.topics, self.probabilities = self.topic_model.fit_transform(self.df["cleaned_text"], self.embeddings)
 
     def get_topics(self):
         topics = self.topic_model.get_topic_info()
