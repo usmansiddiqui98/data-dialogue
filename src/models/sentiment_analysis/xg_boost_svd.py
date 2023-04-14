@@ -14,17 +14,22 @@ class XgBoostSvd(BaseModel):
     XgBoostSvd is a class that implements sentiment analysis using XGBoost and TruncatedSVD dimensionality reduction.
 
     Attributes
-        vectorizer (TfidfVectorizer): TfidfVectorizer object for text vectorization.
-        dim_reduce (TruncatedSVD): TruncatedSVD object for dimensionality reduction.
-        tuned_parameters (dict): Dictionary of hyperparameters for XGBoost classifier.
-        model (XGBClassifier): XGBoost classifier object.
+    ----------
+    vectorizer (TfidfVectorizer):
+        TfidfVectorizer object for text vectorization.
+    dim_reduce (TruncatedSVD):
+        TruncatedSVD object for dimensionality reduction.
+    tuned_parameters (dict):
+        Dictionary of hyperparameters for XGBoost classifier.
+    model (XGBClassifier):
+        XGBoost classifier object.
     """
 
     def __init__(self, *args, **kwargs):
         """
         Initialize the XgBoostSvd model.
 
-        Args
+        Parameters:
             *args: Variable length argument list.
             **kwargs: Arbitrary keyword arguments.
         """
@@ -45,11 +50,11 @@ class XgBoostSvd(BaseModel):
         """
         Fit the XgBoostSvd model to the training data.
 
-        Args
+        Parameters:
             X_train (pd.DataFrame): Training data.
             y_train (pd.Series): Target labels.
 
-        Returns
+        Returns:
             None
         """
         vectorizer = self.vectorizer
@@ -69,10 +74,10 @@ class XgBoostSvd(BaseModel):
         """
         Save the trained model, vectorizer, and dim_reduce objects to pickle files.
 
-        Args
+        Parameters:
             model_name (str): Name of the model to be saved.
 
-        Returns
+        Returns:
             None
         """
 
@@ -89,10 +94,10 @@ class XgBoostSvd(BaseModel):
         """
         Load a trained model, vectorizer, and dimensionality reduction model from disk.
 
-        Args
+        Parameters:
             model_name (str): The name of the model to load.
 
-        Returns
+        Returns:
             None
         """
         self.model_dir = os.path.join(self.models_path, model_name)
@@ -108,10 +113,10 @@ class XgBoostSvd(BaseModel):
         """
         Perform sentiment classification on test data.
 
-        Args
+        Parameters:
             X_test (DataFrame): Test data as a pandas DataFrame.
 
-        Returns
+        Returns:
             dict: Dictionary containing predicted sentiment labels and probabilities.
                 {"predicted_sentiment": List of predicted sentiment labels,
                  "predicted_sentiment_probability": List of predicted sentiment probabilities}

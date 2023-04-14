@@ -15,20 +15,18 @@ class Naivebayes(BaseModel):
     A class to train and predict positive and negative sentiment of texts using (Multinomial) Naive Bayes model.
     Naive Bayes classifiers are a collection of classification algorithms based on Bayes Theorem.
 
-    Parameters
-
-    *args
-        The variable arguments
-    **kwargs
-        The arbitrary keyword arguments
+    Parameters:
+        *args: The variable arguments
+        **kwargs: The arbitrary keyword arguments
 
     Attributes
+    ----------
 
-    vectorizer : sklearn.feature_extraction.text.TfidfVectorizer
+    vectorizer (sklearn.feature_extraction.text.TfidfVectorizer):
         Initialises TfidfVectorizer to convert a collection of raw text to a matrix of TF-IDF features.
-    scalar : sklearn.preprocessing.MinMaxScaler
+    scalar (sklearn.preprocessing.MinMaxScaler):
         Transform features by scaling each feature to a range of 0 to 1 as Naive Bayes does not take in negative values.
-    model : sklearn.naive_bayes.MultinomialNB
+    model (sklearn.naive_bayes.MultinomialNB):
         Naive Bayes classifier that takes in tuned parameters.
     """
 
@@ -45,12 +43,9 @@ class Naivebayes(BaseModel):
         Scales the feature engineered features to values 0 to 1 using MinMaxScaler.
         Fits the TF-IDF and feature engineered features into the SVM model and trains it.
 
-        Parameters
-
-        X_train : pandas.DataFrame
-            The input data consisting of review texts and feature engineered features.
-        y_train : pandas.DataFrame
-            The sentiment of X_train.
+        Parameters:
+            X_train (pandas.DataFrame): The input data consisting of review texts and feature engineered features.
+            y_train (pandas.DataFrame): The sentiment of X_train.
         """
         X_train_bow = self.vectorizer.fit_transform(X_train["cleaned_text"])
         X_train_bow = pd.DataFrame(X_train_bow.toarray(), columns=self.vectorizer.get_feature_names_out())
@@ -66,10 +61,8 @@ class Naivebayes(BaseModel):
         """
         Save Naive Bayes model and the vectorizer as pickle files.
 
-        Parameters
-
-        model_name : str
-            The name of the Naive Bayes model to be saved.
+        Parameters:
+            model_name (str): The name of the Naive Bayes model to be saved.
         """
         self.model_dir = os.path.join(self.models_path, model_name)
 
@@ -83,10 +76,8 @@ class Naivebayes(BaseModel):
         """
         Load Naive Bayes model and the vectorizer pickle files.
 
-        Parameters
-
-        model_name : str
-            The name of the Naive Bayes model to be loaded.
+        Parameters:
+            model_name (str): The name of the Naive Bayes model to be loaded.
         """
         self.model_dir = os.path.join(self.models_path, model_name)
 
@@ -102,12 +93,9 @@ class Naivebayes(BaseModel):
         Naive Bayes model predicts sentiment & probability of sentiment on unseen data (TF-IDF and scaled feature engineered features of X_test).
 
         Parameters:
-
-        X_test : pandas.DataFrame
-            The test data consisting of review texts and feature engineered features.
+            X_test (DataFrame): Test data containing cleaned text.
 
         Returns:
-
             dict: Dictionary containing predicted sentiment labels and probabilities.
                 {"predicted_sentiment": List of predicted sentiment labels,
                  "predicted_sentiment_probability": List of predicted sentiment probabilities}

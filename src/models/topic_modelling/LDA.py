@@ -11,17 +11,17 @@ class LDAGensim:
     Attributes
     ----------
 
-    df : pandas.DataFrame
+    df (pandas.DataFrame):
         The input dataframe containing text data to perform LSA.
-    num_topics : int, optional, default: 10
+    num_topics (int, optional, default: 10):
         The number of topics to extract.
-    tags : list, optional, default: None
+    tags (list, optional, default: None):
         A list of part-of-speech tags to use for lemmatization.
-    id2word : gensim.corpora.Dictionary
+    id2word (gensim.corpora.Dictionary):
         The Gensim dictionary object representing the corpus vocabulary.
-    corpus : list
+    corpus (list):
         The Gensim corpus object representing the tokenized documents.
-    lda_model : gensim.models.ldamodel.LdaModel
+    lda_model (gensim.models.ldamodel.LdaModel):
         The Gensim LDA model object.
     """
 
@@ -29,14 +29,10 @@ class LDAGensim:
         """
         Initializes the LDAGensim object.
 
-        Parameters
-
-        df : pandas.DataFrame
-            The input data as a pandas DataFrame.
-        num_topics : int, optional, default: 10
-            The number of topics to extract.
-        tags : list, optional, default: None
-            A list of part-of-speech tags to use for lemmatization.
+        Parameters:
+            df (pandas.DataFrame): The input data as a pandas DataFrame.
+            num_topics (int, optional, default: 10): The number of topics to extract.
+            tags (ist, optional, default: None): A list of part-of-speech tags to use for lemmatization.
         """
 
         self.df = df
@@ -51,17 +47,12 @@ class LDAGensim:
         """
         Lemmatizes input texts using spaCy.
 
-        Parameters
+        Parameters:
+            texts (list): A list of tokenized texts to lemmatize.
+            tags (list): A list of part-of-speech tags to use for lemmatization.
 
-        texts : list
-            A list of tokenized texts to lemmatize.
-        tags : list
-            A list of part-of-speech tags to use for lemmatization.
-
-        Returns
-
-        list
-            A list of lemmatized texts.
+        Returns:
+            list: A list of lemmatized texts.
         """
         output = []
         nlp = spacy.load("en_core_web_sm")
@@ -74,15 +65,11 @@ class LDAGensim:
         """
         Extracts LDA topics from the input data using the Gensim library.
 
-        Parameters
+        Parameters:
+            passes (int, optional, default: 10): The number of passes to use for training the LDA model.
 
-        passes : int, optional, default: 10
-            The number of passes to use for training the LDA model.
-
-        Returns
-
-        dict
-            A dictionary of topic words and their weights for each topic.
+        Returns:
+            dict: A dictionary of topic words and their weights for each topic.
         """
         if not self.tags:
             reviews = [word_tokenize(review) for review in self.df["cleaned_text"]]

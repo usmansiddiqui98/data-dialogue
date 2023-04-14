@@ -11,19 +11,19 @@ class LSAModel:
     Attributes
     ----------
 
-    df : pandas.DataFrame
+    df (pandas.DataFrame):
         The input dataframe containing text data to perform LSA.
-    num_topics : int, optional, default: 10
+    num_topics (int, optional, default: 10):
         The number of topics to extract.
-    tags : list, optional, default: None
+    tags (list, optional, default: None):
         A list of part-of-speech tags to use for lemmatization.
-    vectorizer : sklearn.feature_extraction.text.TfidfVectorizer
+    vectorizer (sklearn.feature_extraction.text.TfidfVectorizer):
         The TfidfVectorizer object used to convert text data to a matrix of TF-IDF features.
-    X : scipy.sparse.csr_matrix
+    X (scipy.sparse.csr_matrix):
         The matrix of TF-IDF features.
-    svd_model : sklearn.decomposition.TruncatedSVD
+    svd_model (sklearn.decomposition.TruncatedSVD):
         The TruncatedSVD object used to perform dimensionality reduction on the matrix of TF-IDF features.
-    terms : list
+    terms (list):
         The list of terms (i.e., words) extracted from the input text data.
     """
 
@@ -31,14 +31,10 @@ class LSAModel:
         """
         Initializes the LDAGensim object.
 
-        Parameters
-
-        df : pandas.DataFrame
-            The input data as a pandas DataFrame.
-        num_topics : int, optional, default: 10
-            The number of topics to extract.
-        tags : list, optional, default: None
-            A list of part-of-speech tags to use for lemmatization.
+        Parameters:
+            df (pandas.DataFrame): The input data as a pandas DataFrame.
+            num_topics (int, optional, default: 10): The number of topics to extract.
+            tags (list, optional, default: None): A list of part-of-speech tags to use for lemmatization.
         """
         self.df = df
         self.num_topics = num_topics
@@ -53,17 +49,12 @@ class LSAModel:
         """
         Lemmatizes input texts using spaCy.
 
-        Parameters
+        Parameters:
+            texts (list): A list of tokenized texts to lemmatize.
+            tags (list): A list of part-of-speech tags to use for lemmatization.
 
-        texts : list
-            A list of tokenized texts to lemmatize.
-        tags : list
-            A list of part-of-speech tags to use for lemmatization.
-
-        Returns
-
-        list
-            A list of lemmatized texts.
+        Returns:
+            list: A list of lemmatized texts.
         """
         output = []
         nlp = spacy.load("en_core_web_sm")
@@ -76,10 +67,8 @@ class LSAModel:
         """
         Perform LSA on the input text data.
 
-        Returns
-
-        dict
-            A dictionary of topic words and their weights for each topic.
+        Returns:
+            dict: A dictionary of topic words and their weights for each topic.
         """
         if not self.tags:
             reviews = [word_tokenize(review) for review in self.df["cleaned_text"]]

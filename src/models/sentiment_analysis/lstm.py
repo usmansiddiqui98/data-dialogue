@@ -12,7 +12,7 @@ class SentimentLSTM(nn.Module):
     """
     A PyTorch module for sentiment analysis using LSTM (Long Short-Term Memory).
 
-    Args
+    Parameters:
         no_layers (int): Number of LSTM layers.
         vocab_size (int): Size of the vocabulary.
         hidden_dim (int): Number of hidden dimensions in LSTM.
@@ -20,15 +20,26 @@ class SentimentLSTM(nn.Module):
         output_dim (int): Dimension of output.
 
     Attributes
-        no_layers (int): Number of LSTM layers.
-        output_dim (int): Dimension of output.
-        hidden_dim (int): Number of hidden dimensions in LSTM.
-        vocab_size (int): Size of the vocabulary.
-        embedding (nn.Embedding): Embedding layer for word embeddings.
-        lstm (nn.LSTM): LSTM layer for sequence modeling.
-        dropout (nn.Dropout): Dropout layer for regularization.
-        fc (nn.Linear): Fully connected layer for output.
-        sig (nn.Sigmoid): Sigmoid activation function.
+    ----------
+
+    no_layers (int):
+        Number of LSTM layers.
+    output_dim (int):
+        Dimension of output.
+    hidden_dim (int):
+        Number of hidden dimensions in LSTM.
+    vocab_size (int):
+        Size of the vocabulary.
+    embedding (nn.Embedding):
+        Embedding layer for word embeddings.
+    lstm (nn.LSTM):
+        LSTM layer for sequence modeling.
+    dropout (nn.Dropout):
+        Dropout layer for regularization.
+    fc (nn.Linear):
+        Fully connected layer for output.
+    sig (nn.Sigmoid):
+        Sigmoid activation function.
 
     """
 
@@ -50,11 +61,11 @@ class SentimentLSTM(nn.Module):
         """
         Forward pass of the LSTM model.
 
-        Args
+        Parameters:
             x (torch.Tensor): Input tensor of shape (batch_size, seq_len).
             hidden (tuple): Tuple containing the hidden state and cell state of LSTM.
 
-        Returns
+        Returns:
             torch.Tensor: Output tensor of shape (batch_size, output_dim).
             tuple: Updated hidden state of LSTM.
 
@@ -74,10 +85,10 @@ class SentimentLSTM(nn.Module):
         """
         Initialize hidden state of LSTM.
 
-        Args
+        Parameters:
             batch_size (int): Batch size.
 
-        Returns
+        Returns:
             tuple: Initial hidden state of LSTM.
 
         """
@@ -96,7 +107,7 @@ class BasicLSTM(BaseModel):
         """
         Initialize the BasicLSTM model.
 
-        Args
+        Parameters:
             models_path (str): The path to save the trained model.
         """
         super().__init__(models_path)
@@ -106,10 +117,10 @@ class BasicLSTM(BaseModel):
         """
         Prepare the training data.
 
-        Args
+        Parameters:
             x_train (list): List of sentences in the training data.
 
-        Returns
+        Returns:
             np.ndarray: The prepared training data as a numpy array.
         """
         if len(self.onehot_dict) == 0:
@@ -135,11 +146,11 @@ class BasicLSTM(BaseModel):
         """
         Pad the sentences to a fixed sequence length.
 
-        Args
+        Parameters:
             sents (list): List of sentences.
             seq_len (int, optional): The sequence length to pad the sentences to. Defaults to 50.
 
-        Returns
+        Returns:
             np.ndarray: The padded sentences as a numpy array.
         """
         features = np.zeros((len(sents), seq_len), dtype=int)
@@ -152,11 +163,11 @@ class BasicLSTM(BaseModel):
         """
         Prepare the LSTM data.
 
-        Args
+        Parameters:
             x (np.ndarray): The input data.
             y (np.ndarray): The target labels.
 
-        Returns
+        Returns:
             TensorDataset: The LSTM data as a TensorDataset object.
         """
         x_pad = self.padding(x)
@@ -166,7 +177,7 @@ class BasicLSTM(BaseModel):
         """
         Fits the LSTM model to the training data.
 
-        Args
+        Parameters:
             train_data (pd.Series): Training data with cleaned text.
             train_labels (np.ndarray): Training labels.
             num_epochs (int, optional): Number of epochs to train the model. Defaults to 1.
@@ -194,10 +205,10 @@ class BasicLSTM(BaseModel):
         """
         Predicts sentiment labels and probabilities for the test data.
 
-        Args
-            X_test (pd.Series): Test data with cleaned text.
+        Parameters:
+            X_test (DataFrame): Test data containing cleaned text.
 
-        Returns
+        Returns:
             dict: Dictionary containing predicted sentiment labels and probabilities.
                 {"predicted_sentiment": List of predicted sentiment labels,
                  "predicted_sentiment_probability": List of predicted sentiment probabilities}

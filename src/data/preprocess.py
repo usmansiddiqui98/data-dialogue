@@ -157,28 +157,12 @@ class Preprocessor:
 
     Attributes:
     -----------
-    dirty_df : pandas DataFrame
+
+    dirty_df (pandas DataFrame):
         A DataFrame containing the dirty text data to be cleaned.
 
-    clean_df : pandas DataFrame
+    clean_df (pandas DataFrame):
         A DataFrame containing the cleaned text data.
-
-    Methods:
-    --------
-    clean_sentence(sentence, stop_words)
-        Clean a single string by removing tags, resolving contractions, removing digits and special characters,
-        tokenizing, changing to lower case and removing punctuations, removing stop words, finding the POS tag
-        for each token, and lemmatizing each token.
-
-    truncate_to_512(sentence)
-        Truncate a string to contain the first 512 nouns and adjectives.
-
-    clean_csv()
-        Clean the text data in the dirty_df DataFrame, adding a new column of cleaned text and a new column of
-        sentiment labels.
-
-    clean_test_csv()
-        Clean the text data in the dirty_df DataFrame, adding a new column of cleaned text.
 
     """
 
@@ -189,9 +173,7 @@ class Preprocessor:
         Initialize the Preprocessor object.
 
         Parameters:
-        -----------
-        dirty_df : pandas DataFrame
-            A DataFrame containing the dirty text data to be cleaned.
+            dirty_df (pandas DataFrame): A DataFrame containing the dirty text data to be cleaned.
         """
         self.dirty_df = dirty_df
 
@@ -203,17 +185,12 @@ class Preprocessor:
         for each token, and lemmatizing each token.
 
         Parameters:
-        -----------
-        sentence : str
-            A single string to be cleaned.
+            sentence (str):A single string to be cleaned.
 
-        stop_words : list
-            A list of stop words to be removed from the string.
+            stop_words (list): A list of stop words to be removed from the string.
 
         Returns:
-        --------
-        str
-            The cleaned string.
+            str: The cleaned string.
         """
 
         def pos_tagger(nltk_tag):
@@ -255,14 +232,10 @@ class Preprocessor:
         Truncate a string to contain the first 512 nouns and adjectives.
 
         Parameters:
-        -----------
-        sentence : str
-            A string to be truncated.
+            sentence (str): A string to be truncated.
 
         Returns:
-        --------
-        str
-            The truncated string.
+            str: The truncated string.
         """
         words = word_tokenize(sentence)
         pos_tagged = nltk.pos_tag(words)
@@ -280,15 +253,13 @@ class Preprocessor:
         sentiment labels.
 
         Parameters:
-        -----------
-        self: object
-            Object of Preprocessor class with 'dirty_df' attribute.
+            self (object): Object of Preprocessor class with 'dirty_df' attribute.
 
         Returns:
-        --------
-        None
-            The 'dirty_df' attribute is copied to 'clean_df' attribute with cleaned 'Text' column and
-            binary 'Sentiment' column.
+            None
+
+        The 'dirty_df' attribute is copied to 'clean_df' attribute with cleaned 'Text' column and
+        binary 'Sentiment' column.
         """
         new_df = self.dirty_df.copy()
         new_df["cleaned_text"] = new_df["Text"].parallel_apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
@@ -302,14 +273,12 @@ class Preprocessor:
         Clean the text data in the dirty_df DataFrame, adding a new column of cleaned text.
 
         Parameters:
-        -----------
-        self: object
-            Object of Preprocessor class with 'dirty_df' attribute.
+            self (object): Object of Preprocessor class with 'dirty_df' attribute.
 
         Returns:
-        --------
-        None
-            The 'dirty_df' attribute is copied to 'clean_df' attribute with cleaned 'Text' column.
+            None
+
+        The 'dirty_df' attribute is copied to 'clean_df' attribute with cleaned 'Text' column.
         """
         new_df = self.dirty_df.copy()
         new_df["cleaned_text"] = new_df["Text"].parallel_apply(lambda x: Preprocessor.clean_sentence(x, stopwords))

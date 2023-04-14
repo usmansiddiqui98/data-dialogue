@@ -13,9 +13,11 @@ class XgBoost(BaseModel):
     XgBoost class for sentiment analysis using XGBoost classifier.
 
     Attributes
-    vectorizer : TfidfVectorizer
+    ----------
+
+    vectorizer (TfidfVectorizer):
         TfidfVectorizer object for text vectorization.
-    model : XGBClassifier
+    model (XGBClassifier):
         XGBoost classifier object for sentiment analysis.
     """
 
@@ -23,11 +25,9 @@ class XgBoost(BaseModel):
         """
         Initialize XgBoost model.
 
-        Parameters
-        *args : tuple
-            Positional arguments to be passed to the parent class.
-        **kwargs : dict
-            Keyword arguments to be passed to the parent class.
+        Parameters:
+            *args (tuple): Positional arguments to be passed to the parent class.
+            **kwargs (dict): Keyword arguments to be passed to the parent class.
 
         """
         super().__init__(*args, **kwargs)
@@ -38,11 +38,9 @@ class XgBoost(BaseModel):
         """
         Fit the XgBoost model to the training data.
 
-        Parameters
-        X_train : DataFrame
-            Training data containing text and label columns.
-        y_train : Series or array-like
-            Labels for the training data.
+        Parameters:
+            X_train (pandas.DataFrame): The input data consisting of review texts and feature engineered features.
+            y_train (pandas.DataFrame): The sentiment of X_train.
 
         """
         vectorizer = self.vectorizer
@@ -59,9 +57,8 @@ class XgBoost(BaseModel):
         """
         Save the trained XgBoost model and vectorizer to pickle files.
 
-        Parameters
-        model_name : str
-            Name of the model to be saved.
+        Parameters:
+            model_name (str): Name of the model to be saved.
 
         """
         self.model_dir = os.path.join(self.models_path, model_name)

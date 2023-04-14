@@ -10,27 +10,27 @@ class NMFModel:
     Attributes
     ----------
 
-    df : pd.DataFrame
+    df (pd.DataFrame):
         The data that the model will be trained on.
-    n_components : int, optional, default: 10
+    n_components (int, optional, default: 10):
         The number of topics that will be generated.
-    max_features : int, optional, default: 1000
+    max_features (int, optional, default: 1000):
         The maximum number of features that will be used to represent the text.
-    max_df : float, optional, default: 0.5
+    max_df (float, optional, default: 0.5):
         The maximum document frequency of the words that will be used to represent the text.
-    vectorizer : TfidfVectorizer
+    vectorizer (TfidfVectorizer):
         A vectorizer used to convert text to a matrix of TF-IDF features.
-    model : NMF
+    model (NMF):
         A model for topic modeling using non-negative matrix factorization.
-    topic_df : pd.DataFrame
+    topic_df (pd.DataFrame):
         A dataframe of top terms for each topic.
-    labels : list
+    labels (list):
         A list of labels for each topic.
-    X : array-like or sparse matrix, shape (n_samples, n_features)
+    X (array-like or sparse matrix, shape (n_samples, n_features)):
         The matrix of the TF-IDF features for the text.
-    document_weights : array-like, shape (n_samples, n_components)
+    document_weights (array-like, shape (n_samples, n_components)):
         The weights of each document on each topic.
-    label_df : pd.DataFrame
+    label_df (pd.DataFrame):
         A dataframe with the original data and topic labels.
     """
 
@@ -38,16 +38,13 @@ class NMFModel:
         """
         Initializes the NMFModel object.
 
-        Parameters
-
-        df : pd.DataFrame
-            The data that the model will be trained on.
-        n_components : int, optional, default: 10
-            The number of topics that will be generated.
-        max_features : int, optional, default: 1000
-            The maximum number of features that will be used to represent the text.
-        max_df : float, optional, default: 0.5
-            The maximum document frequency of the words that will be used to represent the text.
+        Parameters:
+            df (pd.DataFrame): The data that the model will be trained on.
+            n_components (int, optional, default: 10): The number of topics that will be generated.
+            max_features (int, optional, default: 1000): The maximum number of features that will be used
+            to represent the text.
+            max_df (float, optional, default: 0.5): The maximum document frequency of the words that will be used to
+            represent the text.
         """
         self.df = df
         self.n_components = n_components
@@ -79,14 +76,12 @@ class NMFModel:
         """
         Get the top terms for each topic.
 
-        Parameters
-        n_top_words : int, default=10
-            The number of top words to display for each topic.
+        Parameters:
+            n_top_words (int, default=10): The number of top words to display for each topic.
 
-        Returns
-        topics_dict : dict
-            A dictionary where each key corresponds to a topic index, and each value is another dictionary
-            containing the top words/terms for that topic and their corresponding weights.
+        Returns:
+            topics_dict (dict): A dictionary where each key corresponds to a topic index, and each value is
+            another dictionary containing the top words/terms for that topic and their corresponding weights.
         """
         words = self.vectorizer.get_feature_names_out()
         components_df = pd.DataFrame(self.model.components_, columns=words)
@@ -104,21 +99,18 @@ class NMFModel:
         """
         Label the topics for each data point in the input DataFrame.
 
-        Parameters
+        Parameters:
+             n_top_words (int, optional): The number of top words to use in the topic description. Defaults to 5.
 
-        n_top_words : int, optional
-            The number of top words to use in the topic description. Defaults to 5.
-
-        Returns
-        pandas.DataFrame
-            A new DataFrame with an additional column `Topic_idx` that contains
+        Returns:
+            pandas.DataFrame: A new DataFrame with an additional column `Topic_idx` that contains
             the index of the topic with the highest weight for each data point, and
             another additional column `Top_Topic_Terms` that contains the
             description of the top words in the corresponding topic.
 
         Raises
         ValueError
-            If `fit_transform` method hasn't been called yet.
+        If `fit_transform` method hasn't been called yet.
 
         Notes
         This method uses the `document_weights` attribute that is computed by the
