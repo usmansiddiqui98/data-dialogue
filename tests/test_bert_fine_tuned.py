@@ -41,6 +41,7 @@ def test_predict(model, get_data):
     assert len(predicted_sentiment) == len(predicted_sentiment_probability)
     assert all(x in [0, 1] for x in predicted_sentiment.tolist())
 
+
 def test_accuracy(model, get_data):
     X_test, y_test = get_data
     y_pred = model.predict(X_test)["predicted_sentiment"]

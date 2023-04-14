@@ -1,17 +1,19 @@
 import os
 
 import pandas as pd
+import pytest
 from sklearn.ensemble import BaggingClassifier
 from sklearn.metrics import accuracy_score
 
 from src.models.sentiment_analysis.svm import SVM
 
 
+@pytest.fixture
 def model():
-    # Load and return the trained model here
     return SVM(models_path="/test_files")
 
 
+@pytest.fixture
 def get_data():
     train_fname = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test_files", "train_reviews.csv"))
     test_fname = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test_files", "test_reviews.csv"))

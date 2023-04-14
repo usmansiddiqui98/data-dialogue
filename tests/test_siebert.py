@@ -30,6 +30,8 @@ def test_predict(model, get_data):
     assert len(result["predicted_sentiment"]) == len(X_test)
     assert len(result["predicted_sentiment_probability"]) == len(X_test)
     assert all(isinstance(x, float) or isinstance(x, int) for x in result["predicted_sentiment_probability"])
+
+
 def test_accuracy(model, get_data):
     X_test, y_test = get_data
     y_pred = model.predict(X_test)["predicted_sentiment"]
