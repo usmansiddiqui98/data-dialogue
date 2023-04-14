@@ -8,10 +8,11 @@ Whether for a B2B or B2C company, relevance and longevity in the industry depend
 1. Clone the repo using `git clone` or download the zip file.
 2. Run `make create_environment` to create a virtual environment.
 3. Run `make install` to install dependencies
-4. Run `make training_pipeline` to feature_engineer, preprocess, and train the models
-5. Run `make run` to start the app to predict the sentiment.
-6. Go to `localhost:8501` in your browser
-7. Upload a file to predict the sentiment
+4. Upload `bert_state_dict_new_raw.pt` into the models/sentiment_analysis/bert_fine_tuned folder.
+5. Run `make training_pipeline` to feature_engineer, preprocess, and train the models
+6. Run `make run` to start the app to predict the sentiment.
+7. Go to `localhost:8501` in your browser
+8. Upload a file to predict the sentiment
 
 
 ## To change the model run by our Scoring Pipeline:
