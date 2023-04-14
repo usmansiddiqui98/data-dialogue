@@ -1,5 +1,6 @@
 import os
 import time
+import torch
 from sys import platform
 
 import pandas as pd
@@ -42,13 +43,23 @@ def run_scoring_pipeline(input_df):
     else:
         models_path = "models/sentiment_analysis"
 
-    model_classes = {
-        "xg_boost": XgBoost,
-        "xg_boost_svd": XgBoostSvd,
-        "log_reg": LogReg,
-        # "siebert": Siebert,
-        # Add other model instances here
-    }
+    if torch.cuda.is_available():
+        model_classes = {
+            "xg_boost": XgBoost,
+            "xg_boost_svd": XgBoostSvd,
+            "log_reg": LogReg,
+            "siebert": Siebert,
+            # Add other model instances here
+        }
+    else:
+        model_classes = {
+            "xg_boost": XgBoost,
+            "xg_boost_svd": XgBoostSvd,
+            "log_reg": LogReg,
+            # Add other model instances here
+        }
+
+
     # Use the best_model variable to create the corresponding model object
     model = model_classes[best_model](models_path)
 

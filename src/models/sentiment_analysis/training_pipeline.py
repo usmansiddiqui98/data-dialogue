@@ -2,6 +2,7 @@ import os
 from sys import platform
 
 import pandas as pd
+import torch
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score
 from tqdm.auto import tqdm
 
@@ -152,16 +153,32 @@ if __name__ == "__main__":
         models_path = "..\\..\\..\\models\\sentiment_analysis"
     else:
         models_path = os.path.join(BASE_DIR, "models/sentiment_analysis")
-    models = {
-        "xg_boost": XgBoost(models_path),
-        "xg_boost_svd": XgBoostSvd(models_path),
-        "log_reg": LogReg(models_path),
-        "svm": SVM(models_path),
-        "naive_bayes": Naivebayes(models_path),
-        "bert_fine_tuned": BertFineTuned(models_path),
-        "siebert": Siebert(models_path),
-        "lstm": BasicLSTM(models_path),
-    }
+
+    if torch.cuda.is_available():
+        models = {
+            "xg_boost": XgBoost(models_path),
+            "xg_boost_svd": XgBoostSvd(models_path),
+            "log_reg": LogReg(models_path),
+            "svm": SVM(models_path),
+            "naive_bayes": Naivebayes(models_path),
+            "bert_fine_tuned": BertFineTuned(models_path),
+            "siebert": Siebert(models_path),
+            "lstm": BasicLSTM(models_path),
+            # Add other model instances here
+        }
+    else:
+        models = {
+            "xg_boost": XgBoost(models_path),
+            "xg_boost_svd": XgBoostSvd(models_path),
+            "log_reg": LogReg(models_path),
+            "svm": SVM(models_path),
+            "naive_bayes": Naivebayes(models_path),
+            "bert_fine_tuned": BertFineTuned(models_path),
+            "siebert": Siebert(models_path),
+            "lstm": BasicLSTM(models_path),
+            # Add other model instances here
+        }
+
 
     # Train the models and save them
     train_models(models, X_train, y_train, X_train_os, y_train_os, models_path)
