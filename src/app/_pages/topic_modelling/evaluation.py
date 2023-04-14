@@ -2,8 +2,8 @@ import os
 import sys
 
 import pandas as pd
-import streamlit as st
 import pyLDAvis.gensim_models
+import streamlit as st
 import streamlit.components.v1 as components
 from wordcloud import WordCloud
 
@@ -14,6 +14,7 @@ sys.path.append(os.path.abspath("../../models/topic_modelling/"))
 
 if "pre_processed_df" not in st.session_state:
     st.session_state.pre_processed_df = None
+
 
 def run_preprocessing_and_topic_modelling(model_choice, num_topics=None, tags=None):
     if st.session_state.pre_processed_df is None:
@@ -26,12 +27,14 @@ def run_preprocessing_and_topic_modelling(model_choice, num_topics=None, tags=No
 
     if st.session_state.pre_processed_df is not None:
         with st.spinner("Running topic modelling..."):
-            topics_dict = run_training_pipeline(model_choice.lower(), st.session_state.pre_processed_df,
-                                                num_topics=num_topics, tags=tags)
+            topics_dict = run_training_pipeline(
+                model_choice.lower(), st.session_state.pre_processed_df, num_topics=num_topics, tags=tags
+            )
             topics_df = topics_dict_to_df(model_choice.lower(), topics_dict)
             st.success("Done! Here is the topic modelling results:")
             st.dataframe(topics_df)
         return topics_dict
+
 
 def display():
     st.title("Human Evaluator for topic modelling")
@@ -48,7 +51,7 @@ def display():
     model_choice = st.selectbox("Choose which topic model to run", (None, "LDA", "LSA", "NMF", "Bertopic"))
 
     if not model_choice:
-        st.write('Choose a Model to Continue ...')
+        st.write("Choose a Model to Continue ...")
         st.stop()
 
     num_topics, tags = None, None
@@ -57,7 +60,7 @@ def display():
         tags = st.multiselect("Part-of-Speech Tags", options=["NOUN", "VERB", "ADJ"])
 
         if num_topics is not None and not tags:
-            st.write('Choose a Tag to Continue ...')
+            st.write("Choose a Tag to Continue ...")
             st.stop()
 
     if st.button("Run Topic Modelling"):
