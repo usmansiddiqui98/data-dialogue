@@ -106,6 +106,7 @@ if __name__ == "__main__":
             data, train_split_output_filepath=train_filepath, test_split_output_filepath=test_filepath
         )
         # with oversample
+        print("Proceeding with FE on oversampled data...")
         X_train_os, X_test, y_train_os, y_test = make_dataset(
             data_os,
             train_split_output_filepath=train_oversample_filepath,
@@ -118,13 +119,12 @@ if __name__ == "__main__":
     else:
         models_path = os.path.join(BASE_DIR, "models/sentiment_analysis")
     models = {
-        # "xg_boost": XgBoost(models_path),
-        # "xg_boost_svd": XgBoostSvd(models_path),
-        # "log_reg": LogReg(models_path),
-        # "svm": SVM(models_path),
-        # "naive_bayes": Naivebayes(models_path),
-        # # "siebert": Siebert(models_path)
-        # # Add other model instances here
+        "xg_boost": XgBoost(models_path),
+        "xg_boost_svd": XgBoostSvd(models_path),
+        "log_reg": LogReg(models_path),
+        "svm": SVM(models_path),
+        "naive_bayes": Naivebayes(models_path),
+        "siebert": Siebert(models_path),
         "lstm": BasicLSTM(models_path),
     }
 
