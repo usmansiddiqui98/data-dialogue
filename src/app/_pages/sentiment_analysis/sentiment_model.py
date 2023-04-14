@@ -27,7 +27,7 @@ model_classes = {
     "xg_boost": XgBoost,
     "xg_boost_svd": XgBoostSvd,
     "log_reg": LogReg,
-    # "siebert": Siebert,
+    "siebert": Siebert,
     # Add other model instances here
 }
 

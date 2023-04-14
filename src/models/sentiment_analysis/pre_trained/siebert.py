@@ -22,6 +22,10 @@ class Siebert(BaseModel):
         pass
 
     def predict(self, x_test):
+        if self.device == 0:
+            print("Prediction running on GPU")
+        else:
+            print("Prediction running on CPU")
         x_test = x_test.text.to_list()
         x_test = [x[:512] if len(x) > 512 else x for x in x_test]
         sentiment_analysis = pipeline(
