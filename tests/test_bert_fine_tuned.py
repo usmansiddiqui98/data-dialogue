@@ -1,14 +1,18 @@
 import os
+
 import pandas as pd
 import pytest
 import torch
+
 from src.models.sentiment_analysis.pre_trained.bert_fine_tuned import BertFineTuned
 
 
 @pytest.fixture
 def model():
-    models_path = "/path/to/models"
-    return BertFineTuned(models_path)
+    # Load and return the trained model here
+    return BertFineTuned(
+        models_path=os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "models", "sentiment_analysis"))
+    )
 
 
 @pytest.fixture
@@ -36,5 +40,3 @@ def test_predict(model, get_data):
 
     assert len(predicted_sentiment) == len(predicted_sentiment_probability)
     assert all(x in [0, 1] for x in predicted_sentiment.tolist())
-
-
