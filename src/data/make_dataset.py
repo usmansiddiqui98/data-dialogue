@@ -9,9 +9,32 @@ from src.data.feature_engineering import FeatureEngineer
 from src.data.preprocess import Preprocessor
 
 
-def main(input_df, train_split_output_filepath=None, test_split_output_filepath=None):
-    """Runs data processing scripts to turn raw data from (../raw) into
-    cleaned data ready to be analyzed (saved in ../processed).
+def main(input_df, train_split_output_filepath=None, test_split_output_filepath=None, oversample=False):
+    """
+    Main function for preprocessing and feature engineering of input data using our Preprocessor and FeatureEngineer classes, and writing of train/test splits to CSV files.
+
+    Parameters
+    ----------
+    input_df : pandas.DataFrame
+        The input data to be preprocessed and feature engineered.
+    train_split_output_filepath : str, optional
+        The output file path for the preprocessed and feature engineered training set CSV file.
+    test_split_output_filepath : str, optional
+        The output file path for the preprocessed and feature engineered test set CSV file.
+    oversample : bool, optional
+        Whether to the input data has been oversampled.
+
+    Returns
+    -------
+        pandas.DataFrame: X_train
+            Preprocessed and feature engineered training feature matrix.
+        pandas.DataFrame: X_test
+            Preprocessed and feature engineered test feature matrix.
+        pandas.DataFrame: y_train
+            Training target labels.
+        pandas.DataFrame: y_test
+            Test target labels.
+
     """
 
     preprocessor = Preprocessor(input_df)
@@ -26,7 +49,14 @@ def main(input_df, train_split_output_filepath=None, test_split_output_filepath=
     X = feature_engineered_df.drop(["sentiment", "time"], axis=1)
     y = feature_engineered_df["sentiment"]
     # train test split and write splits to csv
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=4263, stratify=y)
+    if oversample:  # alr split beforehand
+        num_test_rows = 1089
+        X_train = X[:-num_test_rows]  # Remove the bottom subset of the dataset (test set)
+        X_test = X[-num_test_rows:]  # get bottom subset
+        y_train = y[:-num_test_rows]
+        y_test = y[-num_test_rows:]
+    else:
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=4263, stratify=y)
     X_train.reset_index(drop=True, inplace=True)
     X_test.reset_index(drop=True, inplace=True)
     y_train.reset_index(drop=True, inplace=True)

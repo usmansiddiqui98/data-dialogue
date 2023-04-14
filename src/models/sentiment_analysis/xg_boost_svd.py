@@ -10,7 +10,24 @@ from src.models.sentiment_analysis.base_model import BaseModel
 
 
 class XgBoostSvd(BaseModel):
+    """
+    XgBoostSvd is a class that implements sentiment analysis using XGBoost and TruncatedSVD dimensionality reduction.
+
+    Attributes
+        vectorizer (TfidfVectorizer): TfidfVectorizer object for text vectorization.
+        dim_reduce (TruncatedSVD): TruncatedSVD object for dimensionality reduction.
+        tuned_parameters (dict): Dictionary of hyperparameters for XGBoost classifier.
+        model (XGBClassifier): XGBoost classifier object.
+    """
+
     def __init__(self, *args, **kwargs):
+        """
+        Initialize the XgBoostSvd model.
+
+        Args
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+        """
         super().__init__(*args, **kwargs)
         self.vectorizer = TfidfVectorizer()
         self.dim_reduce = TruncatedSVD(n_components=100, random_state=4265)
@@ -22,13 +39,19 @@ class XgBoostSvd(BaseModel):
             "n_estimators": 500,
             "subsample": 0.5,
         }
-        self.model = XGBClassifier(
-            use_label_encoder=False, eval_metric="mlogloss", **self.tuned_parameters, random_state=4265
-        )
+        self.model = XGBClassifier(eval_metric="mlogloss", **self.tuned_parameters, random_state=4265)
 
     def fit(self, X_train, y_train):
-        # X_train_processed = self.fit_transform(X_train)
+        """
+        Fit the XgBoostSvd model to the training data.
 
+        Args
+            X_train (pd.DataFrame): Training data.
+            y_train (pd.Series): Target labels.
+
+        Returns
+            None
+        """
         vectorizer = self.vectorizer
         dim_reduce = self.dim_reduce
         X_train.reset_index(drop=True, inplace=True)
@@ -43,7 +66,16 @@ class XgBoostSvd(BaseModel):
         self.model.fit(X_train_concat, y_train)
 
     def save(self, model_name):
-        # Save the model, vectorizer to pickle files
+        """
+        Save the trained model, vectorizer, and dim_reduce objects to pickle files.
+
+        Args
+            model_name (str): Name of the model to be saved.
+
+        Returns
+            None
+        """
+
         self.model_dir = os.path.join(self.models_path, model_name)
 
         with open(os.path.join(self.model_dir, "model.pkl"), "wb") as f:
@@ -54,7 +86,15 @@ class XgBoostSvd(BaseModel):
             pickle.dump(self.dim_reduce, f)
 
     def load(self, model_name):
-        # Load model, vectorizer
+        """
+        Load a trained model, vectorizer, and dimensionality reduction model from disk.
+
+        Args
+            model_name (str): The name of the model to load.
+
+        Returns
+            None
+        """
         self.model_dir = os.path.join(self.models_path, model_name)
 
         with open(os.path.join(self.model_dir, "model.pkl"), "rb") as f:
@@ -65,6 +105,17 @@ class XgBoostSvd(BaseModel):
             self.dim_reduce = pickle.load(f)
 
     def predict(self, X_test):
+        """
+        Perform sentiment classification on test data.
+
+        Args
+            X_test (DataFrame): Test data as a pandas DataFrame.
+
+        Returns
+            dict: Dictionary containing predicted sentiment labels and probabilities.
+                {"predicted_sentiment": List of predicted sentiment labels,
+                 "predicted_sentiment_probability": List of predicted sentiment probabilities}
+        """
         vectorizer = self.vectorizer
         dim_reduce = self.dim_reduce
         X_test.reset_index(drop=True, inplace=True)
