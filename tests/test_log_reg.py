@@ -3,9 +3,7 @@ import os
 import pandas as pd
 import pytest
 from sklearn.linear_model import LogisticRegression
-
 from sklearn.metrics import accuracy_score
-
 
 from src.models.sentiment_analysis.log_reg import LogReg
 
@@ -27,7 +25,6 @@ def get_data():
     X_test = test_df.drop(["sentiment"], axis=1)
     y_test = test_df["sentiment"]
     return X_train, y_train, X_test, y_test
-
 
 
 def test_fit(model, get_data):
@@ -53,4 +50,3 @@ def test_accuracy(model, get_data):
     y_pred = model.predict(X_test)["predicted_sentiment"]
     accuracy = accuracy_score(y_test, y_pred)
     assert accuracy >= 0.7
-
