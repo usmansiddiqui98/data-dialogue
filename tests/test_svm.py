@@ -2,22 +2,21 @@ import os
 
 import pandas as pd
 import pytest
-from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import BaggingClassifier
 from sklearn.metrics import accuracy_score
 
-from src.models.sentiment_analysis.log_reg import LogReg
+from src.models.sentiment_analysis.svm import SVM
 
 
 @pytest.fixture
 def model():
-    return LogReg(models_path="/test_files")
+    return SVM(models_path="/test_files")
 
 
 @pytest.fixture
 def get_data():
     train_fname = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test_files", "train_reviews.csv"))
     test_fname = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test_files", "test_reviews.csv"))
-
     train_df = pd.read_csv(train_fname).head(100)
     test_df = pd.read_csv(test_fname).head(100)
     X_train = train_df.drop(["sentiment"], axis=1)
@@ -30,7 +29,7 @@ def get_data():
 def test_fit(model, get_data):
     X_train, y_train, _, _ = get_data
     model.fit(X_train, y_train)
-    assert isinstance(model.model, LogisticRegression)
+    assert isinstance(model.model, BaggingClassifier)
 
 
 def test_predict(model, get_data):

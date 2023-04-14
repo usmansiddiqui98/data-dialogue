@@ -2,15 +2,15 @@ import os
 
 import pandas as pd
 import pytest
-from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
+from xgboost import XGBClassifier
 
-from src.models.sentiment_analysis.log_reg import LogReg
+from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 
 
 @pytest.fixture
 def model():
-    return LogReg(models_path="/test_files")
+    return XgBoostSvd(models_path="/test_files")
 
 
 @pytest.fixture
@@ -30,7 +30,7 @@ def get_data():
 def test_fit(model, get_data):
     X_train, y_train, _, _ = get_data
     model.fit(X_train, y_train)
-    assert isinstance(model.model, LogisticRegression)
+    assert isinstance(model.model, XGBClassifier)
 
 
 def test_predict(model, get_data):
