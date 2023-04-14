@@ -10,6 +10,7 @@ class LDAGensim:
 
     Attributes
     ----------
+
     df : pandas.DataFrame
         The input dataframe containing text data to perform LSA.
     num_topics : int, optional, default: 10
@@ -22,13 +23,6 @@ class LDAGensim:
         The Gensim corpus object representing the tokenized documents.
     lda_model : gensim.models.ldamodel.LdaModel
         The Gensim LDA model object.
-
-    Methods
-    -------
-    lemmatization(texts, tags)
-        Lemmatizes input texts using spaCy.
-    get_topics(passes=10)
-        Perform Latent Dirichlet Allocation on the input text data and return a dictionary of topics.
     """
 
     def __init__(self, df, num_topics=10, tags=None):
@@ -36,7 +30,7 @@ class LDAGensim:
         Initializes the LDAGensim object.
 
         Parameters
-        ----------
+
         df : pandas.DataFrame
             The input data as a pandas DataFrame.
         num_topics : int, optional, default: 10
@@ -58,14 +52,14 @@ class LDAGensim:
         Lemmatizes input texts using spaCy.
 
         Parameters
-        ----------
+
         texts : list
             A list of tokenized texts to lemmatize.
         tags : list
             A list of part-of-speech tags to use for lemmatization.
 
         Returns
-        -------
+
         list
             A list of lemmatized texts.
         """
@@ -81,12 +75,12 @@ class LDAGensim:
         Extracts LDA topics from the input data using the Gensim library.
 
         Parameters
-        ----------
+
         passes : int, optional, default: 10
             The number of passes to use for training the LDA model.
 
         Returns
-        -------
+
         dict
             A dictionary of topic words and their weights for each topic.
         """

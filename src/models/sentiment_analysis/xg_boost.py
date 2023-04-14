@@ -12,39 +12,18 @@ class XgBoost(BaseModel):
     """
     XgBoost class for sentiment analysis using XGBoost classifier.
 
-    Parameters:
-    ----------
-    *args : tuple
-        Positional arguments to be passed to the parent class.
-    **kwargs : dict
-        Keyword arguments to be passed to the parent class.
-
-    Attributes:
-    ----------
+    Attributes
     vectorizer : TfidfVectorizer
         TfidfVectorizer object for text vectorization.
     model : XGBClassifier
         XGBoost classifier object for sentiment analysis.
-
-    Methods:
-    -------
-    fit(X_train, y_train)
-        Fit the model to the training data.
-    save(model_name)
-        Save the trained model and vectorizer to pickle files.
-    load(model_name)
-        Load the trained model and vectorizer from pickle files.
-    predict(X_test)
-        Predict sentiment labels for test data.
-
     """
 
     def __init__(self, *args, **kwargs):
         """
         Initialize XgBoost model.
 
-        Parameters:
-        ----------
+        Parameters
         *args : tuple
             Positional arguments to be passed to the parent class.
         **kwargs : dict
@@ -59,8 +38,7 @@ class XgBoost(BaseModel):
         """
         Fit the XgBoost model to the training data.
 
-        Parameters:
-        ----------
+        Parameters
         X_train : DataFrame
             Training data containing text and label columns.
         y_train : Series or array-like
@@ -81,8 +59,7 @@ class XgBoost(BaseModel):
         """
         Save the trained XgBoost model and vectorizer to pickle files.
 
-        Parameters:
-        ----------
+        Parameters
         model_name : str
             Name of the model to be saved.
 
@@ -98,8 +75,7 @@ class XgBoost(BaseModel):
         """
         Load the trained XgBoost model and vectorizer from pickle files.
 
-        Parameters:
-        ----------
+        Parameters
         model_name : str
             Name of the model to be loaded.
 
@@ -115,15 +91,13 @@ class XgBoost(BaseModel):
         """
         Predict sentiment labels and probabilities for a given test dataset using the trained model.
 
-        Parameters:
+        Parameters
             X_test (pd.DataFrame): Test dataset containing features for prediction.
 
-        Returns:
-            dict: A dictionary containing predicted sentiment labels and their corresponding probabilities.
-                {
-                    "predicted_sentiment": list of int: List of predicted sentiment labels (0 or 1) for each sample,
-                    "predicted_sentiment_probability": list of float: List of predicted sentiment probabilities for each sample
-                }
+        Returns
+            dict: Dictionary containing predicted sentiment labels and probabilities.
+                {"predicted_sentiment": List of predicted sentiment labels,
+                 "predicted_sentiment_probability": List of predicted sentiment probabilities}
         """
         vectorizer = self.vectorizer
         X_test.reset_index(drop=True, inplace=True)

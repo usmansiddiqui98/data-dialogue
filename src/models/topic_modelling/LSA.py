@@ -10,6 +10,7 @@ class LSAModel:
 
     Attributes
     ----------
+
     df : pandas.DataFrame
         The input dataframe containing text data to perform LSA.
     num_topics : int, optional, default: 10
@@ -24,13 +25,6 @@ class LSAModel:
         The TruncatedSVD object used to perform dimensionality reduction on the matrix of TF-IDF features.
     terms : list
         The list of terms (i.e., words) extracted from the input text data.
-
-    Methods
-    -------
-    lemmatization(texts, tags)
-        Lemmatizes input texts using spaCy.
-    get_topics()
-        Perform Latent Semantic Analysis on the input text data and return a dictionary of topics.
     """
 
     def __init__(self, df, num_topics=10, tags=None):
@@ -38,7 +32,7 @@ class LSAModel:
         Initializes the LDAGensim object.
 
         Parameters
-        ----------
+
         df : pandas.DataFrame
             The input data as a pandas DataFrame.
         num_topics : int, optional, default: 10
@@ -60,14 +54,14 @@ class LSAModel:
         Lemmatizes input texts using spaCy.
 
         Parameters
-        ----------
+
         texts : list
             A list of tokenized texts to lemmatize.
         tags : list
             A list of part-of-speech tags to use for lemmatization.
 
         Returns
-        -------
+
         list
             A list of lemmatized texts.
         """
@@ -83,7 +77,7 @@ class LSAModel:
         Perform LSA on the input text data.
 
         Returns
-        -------
+
         dict
             A dictionary of topic words and their weights for each topic.
         """

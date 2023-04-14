@@ -10,6 +10,7 @@ class Siebert(BaseModel):
 
     Attributes
     ----------
+
     models_path : str
         Path to directory where the model should be saved or loaded from.
 
@@ -20,7 +21,7 @@ class Siebert(BaseModel):
     def __init__(self, models_path):
         """
         Parameters
-        ----------
+
         models_path : str
             Path to directory where the model should be saved or loaded from.
         """
@@ -36,12 +37,12 @@ class Siebert(BaseModel):
         This method is not implemented since Siebert uses a pre-trained model.
 
         Parameters
-        ----------
+
         model_name : str
             Name of the model to be saved.
 
         Returns
-        -------
+
         None
         """
         pass
@@ -51,12 +52,11 @@ class Siebert(BaseModel):
         Load the model from the models_path directory. This method is not implemented since Siebert uses a pre-trained model.
 
         Parameters
-        ----------
+
         model_name : str
             Name of the model to be loaded.
 
         Returns
-        -------
         None
         """
         pass
@@ -66,7 +66,7 @@ class Siebert(BaseModel):
         Fit method is not implemented since Siebert uses a pre-trained model.
 
         Parameters
-        ----------
+
         X_train : pd.DataFrame
             Training data, a Pandas DataFrame containing text data to be used for training.
 
@@ -74,7 +74,6 @@ class Siebert(BaseModel):
             Labels corresponding to the training data.
 
         Returns
-        -------
         None
         """
         pass
@@ -85,14 +84,14 @@ class Siebert(BaseModel):
         the corresponding probabilities for each sample in the input.
 
         Parameters
-        ----------
+
         x_test : pd.DataFrame
             Test data, a Pandas DataFrame containing text data to be used for predicting sentiment.
 
-        Returns
-        -------
-        dict
-            A dictionary containing the predicted sentiment and the corresponding probabilities for each sample in the input.
+        Returns:
+            dict: Dictionary containing predicted sentiment labels and probabilities.
+                {"predicted_sentiment": List of predicted sentiment labels,
+                 "predicted_sentiment_probability": List of predicted sentiment probabilities}
         """
         x_test = x_test.text.to_list()
         x_test = [x[:512] if len(x) > 512 else x for x in x_test]

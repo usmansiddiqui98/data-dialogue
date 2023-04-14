@@ -19,6 +19,7 @@ class BERTDataset:
 
     Attributes
     ----------
+
     reviews : list
         The reviews in the dataset.
     tokenizer : transformers.BertTokenizer
@@ -32,7 +33,7 @@ class BERTDataset:
         Initialize the BERTDataset object.
 
         Parameters
-        ----------
+
         reviews : list
             The reviews in the dataset.
         tokenizer : transformers.BertTokenizer
@@ -49,7 +50,6 @@ class BERTDataset:
         Get the number of items in the dataset.
 
         Returns
-        -------
         int
             The number of items in the dataset.
         """
@@ -60,12 +60,11 @@ class BERTDataset:
         Get an item from the dataset by index.
 
         Parameters
-        ----------
+
         item : int
             The index of the item to get.
 
         Returns
-        -------
         dict
             A dictionary containing the tokenized review text, input IDs, and attention mask.
         """
@@ -95,7 +94,7 @@ class SentimentClassifier(nn.Module):
     A class for sentiment classification using a fine-tuned BERT model.
 
     Attributes
-    ----------
+
     bert : transformers.BertModel
         The pre-trained BERT model.
     drop : torch.nn.Dropout
@@ -109,7 +108,7 @@ class SentimentClassifier(nn.Module):
         Initialize the SentimentClassifier object.
 
         Parameters
-        ----------
+
         n_classes : int
             The number of output classes.
         """
@@ -123,14 +122,13 @@ class SentimentClassifier(nn.Module):
         Forward propagation through the model.
 
         Parameters
-        ----------
+
         input_ids : torch.Tensor
             The input IDs of the tokenized text.
         attention_mask : torch.Tensor
             The attention mask for the tokenized text.
 
         Returns
-        -------
         torch.Tensor
             The output tensor after passing through the model.
         """
@@ -145,7 +143,7 @@ class BertFineTuned(BaseModel):
     A class for fine-tuning BERT models for sentiment classification tasks.
 
     Attributes
-    ----------
+
     device : torch.device
         The device on which the model will run (either CPU or GPU).
     tokenizer : transformers.BertTokenizer
@@ -165,7 +163,7 @@ class BertFineTuned(BaseModel):
         Initialize the BertFineTuned object.
 
         Parameters
-        ----------
+
         models_path : str
             The path to the directory containing the saved models.
         """
@@ -183,12 +181,11 @@ class BertFineTuned(BaseModel):
         This method is not implemented since Siebert uses a pre-trained model.
 
         Parameters
-        ----------
+
         model_name : str
             Name of the model to be saved.
 
         Returns
-        -------
         None
         """
         pass
@@ -198,12 +195,11 @@ class BertFineTuned(BaseModel):
         Load the model from the models_path directory. This method is not implemented since Siebert uses a pre-trained model.
 
         Parameters
-        ----------
+
         model_name : str
             Name of the model to be loaded.
 
         Returns
-        -------
         None
         """
         pass
@@ -213,7 +209,7 @@ class BertFineTuned(BaseModel):
         Fit method is not implemented since Siebert uses a pre-trained model.
 
         Parameters
-        ----------
+
         x_train : pd.DataFrame
             Training data, a Pandas DataFrame containing text data to be used for training.
 
@@ -221,7 +217,6 @@ class BertFineTuned(BaseModel):
             Labels corresponding to the training data.
 
         Returns
-        -------
         None
         """
         pass
@@ -231,12 +226,11 @@ class BertFineTuned(BaseModel):
         Predict the sentiment of the given text data using the fine-tuned BERT model.
 
         Parameters
-        ----------
+
         x_test : pandas.DataFrame or pandas.Series
             The test data containing the text.
 
         Returns
-        -------
         dict
             A dictionary containing the predicted sentiment and predicted sentiment probability.
         """
@@ -263,7 +257,6 @@ class BertFineTuned(BaseModel):
                 input_ids = d["input_ids"].to(self.device)
                 attention_mask = d["attention_mask"].to(self.device)
 
-          
                 outputs = self.saved_model(input_ids=input_ids, attention_mask=attention_mask)
                 _, preds = torch.max(outputs, dim=1)
 

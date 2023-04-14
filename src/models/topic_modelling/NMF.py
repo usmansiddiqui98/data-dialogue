@@ -9,6 +9,7 @@ class NMFModel:
 
     Attributes
     ----------
+
     df : pd.DataFrame
         The data that the model will be trained on.
     n_components : int, optional, default: 10
@@ -31,15 +32,6 @@ class NMFModel:
         The weights of each document on each topic.
     label_df : pd.DataFrame
         A dataframe with the original data and topic labels.
-
-    Methods
-    -------
-    fit_transform()
-        Fit and transform the data to get the document weights.
-    get_topic_terms(n_top_words=10)
-        Get the top terms for each topic.
-    get_labels(n_top_words=5)
-        Label the topics for each data point in the input DataFrame.
     """
 
     def __init__(self, df, n_components=10, max_features=1000, max_df=0.5):
@@ -47,7 +39,7 @@ class NMFModel:
         Initializes the NMFModel object.
 
         Parameters
-        ----------
+
         df : pd.DataFrame
             The data that the model will be trained on.
         n_components : int, optional, default: 10
@@ -87,13 +79,11 @@ class NMFModel:
         """
         Get the top terms for each topic.
 
-        Parameters:
-        -----------
+        Parameters
         n_top_words : int, default=10
             The number of top words to display for each topic.
 
-        Returns:
-        --------
+        Returns
         topics_dict : dict
             A dictionary where each key corresponds to a topic index, and each value is another dictionary
             containing the top words/terms for that topic and their corresponding weights.
@@ -115,12 +105,11 @@ class NMFModel:
         Label the topics for each data point in the input DataFrame.
 
         Parameters
-        ----------
+
         n_top_words : int, optional
             The number of top words to use in the topic description. Defaults to 5.
 
         Returns
-        -------
         pandas.DataFrame
             A new DataFrame with an additional column `Topic_idx` that contains
             the index of the topic with the highest weight for each data point, and
@@ -128,12 +117,10 @@ class NMFModel:
             description of the top words in the corresponding topic.
 
         Raises
-        ------
         ValueError
             If `fit_transform` method hasn't been called yet.
 
         Notes
-        -----
         This method uses the `document_weights` attribute that is computed by the
         `fit_transform` method. If the `fit_transform` method hasn't been called
         yet, a `ValueError` is raised.

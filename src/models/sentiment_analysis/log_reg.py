@@ -13,27 +13,17 @@ class LogReg(BaseModel):
     """
     Logistic Regression Model for sentiment analysis.
 
-    Attributes:
+    Attributes
+    ----------
         vectorizer (TfidfVectorizer): TF-IDF vectorizer for text feature extraction.
         model (LogisticRegression): Logistic regression model for classification.
-
-    Methods:
-        fit(X_train, y_train):
-            Fits the logistic regression model to the training data.
-        save(model_name):
-            Saves the trained model and vectorizer to disk.
-        load(model_name):
-            Loads the trained model and vectorizer from disk.
-        predict(X_test):
-            Predicts sentiment labels for test data.
-
     """
 
     def __init__(self, *args, **kwargs):
         """
         Constructor for LogReg class.
 
-        Args:
+        Args
             *args: Variable length argument list.
             **kwargs: Arbitrary keyword arguments.
 
@@ -47,7 +37,7 @@ class LogReg(BaseModel):
         """
         Fits the logistic regression model to the training data.
 
-        Args:
+        Args
             X_train (DataFrame): Training data containing cleaned text.
             y_train (Series): Training labels.
 
@@ -64,7 +54,7 @@ class LogReg(BaseModel):
         """
         Saves the trained model and vectorizer to disk.
 
-        Args:
+        Args
             model_name (str): Name of the model to be saved.
 
         """
@@ -83,7 +73,7 @@ class LogReg(BaseModel):
         """
         Loads the trained model and vectorizer from disk.
 
-        Args:
+        Args
             model_name (str): Name of the model to be loaded.
 
         """
@@ -106,7 +96,9 @@ class LogReg(BaseModel):
             X_test (DataFrame): Test data containing cleaned text.
 
         Returns:
-            dict: Dictionary containing predicted sentiment labels and predicted sentiment probabilities.
+            dict: Dictionary containing predicted sentiment labels and probabilities.
+                {"predicted_sentiment": List of predicted sentiment labels,
+                 "predicted_sentiment_probability": List of predicted sentiment probabilities}
 
         """
         X_test_bow = self.vectorizer.transform(X_test["cleaned_text"])

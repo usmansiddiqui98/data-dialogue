@@ -21,7 +21,6 @@ def train_models(models, X_train, y_train, X_train_os, y_train_os, models_path):
     """Train the various models on the training data, and save the model to the specified directory.
 
     Parameters
-    ----------
     models : dict
         A dictionary of model names and instances.
     X_train : array-like of shape (n_samples, n_features)
@@ -32,7 +31,6 @@ def train_models(models, X_train, y_train, X_train_os, y_train_os, models_path):
         The path to the directory where the trained models will be saved.
 
     Returns
-    -------
     None
 
     """
@@ -54,7 +52,6 @@ def find_best_model(models, models_path, X_test, y_test):
     """Find the best model among the trained models. All models are tested on the same test set, the model with the highest accuracy is returned.
 
     Parameters
-    ----------
     models : dict
         A dictionary of model names and instances.
     models_path : str
@@ -65,7 +62,6 @@ def find_best_model(models, models_path, X_test, y_test):
         The true target values (class labels in classification) of the test samples.
 
     Returns
-    -------
     tuple
         A tuple containing the best model instance, the name of the best model, and the accuracy of the best model.
 
