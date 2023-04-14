@@ -3,11 +3,16 @@ import time
 from sys import platform
 
 import pandas as pd
+import torch
 
 from src.data.feature_engineering import FeatureEngineer
 from src.data.preprocess import Preprocessor
 from src.models.sentiment_analysis.log_reg import LogReg
+from src.models.sentiment_analysis.lstm import BasicLSTM
+from src.models.sentiment_analysis.naive_bayes import Naivebayes
+from src.models.sentiment_analysis.pre_trained.bert_fine_tuned import BertFineTuned
 from src.models.sentiment_analysis.pre_trained.siebert import Siebert
+from src.models.sentiment_analysis.svm import SVM
 from src.models.sentiment_analysis.xg_boost import XgBoost
 from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 
@@ -46,9 +51,13 @@ def run_scoring_pipeline(input_df):
         "xg_boost": XgBoost,
         "xg_boost_svd": XgBoostSvd,
         "log_reg": LogReg,
-        # "siebert": Siebert,
-        # Add other model instances here
+        "svm": SVM,
+        "naive_bayes": Naivebayes,
+        "bert_fine_tuned": BertFineTuned,
+        "siebert": Siebert,
+        "lstm": BasicLSTM,
     }
+
     # Use the best_model variable to create the corresponding model object
     model = model_classes[best_model](models_path)
 
@@ -94,5 +103,6 @@ if __name__ == "__main__":
     input_df = pd.read_csv("data/raw/reviews_test.csv")
     # Run the pipeline
     output_df = run_scoring_pipeline(input_df)
-    # Save the output
+    output_path = "data/predictions"
+    os.makedirs(output_path, exist_ok=True)
     output_df.to_csv("data/predictions/reviews_test_predictions_data-dialogue.csv", index=False)
