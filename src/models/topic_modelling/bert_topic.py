@@ -8,17 +8,46 @@ from umap import UMAP
 
 
 class BertTopic:
-    def __init__(self, df):
-        self.df = df
-        # self.preprocessor = preprocessor
+    """
+    A class for generating topic models using BERT embeddings.
+
+    Attributes:
+    -----------
+
+    data (pandas.DataFrame):
+        The input data as a pandas dataframe.
+    preprocessor (Preprocessor):
+        An instance of Preprocessor class used for text pre-processing.
+    embeddings (numpy.ndarray):
+        An array of BERT embeddings for each document.
+    topics (list):
+        A list of topic labels for each document.
+    probabilities (numpy.ndarray):
+        An array of probabilities for each topic in each document.
+    topic_model (BERTopic):
+        An instance of BERTopic model for generating topics.
+    """
+
+    def __init__(self, data):
+        """
+        Constructs all necessary attributes for the BertTopic object.
+
+        Parameters:
+            data (pandas.DataFrame):
+                The input data as a pandas dataframe.
+        """
+        self.data = data
         self.embeddings = None
         self.topics = None
         self.probabilities = None
         self.topic_model = None
 
     def prepare_embeddings(self):
+        """
+        Generates BERT embeddings for input data and saves them to a file for future use.
+        """
         BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
-        embeddings_file = os.path.join(BASE_DIR, "models/topic_modelling/bert_topic/BERTopic_embeddings.pickle")
+        embeddings_file = os.path.join(BASE_DIR, "data/embeddings/BERTopic_embeddings.pickle")
 
         if os.path.exists(embeddings_file):
             print("Loading existing embeddings...")
@@ -34,6 +63,9 @@ class BertTopic:
                 pickle.dump(self.embeddings, pkl)
 
     def run_bertopic(self):
+        """
+        Runs BERTopic model to generate topics and probabilities.
+        """
         umap_model = UMAP(n_neighbors=100, n_components=3, min_dist=0.0, metric="cosine", random_state=4263)
         hdbscan_model = HDBSCAN(min_cluster_size=50, min_samples=20, metric="euclidean", prediction_data=True)
         self.topic_model = BERTopic(
@@ -46,6 +78,9 @@ class BertTopic:
         self.topics, self.probabilities = self.topic_model.fit_transform(self.df["cleaned_text"], self.embeddings)
 
     def get_topics(self):
+        """
+        Returns a dictionary of topics with top words and probabilities.
+        """
         topics = self.topic_model.get_topic_info()
         topics_dict = {}
         for index, row in topics.iterrows():

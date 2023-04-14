@@ -152,13 +152,47 @@ stopwords = list(stopwords)
 
 
 class Preprocessor:
+    """
+    A class for preprocessing text data.
+
+    Attributes:
+    -----------
+
+    dirty_df (pandas DataFrame):
+        A DataFrame containing the dirty text data to be cleaned.
+
+    clean_df (pandas DataFrame):
+        A DataFrame containing the cleaned text data.
+
+    """
+
     pandarallel.initialize(progress_bar=False, verbose=0)
 
     def __init__(self, dirty_df):
+        """
+        Initialize the Preprocessor object.
+
+        Parameters:
+            dirty_df (pandas DataFrame): A DataFrame containing the dirty text data to be cleaned.
+        """
         self.dirty_df = dirty_df
 
     @staticmethod
-    def clean_sentence(sentence, stop_words):  # takes in single string, returns a cleaned string
+    def clean_sentence(sentence, stop_words):
+        """
+        Clean a single string by removing tags, resolving contractions, removing digits and special characters,
+        tokenizing, changing to lower case and removing punctuations, removing stop words, finding the POS tag
+        for each token, and lemmatizing each token.
+
+        Parameters:
+            sentence (str):A single string to be cleaned.
+
+            stop_words (list): A list of stop words to be removed from the string.
+
+        Returns:
+            str: The cleaned string.
+        """
+
         def pos_tagger(nltk_tag):
             if nltk_tag.startswith("J"):
                 return wordnet.ADJ
@@ -194,6 +228,15 @@ class Preprocessor:
         # return stemmed_sentence
 
     def truncate_to_512(sentence):
+        """
+        Truncate a string to contain the first 512 nouns and adjectives.
+
+        Parameters:
+            sentence (str): A string to be truncated.
+
+        Returns:
+            str: The truncated string.
+        """
         words = word_tokenize(sentence)
         pos_tagged = nltk.pos_tag(words)
         nouns_adjectives = [word for word, tag in pos_tagged if tag.startswith("N") or tag.startswith("J")]
@@ -205,6 +248,19 @@ class Preprocessor:
         return " ".join(combined)
 
     def clean_csv(self):
+        """
+        Clean the text data in the dirty_df DataFrame, adding a new column of cleaned text and a new column of
+        sentiment labels.
+
+        Parameters:
+            self (object): Object of Preprocessor class with 'dirty_df' attribute.
+
+        Returns:
+            None
+
+        The 'dirty_df' attribute is copied to 'clean_df' attribute with cleaned 'Text' column and
+        binary 'Sentiment' column.
+        """
         new_df = self.dirty_df.copy()
         new_df["cleaned_text"] = new_df["Text"].parallel_apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
         new_df["Sentiment"] = new_df["Sentiment"].parallel_apply(lambda x: 1 if x == "positive" else 0)
@@ -213,6 +269,17 @@ class Preprocessor:
         self.clean_df = new_df
 
     def clean_test_csv(self):
+        """
+        Clean the text data in the dirty_df DataFrame, adding a new column of cleaned text.
+
+        Parameters:
+            self (object): Object of Preprocessor class with 'dirty_df' attribute.
+
+        Returns:
+            None
+
+        The 'dirty_df' attribute is copied to 'clean_df' attribute with cleaned 'Text' column.
+        """
         new_df = self.dirty_df.copy()
         new_df["cleaned_text"] = new_df["Text"].parallel_apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
         # lower case all column names

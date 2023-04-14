@@ -16,18 +16,12 @@ class SVM(BaseModel):
     A class to train and predict positive and negative sentiment of texts using SVM model.
     SVM performs classification by finding the hyper-plane that differentiate the classes we plotted in n-dimensional space.
 
-    Parameters
-    ----------
-    *args
-        The variable arguments
-    **kwargs
-        The arbitrary keyword arguments
-
     Attributes
     ----------
-    vectorizer : sklearn.feature_extraction.text.TfidfVectorizer
+
+    vectorizer (sklearn.feature_extraction.text.TfidfVectorizer):
         Initialises TfidfVectorizer to convert a collection of raw text to a matrix of TF-IDF features.
-    model : sklearn.ensemble.BaggingClassifier
+    model (sklearn.ensemble.BaggingClassifier):
         A Bagging classifier that takes in the SVM model (sklearn.svm.SVC) along with the optimised parameters.
 
     """
@@ -48,12 +42,9 @@ class SVM(BaseModel):
         Function to generate the TF-IDF features by taking in 'cleaned_text' in X_train.
         Fits the TF-IDF and feature engineered features into the SVM model and trains it.
 
-        Parameters
-        ----------
-        X_train : pandas.DataFrame
-            The input data consisting of review texts and feature engineered features.
-        y_train : pandas.DataFrame
-            The sentiment of X_train.
+        Parameters:
+            X_train (pandas.DataFrame): The input data consisting of review texts and feature engineered features.
+            y_train (pandas.DataFrame): The sentiment of X_train.
         """
         X_train_bow = self.vectorizer.fit_transform(X_train["cleaned_text"])
         X_train_bow = pd.DataFrame(X_train_bow.toarray(), columns=self.vectorizer.get_feature_names_out())
@@ -66,10 +57,8 @@ class SVM(BaseModel):
         """
         Save SVM model and the vectorizer as pickle files.
 
-        Parameters
-        ----------
-        model_name : str
-            The name of the SVM model to be saved.
+        Parameters:
+            model_name (str): The name of the SVM model to be saved.
         """
         self.model_dir = os.path.join(self.models_path, model_name)
 
@@ -83,10 +72,8 @@ class SVM(BaseModel):
         """
         Load SVM model and the vectorizer pickle files.
 
-        Parameters
-        ----------
-        model_name : str
-            The name of the SVM model to be loaded.
+        Parameters:
+            model_name (str): The name of the SVM model to be loaded.
         """
         self.model_dir = os.path.join(self.models_path, model_name)
 
@@ -101,19 +88,13 @@ class SVM(BaseModel):
         Generates the TF-IDF features by taking in 'cleaned_text' in X_test.
         SVM model predicts sentiment & probability of sentiment on unseen data (TF-IDF and feature engineered features of X_test).
 
-        Parameters
-        ----------
-        X_test : pandas.DataFrame
-            The test data consisting of review texts and feature engineered features.
+        Parameters:
+            X_test (pandas.DataFrame): The test data consisting of review texts and feature engineered features.
 
-        Returns
-        -------
-        dict [str, List]
-            The key-value pairs are as follows:
-            Key 1: "predicted_sentiment"
-            Value 1: List of sentiments
-            Key 2: "predicted_sentiment_probability"
-            Value 2: List of probabilities of predicted sentiment
+        Returns:
+            dict: Dictionary containing predicted sentiment labels and probabilities.
+                {"predicted_sentiment": List of predicted sentiment labels,
+                 "predicted_sentiment_probability": List of predicted sentiment probabilities}
         """
         X_test_bow = self.vectorizer.transform(X_test["cleaned_text"])
         X_test_bow = pd.DataFrame(X_test_bow.toarray(), columns=self.vectorizer.get_feature_names_out())

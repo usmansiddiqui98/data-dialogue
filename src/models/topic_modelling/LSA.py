@@ -8,28 +8,33 @@ class LSAModel:
     """
     A class to represent Latent Semantic Analysis model.
 
-    Attributes:
-        df (pandas.DataFrame): The input dataframe containing text data to perform LSA.
-        num_topics (int): The number of topics to extract (default: 10).
-        tags (list): A list of part-of-speech tags to use for lemmatization (default: None).
-        vectorizer (sklearn.feature_extraction.text.TfidfVectorizer): The TfidfVectorizer object used to convert text data to a matrix of TF-IDF features.
-        X (scipy.sparse.csr_matrix): The matrix of TF-IDF features.
-        svd_model (sklearn.decomposition.TruncatedSVD): The TruncatedSVD object used to perform dimensionality reduction on the matrix of TF-IDF features.
-        terms (list): The list of terms (i.e., words) extracted from the input text data.
+    Attributes
+    ----------
 
-    Methods:
-        lemmatization(texts, tags): Lemmatizes input texts using spaCy.
-        get_topics(): Perform Latent Semantic Analysis on the input text data and return a dictionary of topics.
+    df (pandas.DataFrame):
+        The input dataframe containing text data to perform LSA.
+    num_topics (int, optional, default: 10):
+        The number of topics to extract.
+    tags (list, optional, default: None):
+        A list of part-of-speech tags to use for lemmatization.
+    vectorizer (sklearn.feature_extraction.text.TfidfVectorizer):
+        The TfidfVectorizer object used to convert text data to a matrix of TF-IDF features.
+    X (scipy.sparse.csr_matrix):
+        The matrix of TF-IDF features.
+    svd_model (sklearn.decomposition.TruncatedSVD):
+        The TruncatedSVD object used to perform dimensionality reduction on the matrix of TF-IDF features.
+    terms (list):
+        The list of terms (i.e., words) extracted from the input text data.
     """
 
     def __init__(self, df, num_topics=10, tags=None):
         """
         Initializes the LDAGensim object.
 
-        Args:
+        Parameters:
             df (pandas.DataFrame): The input data as a pandas DataFrame.
-            num_topics (int): The number of topics to extract (default: 10).
-            tags (list): A list of part-of-speech tags to use for lemmatization (default: None).
+            num_topics (int, optional, default: 10): The number of topics to extract.
+            tags (list, optional, default: None): A list of part-of-speech tags to use for lemmatization.
         """
         self.df = df
         self.num_topics = num_topics
@@ -44,7 +49,7 @@ class LSAModel:
         """
         Lemmatizes input texts using spaCy.
 
-        Args:
+        Parameters:
             texts (list): A list of tokenized texts to lemmatize.
             tags (list): A list of part-of-speech tags to use for lemmatization.
 

@@ -15,6 +15,21 @@ from src.utils.feature_engineering_helpers import (
 
 
 class FeatureEngineer:
+    """Class for performing feature engineering on pre-processed text data.
+
+    Parameters:
+        pre_processed_df (pandas.DataFrame): The pre-processed text data.
+
+    Attributes
+    ----------
+
+    pre_processed_df (pandas.DataFrame):
+        The pre-processed text data.
+    feature_engineered_df (pandas.DataFrame or None):
+        The feature-engineered data. Initialized to None.
+
+    """
+
     pandarallel.initialize(progress_bar=False, verbose=0)
 
     def __init__(self, pre_processed_df):
@@ -23,6 +38,15 @@ class FeatureEngineer:
 
     @staticmethod
     def pos_tag_count(pre_processed_df):
+        """Count the number of verbs, nouns, and cardinal digits in each review.
+
+        Parameters:
+            pre_processed_df (pandas.DataFrame): The pre-processed text data.
+
+        Returns:
+            pandas.DataFrame: The data with three new columns, indicating the number of verbs, nouns, and cardinal digits in each review.
+
+        """
         # extract verbs
         df = pre_processed_df.copy()
         df["verbs"] = df["pos_tags"].parallel_apply(
@@ -46,6 +70,15 @@ class FeatureEngineer:
 
     @staticmethod
     def tokenized_untokenized_count(df):
+        """Count the number of tokens in the cleaned and raw text of each review.
+
+        Parameters:
+            df (pandas.DataFrame): The data containing the pre-processed and cleaned text data.
+
+        Returns:
+            pandas.DataFrame: The data with two new columns, indicating the number of tokens in the cleaned and raw text of each review.
+
+        """
         df["num_tokens_cleaned"] = df["cleaned_text"].str.lower().parallel_apply(nltk.word_tokenize).str.len()
         df["num_tokens_raw"] = df["text"].str.lower().parallel_apply(nltk.word_tokenize).str.len()
         print("[FE] finished tokenized_untokenized count...")
@@ -53,6 +86,16 @@ class FeatureEngineer:
 
     @staticmethod
     def add_pos_neg_count(df):
+        """
+        Adds columns for the number of positive, negative, and neutral words of each review to the given DataFrame.
+
+        Parameters:
+            df (pandas.DataFrame): A DataFrame.
+
+        Returns:
+            pandas.DataFrame: A DataFrame with added columns for the number of positive, negative, and neutral words.
+        """
+
         df["num_pos_neg_neutral_words"] = df["cleaned_text"].parallel_apply(count_pos_neg_neutral)
         df["num_pos_words"] = df["num_pos_neg_neutral_words"].str[0]
         df["num_neg_words"] = df["num_pos_neg_neutral_words"].str[1]
@@ -62,6 +105,12 @@ class FeatureEngineer:
 
     # main function that adds feature to the df
     def add_features(self):
+        """
+        Adds new features to the pre-processed DataFrame and creates a new feature-engineered DataFrame.
+
+        Returns:
+            pandas.DataFrame: A DataFrame with added features.
+        """
         new_df = self.pre_processed_df.copy()
         new_df["Lowercase Count"] = new_df["text"].parallel_apply(count_lower)
         print("[FE] finished lowercase count...")

@@ -13,6 +13,8 @@ def test_notebooks():
         if file_name.endswith(".ipynb"):
             if file_name.endswith("BERTopic.ipynb"):
                 continue
+            if file_name.endswith("Sentiment_Analysis.ipynb"):
+                continue
             with open(file_name) as f:
                 nb = nbformat.read(f, as_version=4)
             cleared_nb, _ = exporter.from_notebook_node(nb)

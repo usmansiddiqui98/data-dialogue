@@ -2,6 +2,7 @@ import os
 from sys import platform
 
 import pandas as pd
+import torch
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score
 from tqdm.auto import tqdm
 
@@ -18,6 +19,18 @@ from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 
 
 def train_models(models, X_train, y_train, X_train_os, y_train_os, models_path):
+    """Train the various models on the training data, and save the model to the specified directory.
+
+    Parameters:
+        models (dict): A dictionary of model names and instances.
+        X_train (array-like of shape (n_samples, n_features)): The training input samples.
+        y_train (array-like of shape (n_samples,)): The target values (class labels in classification).
+        models_path : str: The path to the directory where the trained models will be saved.
+
+    Returns:
+        None
+
+    """
     for model_name, model_instance in tqdm(models.items(), desc="Training models"):
         # Train the model
         if model_name == "naive_bayes":
@@ -33,6 +46,19 @@ def train_models(models, X_train, y_train, X_train_os, y_train_os, models_path):
 
 
 def find_best_model(models, models_path, X_test, y_test):
+    """
+    Find the best model among the trained models. All models are tested on the same test set, the model with the highest accuracy is returned.
+
+    Parameters:
+        models (dict): A dictionary of model names and instances.
+        models_path (str): The path to the directory where the trained models are saved.
+        X_test (array-like of shape (n_samples, n_features)): The test input samples.
+        y_test (array-like of shape (n_samples,)): The true target values (class labels in classification) of the test samples.
+
+    Returns:
+        tuple: A tuple containing the best model instance, the name of the best model, and the accuracy of the best model.
+
+    """
     best_accuracy = 0
     best_model = None
     best_model_name = None
@@ -119,16 +145,29 @@ if __name__ == "__main__":
         models_path = "..\\..\\..\\models\\sentiment_analysis"
     else:
         models_path = os.path.join(BASE_DIR, "models/sentiment_analysis")
-    models = {
-        "xg_boost": XgBoost(models_path),
-        "xg_boost_svd": XgBoostSvd(models_path),
-        "log_reg": LogReg(models_path),
-        "svm": SVM(models_path),
-        "naive_bayes": Naivebayes(models_path),
-        "bert_fine_tuned": BertFineTuned(models_path),
-        "siebert": Siebert(models_path),
-        "lstm": BasicLSTM(models_path),
-    }
+
+    if torch.cuda.is_available():
+        models = {
+            "xg_boost": XgBoost(models_path),
+            "xg_boost_svd": XgBoostSvd(models_path),
+            "log_reg": LogReg(models_path),
+            "svm": SVM(models_path),
+            "naive_bayes": Naivebayes(models_path),
+            "bert_fine_tuned": BertFineTuned(models_path),
+            "siebert": Siebert(models_path),
+            "lstm": BasicLSTM(models_path),
+            # Add other model instances here
+        }
+    else:
+        models = {
+            "xg_boost": XgBoost(models_path),
+            "xg_boost_svd": XgBoostSvd(models_path),
+            "log_reg": LogReg(models_path),
+            "svm": SVM(models_path),
+            "naive_bayes": Naivebayes(models_path),
+            "lstm": BasicLSTM(models_path),
+            # Add other model instances here
+        }
 
     # Train the models and save them
     train_models(models, X_train, y_train, X_train_os, y_train_os, models_path)
