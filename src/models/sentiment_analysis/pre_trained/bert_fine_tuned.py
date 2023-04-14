@@ -180,36 +180,50 @@ class BertFineTuned(BaseModel):
 
     def save(self, model_name):
         """
-        Save the fine-tuned BERT model.
+         Save the model under the given model_name in the models_path directory.
+         This method is not implemented since Siebert uses a pre-trained model.
 
-        Parameters
-        ----------
-        model_name : str
-            The name of the model to be saved.
-        """
+         Parameters
+         ----------
+         model_name : str
+             Name of the model to be saved.
+
+         Returns
+         -------
+         None
+         """
         pass
 
     def load(self, model_name):
         """
-        Load a fine-tuned BERT model.
+        Load the model from the models_path directory. This method is not implemented since Siebert uses a pre-trained model.
 
         Parameters
         ----------
         model_name : str
-            The name of the model to be loaded.
+            Name of the model to be loaded.
+
+        Returns
+        -------
+        None
         """
         pass
 
     def fit(self, x_train, y_train):
         """
-        Fit the fine-tuned BERT model on the training data.
+        Fit method is not implemented since Siebert uses a pre-trained model.
 
         Parameters
         ----------
-        x_train : pandas.DataFrame or pandas.Series
-            The training data containing the text.
-        y_train : pandas.DataFrame or pandas.Series
-            The training labels for the text.
+        x_train : pd.DataFrame
+            Training data, a Pandas DataFrame containing text data to be used for training.
+
+        y_train : pd.Series
+            Labels corresponding to the training data.
+
+        Returns
+        -------
+        None
         """
         pass
 
