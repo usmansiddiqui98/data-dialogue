@@ -104,4 +104,6 @@ if __name__ == "__main__":
     # Run the pipeline
     output_df = run_scoring_pipeline(input_df)
     # Save the output
+    output_path = "data/predictions"
+    os.makedirs(output_path, exist_ok=True)
     output_df.to_csv("data/predictions/reviews_test_predictions_data-dialogue.csv", index=False)
