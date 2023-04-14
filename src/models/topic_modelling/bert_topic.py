@@ -8,9 +8,9 @@ from umap import UMAP
 
 
 class BertTopic:
-    def __init__(self, data, preprocessor):
-        self.data = data
-        self.preprocessor = preprocessor
+    def __init__(self, df):
+        self.df = df
+        #self.preprocessor = preprocessor
         self.embeddings = None
         self.topics = None
         self.probabilities = None
@@ -27,7 +27,7 @@ class BertTopic:
         else:
             print("Creating new embeddings...")
             sentence_model = SentenceTransformer("all-MiniLM-L12-v2")
-            self.embeddings = sentence_model.encode(self.pre_processed_df["cleaned_text"], show_progress_bar=True)
+            self.embeddings = sentence_model.encode(self.df["cleaned_text"], show_progress_bar=True)
 
             # save embeddings
             with open(embeddings_file, "wb") as pkl:
@@ -44,7 +44,7 @@ class BertTopic:
             nr_topics="auto",
         )
         self.topics, self.probabilities = self.topic_model.fit_transform(
-            self.preprocessor.clean_df["cleaned_text"], self.embeddings
+            self.df["cleaned_text"], self.embeddings
         )
 
     def get_topics(self):
