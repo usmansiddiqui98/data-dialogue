@@ -7,6 +7,10 @@ from sklearn.linear_model import LogisticRegression
 from src.models.sentiment_analysis.log_reg import LogReg
 from sklearn.metrics import accuracy_score
 
+@pytest.fixture
+def model():
+    # Load and return the trained model here
+    return LogReg(models_path="/test_files")
 
 @pytest.fixture
 def get_data():
@@ -22,9 +26,8 @@ def get_data():
     return X_train, y_train, X_test, y_test
 
 
-def test_fit(get_data):
+def test_fit(model,get_data):
     X_train, y_train, _, _ = get_data
-    model = LogReg(models_path="/test_files")
     model.fit(X_train, y_train)
     assert isinstance(model.model, LogisticRegression)
     assert model.model.get_params() == {
@@ -45,9 +48,8 @@ def test_fit(get_data):
         "warm_start": False,
     }
 
-def test_predict(get_data):
+def test_predict(model,get_data):
     X_train, y_train, X_test, y_test = get_data
-    model = LogReg(models_path="/test_files")
     model.fit(X_train, y_train)
     result = model.predict(X_test)
     assert isinstance(result, dict)
@@ -56,9 +58,8 @@ def test_predict(get_data):
     assert len(result["predicted_sentiment_probability"]) == len(X_test)
     assert all(isinstance(x, float) or isinstance(x, int) for x in result["predicted_sentiment_probability"])
 
-def test_accuracy(get_data):
+def test_accuracy(model,get_data):
     X_train, y_train, X_test, y_test = get_data
-    model = LogReg(models_path="/test_files")
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)["predicted_sentiment"]
     accuracy = accuracy_score(y_test, y_pred)
