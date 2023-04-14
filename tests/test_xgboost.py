@@ -2,10 +2,10 @@ import os
 
 import pandas as pd
 import pytest
+from sklearn.metrics import accuracy_score
 from xgboost import XGBClassifier
 
 from src.models.sentiment_analysis.xg_boost import XgBoost
-from sklearn.metrics import accuracy_score
 
 
 @pytest.fixture

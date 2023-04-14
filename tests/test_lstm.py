@@ -2,10 +2,9 @@ import os
 
 import pandas as pd
 import pytest
-
 from sklearn.metrics import accuracy_score
 
-from src.models.sentiment_analysis.lstm import SentimentLSTM, BasicLSTM
+from src.models.sentiment_analysis.lstm import BasicLSTM, SentimentLSTM
 
 
 @pytest.fixture
