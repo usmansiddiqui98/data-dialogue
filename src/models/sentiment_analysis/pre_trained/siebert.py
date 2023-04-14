@@ -11,19 +11,16 @@ class Siebert(BaseModel):
     Attributes
     ----------
 
-    models_path : str
+    models_path (str):
         Path to directory where the model should be saved or loaded from.
-
-    device : int
+    device (int):
         The device where the model should be loaded. If CUDA is available, the device is set to 0, otherwise it is set to -1.
     """
 
     def __init__(self, models_path):
         """
-        Parameters
-
-        models_path : str
-            Path to directory where the model should be saved or loaded from.
+        Parameters:
+            models_path (str): Path to directory where the model should be saved or loaded from.
         """
         super().__init__(models_path)
         if torch.cuda.is_available():
@@ -36,14 +33,11 @@ class Siebert(BaseModel):
         Save the model under the given model_name in the models_path directory.
         This method is not implemented since Siebert uses a pre-trained model.
 
-        Parameters
+        Parameters:
+            model_name (str): Name of the model to be saved.
 
-        model_name : str
-            Name of the model to be saved.
-
-        Returns
-
-        None
+        Returns:
+            None
         """
         pass
 
@@ -51,13 +45,11 @@ class Siebert(BaseModel):
         """
         Load the model from the models_path directory. This method is not implemented since Siebert uses a pre-trained model.
 
-        Parameters
+        Parameters:
+            model_name (str): Name of the model to be loaded.
 
-        model_name : str
-            Name of the model to be loaded.
-
-        Returns
-        None
+        Returns:
+            None
         """
         pass
 
@@ -65,16 +57,12 @@ class Siebert(BaseModel):
         """
         Fit method is not implemented since Siebert uses a pre-trained model.
 
-        Parameters
+        Parameters:
+            X_train (pd.DataFrame): Training data, a Pandas DataFrame containing text data to be used for training.
+            y_train (pd.Series): Labels corresponding to the training data.
 
-        X_train : pd.DataFrame
-            Training data, a Pandas DataFrame containing text data to be used for training.
-
-        y_train : pd.Series
-            Labels corresponding to the training data.
-
-        Returns
-        None
+        Returns:
+            None
         """
         pass
 
@@ -83,16 +71,15 @@ class Siebert(BaseModel):
         Given a Pandas DataFrame of text data, this method returns a dictionary containing the predicted sentiment and
         the corresponding probabilities for each sample in the input.
 
-        Parameters
-
-        x_test : pd.DataFrame
-            Test data, a Pandas DataFrame containing text data to be used for predicting sentiment.
+        Parameters:
+            x_test (DataFrame): Test data containing cleaned text.
 
         Returns:
             dict: Dictionary containing predicted sentiment labels and probabilities.
                 {"predicted_sentiment": List of predicted sentiment labels,
                  "predicted_sentiment_probability": List of predicted sentiment probabilities}
         """
+
         if torch.cuda.is_available():
             print("Siebert predicting on GPU")
         else:

@@ -15,15 +15,18 @@ class LogReg(BaseModel):
 
     Attributes
     ----------
-        vectorizer (TfidfVectorizer): TF-IDF vectorizer for text feature extraction.
-        model (LogisticRegression): Logistic regression model for classification.
+
+    vectorizer (TfidfVectorizer):
+        TF-IDF vectorizer for text feature extraction.
+    model (LogisticRegression):
+        Logistic regression model for classification.
     """
 
     def __init__(self, *args, **kwargs):
         """
         Constructor for LogReg class.
 
-        Args
+        Parameters:
             *args: Variable length argument list.
             **kwargs: Arbitrary keyword arguments.
 
@@ -37,9 +40,9 @@ class LogReg(BaseModel):
         """
         Fits the logistic regression model to the training data.
 
-        Args
-            X_train (DataFrame): Training data containing cleaned text.
-            y_train (Series): Training labels.
+        Parameters:
+            X_train (pandas.DataFrame): The input data consisting of review texts and feature engineered features.
+            y_train (pandas.DataFrame): The sentiment of X_train.
 
         """
         X_train_bow = self.vectorizer.fit_transform(X_train["cleaned_text"])
@@ -54,7 +57,7 @@ class LogReg(BaseModel):
         """
         Saves the trained model and vectorizer to disk.
 
-        Args
+        Parameters:
             model_name (str): Name of the model to be saved.
 
         """
@@ -73,7 +76,7 @@ class LogReg(BaseModel):
         """
         Loads the trained model and vectorizer from disk.
 
-        Args
+        Parameters:
             model_name (str): Name of the model to be loaded.
 
         """
@@ -92,7 +95,7 @@ class LogReg(BaseModel):
         """
         Predicts sentiment labels for test data.
 
-        Args:
+        Parameters:
             X_test (DataFrame): Test data containing cleaned text.
 
         Returns:

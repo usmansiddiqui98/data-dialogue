@@ -8,3 +8,4 @@ Topic Modelling Models
    lda
    lsa
    nmf
+   bert_topic

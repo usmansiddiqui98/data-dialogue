@@ -21,18 +21,14 @@ from src.models.sentiment_analysis.xg_boost_svd import XgBoostSvd
 def train_models(models, X_train, y_train, X_train_os, y_train_os, models_path):
     """Train the various models on the training data, and save the model to the specified directory.
 
-    Parameters
-    models : dict
-        A dictionary of model names and instances.
-    X_train : array-like of shape (n_samples, n_features)
-        The training input samples.
-    y_train : array-like of shape (n_samples,)
-        The target values (class labels in classification).
-    models_path : str
-        The path to the directory where the trained models will be saved.
+    Parameters:
+        models (dict): A dictionary of model names and instances.
+        X_train (array-like of shape (n_samples, n_features)): The training input samples.
+        y_train (array-like of shape (n_samples,)): The target values (class labels in classification).
+        models_path : str: The path to the directory where the trained models will be saved.
 
-    Returns
-    None
+    Returns:
+        None
 
     """
     for model_name, model_instance in tqdm(models.items(), desc="Training models"):
@@ -50,21 +46,17 @@ def train_models(models, X_train, y_train, X_train_os, y_train_os, models_path):
 
 
 def find_best_model(models, models_path, X_test, y_test):
-    """Find the best model among the trained models. All models are tested on the same test set, the model with the highest accuracy is returned.
+    """
+    Find the best model among the trained models. All models are tested on the same test set, the model with the highest accuracy is returned.
 
-    Parameters
-    models : dict
-        A dictionary of model names and instances.
-    models_path : str
-        The path to the directory where the trained models are saved.
-    X_test : array-like of shape (n_samples, n_features)
-        The test input samples.
-    y_test : array-like of shape (n_samples,)
-        The true target values (class labels in classification) of the test samples.
+    Parameters:
+        models (dict): A dictionary of model names and instances.
+        models_path (str): The path to the directory where the trained models are saved.
+        X_test (array-like of shape (n_samples, n_features)): The test input samples.
+        y_test (array-like of shape (n_samples,)): The true target values (class labels in classification) of the test samples.
 
-    Returns
-    tuple
-        A tuple containing the best model instance, the name of the best model, and the accuracy of the best model.
+    Returns:
+        tuple: A tuple containing the best model instance, the name of the best model, and the accuracy of the best model.
 
     """
     best_accuracy = 0

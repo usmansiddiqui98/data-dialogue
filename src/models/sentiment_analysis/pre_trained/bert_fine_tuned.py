@@ -20,11 +20,11 @@ class BERTDataset:
     Attributes
     ----------
 
-    reviews : list
+    reviews (list):
         The reviews in the dataset.
-    tokenizer : transformers.BertTokenizer
+    tokenizer (transformers.BertTokenizer):
         The BERT tokenizer used to process the text data.
-    max_len : int
+    max_len (int):
         The maximum length for the tokenized text.
     """
 
@@ -32,14 +32,10 @@ class BERTDataset:
         """
         Initialize the BERTDataset object.
 
-        Parameters
-
-        reviews : list
-            The reviews in the dataset.
-        tokenizer : transformers.BertTokenizer
-            The BERT tokenizer used to process the text data.
-        max_len : int
-            The maximum length for the tokenized text.
+        Parameters:
+            reviews (list): The reviews in the dataset.
+            tokenizer (transformers.BertTokenizer): The BERT tokenizer used to process the text data.
+            max_len (int): The maximum length for the tokenized text.
         """
         self.reviews = reviews
         self.tokenizer = tokenizer
@@ -49,9 +45,8 @@ class BERTDataset:
         """
         Get the number of items in the dataset.
 
-        Returns
-        int
-            The number of items in the dataset.
+        Returns:
+            int: The number of items in the dataset.
         """
         return len(self.reviews)
 
@@ -59,14 +54,11 @@ class BERTDataset:
         """
         Get an item from the dataset by index.
 
-        Parameters
+        Parameters:
+            item (int): The index of the item to get.
 
-        item : int
-            The index of the item to get.
-
-        Returns
-        dict
-            A dictionary containing the tokenized review text, input IDs, and attention mask.
+        Returns:
+            dict: A dictionary containing the tokenized review text, input IDs, and attention mask.
         """
         review = str(self.reviews[item])
 
@@ -94,12 +86,13 @@ class SentimentClassifier(nn.Module):
     A class for sentiment classification using a fine-tuned BERT model.
 
     Attributes
+    ----------
 
-    bert : transformers.BertModel
+    bert (transformers.BertModel):
         The pre-trained BERT model.
-    drop : torch.nn.Dropout
+    drop (torch.nn.Dropout):
         The dropout layer.
-    out : torch.nn.Linear
+    out (torch.nn.Linear):
         The output layer.
     """
 
@@ -107,10 +100,8 @@ class SentimentClassifier(nn.Module):
         """
         Initialize the SentimentClassifier object.
 
-        Parameters
-
-        n_classes : int
-            The number of output classes.
+        Parameters:
+            n_classes (int): The number of output classes.
         """
         super(SentimentClassifier, self).__init__()
         self.bert = BertModel.from_pretrained("bert-base-cased")
@@ -121,16 +112,12 @@ class SentimentClassifier(nn.Module):
         """
         Forward propagation through the model.
 
-        Parameters
+        Parameters:
+            input_ids (torch.Tensor): The input IDs of the tokenized text.
+            attention_mask (torch.Tensor): The attention mask for the tokenized text.
 
-        input_ids : torch.Tensor
-            The input IDs of the tokenized text.
-        attention_mask : torch.Tensor
-            The attention mask for the tokenized text.
-
-        Returns
-        torch.Tensor
-            The output tensor after passing through the model.
+        Returns:
+            torch.Tensor: The output tensor after passing through the model.
         """
         _, pooled_output = self.bert(input_ids=input_ids, attention_mask=attention_mask, return_dict=False)
 
@@ -143,18 +130,19 @@ class BertFineTuned(BaseModel):
     A class for fine-tuning BERT models for sentiment classification tasks.
 
     Attributes
+    ----------
 
-    device : torch.device
+    device (torch.device):
         The device on which the model will run (either CPU or GPU).
-    tokenizer : transformers.BertTokenizer
+    tokenizer (transformers.BertTokenizer):
         The BERT tokenizer used to process the text data.
-    saved_model : torch.nn.Module
+    saved_model (torch.nn.Module):
         The fine-tuned BERT model.
-    batch_size : int
+    batch_size (int):
         The batch size for the DataLoader.
-    model_dir : str
+    model_dir (str):
         The directory path to the saved model.
-    model_path : str
+    model_path (str):
         The file path to the saved model.
     """
 
@@ -162,10 +150,8 @@ class BertFineTuned(BaseModel):
         """
         Initialize the BertFineTuned object.
 
-        Parameters
-
-        models_path : str
-            The path to the directory containing the saved models.
+        Parameters:
+            models_path (str): The path to the directory containing the saved models.
         """
         super().__init__(models_path)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -180,13 +166,11 @@ class BertFineTuned(BaseModel):
         Save the model under the given model_name in the models_path directory.
         This method is not implemented since Siebert uses a pre-trained model.
 
-        Parameters
+        Parameters:
+            model_name (str): Name of the model to be saved.
 
-        model_name : str
-            Name of the model to be saved.
-
-        Returns
-        None
+        Returns:
+            None
         """
         pass
 
@@ -194,13 +178,11 @@ class BertFineTuned(BaseModel):
         """
         Load the model from the models_path directory. This method is not implemented since Siebert uses a pre-trained model.
 
-        Parameters
+        Parameters:
+            model_name (str): Name of the model to be loaded.
 
-        model_name : str
-            Name of the model to be loaded.
-
-        Returns
-        None
+        Returns:
+            None
         """
         pass
 
@@ -208,16 +190,12 @@ class BertFineTuned(BaseModel):
         """
         Fit method is not implemented since Siebert uses a pre-trained model.
 
-        Parameters
+        Parameters:
+            x_train (pd.DataFrame): Training data, a Pandas DataFrame containing text data to be used for training.
+            y_train (pd.Series): Labels corresponding to the training data.
 
-        x_train : pd.DataFrame
-            Training data, a Pandas DataFrame containing text data to be used for training.
-
-        y_train : pd.Series
-            Labels corresponding to the training data.
-
-        Returns
-        None
+        Returns:
+            None
         """
         pass
 
@@ -225,14 +203,13 @@ class BertFineTuned(BaseModel):
         """
         Predict the sentiment of the given text data using the fine-tuned BERT model.
 
-        Parameters
+        Parameters:
+            X_test (DataFrame): Test data containing cleaned text.
 
-        x_test : pandas.DataFrame or pandas.Series
-            The test data containing the text.
-
-        Returns
-        dict
-            A dictionary containing the predicted sentiment and predicted sentiment probability.
+        Returns:
+            dict: Dictionary containing predicted sentiment labels and probabilities.
+                {"predicted_sentiment": List of predicted sentiment labels,
+                 "predicted_sentiment_probability": List of predicted sentiment probabilities}
         """
 
         x_test = x_test.text.to_list()

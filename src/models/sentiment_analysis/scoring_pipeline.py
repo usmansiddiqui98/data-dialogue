@@ -28,13 +28,11 @@ def run_scoring_pipeline(input_df):
     4. Prediction using the best model.
     5. Saving the predicted sentiment and sentiment probabilities in an output DataFrame.
 
-    Parameters
-    input_df : pandas.DataFrame
-        The input DataFrame containing the raw reviews data.
+    Parameters:
+        input_df (pandas.DataFrame): The input DataFrame containing the raw reviews data.
 
-    Returns
-    output : pandas.DataFrame
-        The output DataFrame containing the predicted sentiment and sentiment probabilities for each review.
+    Returns:
+        output (pandas.DataFrame): The output DataFrame containing the predicted sentiment and sentiment probabilities for each review.
     """
 
     # ________CHANGE THIS TO CHANGE MODEL_______
@@ -103,7 +101,6 @@ if __name__ == "__main__":
     input_df = pd.read_csv("data/raw/reviews_test.csv")
     # Run the pipeline
     output_df = run_scoring_pipeline(input_df)
-    # Save the output
     output_path = "data/predictions"
     os.makedirs(output_path, exist_ok=True)
     output_df.to_csv("data/predictions/reviews_test_predictions_data-dialogue.csv", index=False)
