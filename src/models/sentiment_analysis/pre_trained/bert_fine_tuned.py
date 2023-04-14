@@ -1,91 +1,22 @@
-# Import necessary libraries
-# Misc.
-import warnings
-from collections import defaultdict
-from textwrap import wrap
+import logging
+import os
 
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import seaborn as sns
 import torch
+import transformers.utils.logging
+from torch import nn
+from torch.utils.data import DataLoader
+from transformers import BertModel, BertTokenizer
 
-# Torch ML libraries
-import transformers
-from matplotlib import rc
-from pylab import rcParams
-from sklearn.metrics import classification_report, confusion_matrix
-from sklearn.model_selection import train_test_split
-from torch import nn, optim
-from torch.utils.data import DataLoader, Dataset
+from src.models.sentiment_analysis.base_model import BaseModel
 
-# Load Saved Model
-from transformers import (
-    AdamW,
-    BertConfig,
-    BertForSequenceClassification,
-    BertModel,
-    BertTokenizer,
-    get_linear_schedule_with_warmup,
-)
-
-# warnings.filterwarnings('ignore')
+logging.basicConfig(level=logging.ERROR)
+transformers.utils.logging.set_verbosity_error()
 
 
-class BertFineTuned:
-    def __init__(self, path):
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.PATH = path
-
-    def get_predictions(self, model, data_loader):
-        model = model.eval()
-        review_texts = []
-        predictions = []
-        prediction_probs = []
-        real_values = []
-
-        with torch.no_grad():
-            for d in data_loader:
-                texts = d["review_text"]
-                input_ids = d["input_ids"].to(self.device)
-                attention_mask = d["attention_mask"].to(self.device)
-                targets = d["targets"].to(self.device)
-
-                # Get outputs
-                outputs = model(input_ids=input_ids, attention_mask=attention_mask)
-                _, preds = torch.max(outputs, dim=1)
-
-                review_texts.extend(texts)
-                predictions.extend(preds)
-                prediction_probs.extend(outputs)
-                real_values.extend(targets)
-
-        predictions = torch.stack(predictions).cpu()
-        prediction_probs = torch.stack(prediction_probs).cpu()
-        real_values = torch.stack(real_values).cpu()
-
-        return review_texts, predictions, prediction_probs, real_values
-
-    def predict(self, x_test):
-        # Build a BERT based tokenizer
-        tokenizer = BertTokenizer.from_pretrained("bert-base-cased")
-
-        test_data_loader = create_data_loader(x_test, tokenizer, 200, 16)
-
-        class_names = ["0", "1"]
-        saved_model = SentimentClassifier(len(class_names))
-        saved_model.load_state_dict(torch.load(self.PATH, map_location=self.device))
-        saved_model = saved_model.to(self.device)
-
-        y_review_texts, y_pred, y_pred_probs, y_test = self.get_predictions(saved_model, test_data_loader)
-        return y_pred
-
-
-class GPReviewDataset(Dataset):
+class BERTDataset:
     # Constructor Function
-    def __init__(self, reviews, targets, tokenizer, max_len):
+    def __init__(self, reviews, tokenizer, max_len):
         self.reviews = reviews
-        self.targets = targets
         self.tokenizer = tokenizer
         self.max_len = max_len
 
@@ -96,7 +27,6 @@ class GPReviewDataset(Dataset):
     # get item magic method
     def __getitem__(self, item):
         review = str(self.reviews[item])
-        target = self.targets[item]
 
         # Encoded format to be returned
         encoding = self.tokenizer.encode_plus(
@@ -104,28 +34,18 @@ class GPReviewDataset(Dataset):
             add_special_tokens=True,
             max_length=self.max_len,
             return_token_type_ids=False,
-            pad_to_max_length=True,
+            padding="max_length",
+            # pad_to_max_length=True,
             return_attention_mask=True,
             return_tensors="pt",
+            truncation=True,
         )
 
         return {
             "review_text": review,
             "input_ids": encoding["input_ids"].flatten(),
             "attention_mask": encoding["attention_mask"].flatten(),
-            "targets": torch.tensor(target, dtype=torch.long),
         }
-
-
-def create_data_loader(df, tokenizer, max_len, batch_size):
-    ds = GPReviewDataset(
-        reviews=df.cleaned_text.to_numpy(),
-        # targets=df.Sentiment.to_numpy(),
-        tokenizer=tokenizer,
-        max_len=max_len,
-    )
-
-    return DataLoader(ds, batch_size=batch_size, num_workers=0)
 
 
 class SentimentClassifier(nn.Module):
@@ -142,3 +62,63 @@ class SentimentClassifier(nn.Module):
         #  Add a dropout layer
         output = self.drop(pooled_output)
         return self.out(output)
+
+
+class BertFineTuned(BaseModel):
+    def __init__(self, models_path):
+        super().__init__(models_path)
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.tokenizer = BertTokenizer.from_pretrained("bert-base-cased")
+        self.saved_model = None
+        self.batch_size = 16
+        self.model_dir = os.path.join(self.models_path, "bert_fine_tuned")
+        self.model_path = os.path.join(self.model_dir, "bert_state_dict_new_raw.pt")
+
+    def save(self, model_name):
+        pass
+
+    def load(self, model_name):
+        pass
+
+    def fit(self, x_train, y_train):
+        pass
+
+    def predict(self, x_test):
+        # Build a BERT based tokenizer
+        x_test = x_test.text.to_list()
+        test_dataset = BERTDataset(x_test, self.tokenizer, 512)
+
+        test_dataloader = DataLoader(test_dataset, batch_size=self.batch_size, num_workers=0)
+
+        class_names = ["0", "1"]
+        self.saved_model = SentimentClassifier(len(class_names))
+        self.saved_model.load_state_dict(torch.load(self.model_path, map_location=self.device))
+        self.saved_model = self.saved_model.to(self.device)
+
+        self.saved_model.eval()
+
+        review_texts = []
+        predictions = []
+        prediction_probs = []
+
+        with torch.no_grad():
+            for d in test_dataloader:
+                texts = d["review_text"]
+                input_ids = d["input_ids"].to(self.device)
+                attention_mask = d["attention_mask"].to(self.device)
+
+                # Get outputs
+                outputs = self.saved_model(input_ids=input_ids, attention_mask=attention_mask)
+                _, preds = torch.max(outputs, dim=1)
+
+                review_texts.extend(texts)
+                predictions.extend(preds)
+                prediction_probs.extend(outputs)
+
+        predictions = torch.stack(predictions).cpu()
+        prediction_probs = torch.stack(prediction_probs).cpu()
+
+        return {
+            "predicted_sentiment": predictions,
+            "predicted_sentiment_probability": prediction_probs,
+        }
