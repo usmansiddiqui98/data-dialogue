@@ -5,6 +5,7 @@ import pytest
 from sklearn.linear_model import LogisticRegression
 
 from src.models.sentiment_analysis.log_reg import LogReg
+from sklearn.metrics import accuracy_score
 
 
 @pytest.fixture
@@ -43,3 +44,22 @@ def test_fit(get_data):
         "verbose": 0,
         "warm_start": False,
     }
+
+def test_predict(get_data):
+    X_train, y_train, X_test, y_test = get_data
+    model = LogReg(models_path="/test_files")
+    model.fit(X_train, y_train)
+    result = model.predict(X_test)
+    assert isinstance(result, dict)
+    assert set(result.keys()) == {"predicted_sentiment", "predicted_sentiment_probability"}
+    assert len(result["predicted_sentiment"]) == len(X_test)
+    assert len(result["predicted_sentiment_probability"]) == len(X_test)
+    assert all(isinstance(x, float) or isinstance(x, int) for x in result["predicted_sentiment_probability"])
+
+def test_accuracy(get_data):
+    X_train, y_train, X_test, y_test = get_data
+    model = LogReg(models_path="/test_files")
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)["predicted_sentiment"]
+    accuracy = accuracy_score(y_test, y_pred)
+    assert accuracy >= 0.7
