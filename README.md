@@ -5,19 +5,15 @@ Whether for a B2B or B2C company, relevance and longevity in the industry depend
 
 ## To run the app locally:
 
-1. Clone the repo using `git clone` or download the zip file.
-2. Run `make create_environment` to create a virtual environment.
+1. Clone the repo using `git clone <git repo link>` or download the zip file.
+2. (Optional) Run `make create_environment` to create a virtual environment.
 3. Run `make install` to install dependencies
 4. Upload `bert_state_dict_new_raw.pt` into the models/sentiment_analysis/bert_fine_tuned folder.
-5. Run `make training_pipeline` to feature_engineer, preprocess, and train the models
+5. Run `make train_sentiment` to feature_engineer, preprocess, and train the models
 6. Run `make run` to start the app to predict the sentiment.
 7. Go to `localhost:8501` in your browser
 8. Upload a file to predict the sentiment
-
-
-## To change the model run by our Scoring Pipeline:
-1. Go to `src/app/_pages/sentiment_analysis/sentiment_model.py`
-2. Change the `best_model` variable to the name of the model you want to use. The model names are the same as the names of the files in `src/models/sentiment_analysis/`
+9. Run `make train_topic` to train the topic models
 
 ##  Project Organization
 ```
@@ -26,10 +22,15 @@ Whether for a B2B or B2C company, relevance and longevity in the industry depend
 ├── Makefile
 ├── README.md
 ├── data
+│   ├── embeddings
+│   │   └── BERTopic_embeddings.pickle
+│   ├── predictions
+│   │   └── reviews_test_predictions_data-dialogue.csv
 │   ├── processed
 │   │   ├── clean_reviews_w_topics.csv
 │   │   ├── test_final_processed_reviews.csv
-│   │   └── train_final_processed_reviews.csv
+│   │   ├── train_final_processed_reviews.csv
+│   │   └── train_oversample_final_processed_reviews.csv
 │   └── raw
 │       ├── reviews.csv
 │       ├── reviews_test.csv
@@ -38,20 +39,60 @@ Whether for a B2B or B2C company, relevance and longevity in the industry depend
 │   ├── Makefile
 │   ├── commands.rst
 │   ├── conf.py
+│   ├── data
+│   │   ├── feature_engineering.rst
+│   │   ├── feature_engineering_helpers.rst
+│   │   ├── main.rst
+│   │   ├── make_dataset.rst
+│   │   └── preprocess.rst
+│   ├── data.rst
 │   ├── getting-started.rst
 │   ├── index.rst
-│   └── make.bat
+│   ├── make.bat
+│   ├── models.rst
+│   ├── pipelines.rst
+│   ├── sentiment_analysis_models
+│   │   ├── bert_fine_tuned.rst
+│   │   ├── log_reg.rst
+│   │   ├── lstm.rst
+│   │   ├── main.rst
+│   │   ├── naive_bayes.rst
+│   │   ├── siebert.rst
+│   │   ├── svm.rst
+│   │   ├── xg_boost.rst
+│   │   └── xg_boost_svd.rst
+│   ├── sentiment_analysis_pipelines
+│   │   ├── main.rst
+│   │   ├── scoring_pipeline.rst
+│   │   └── training_pipeline.rst
+│   ├── topic_modelling_models
+│   │   ├── lda.rst
+│   │   ├── lsa.rst
+│   │   ├── main.rst
+│   │   └── nmf.rst
+│   └── topic_modelling_pipelines
+│       ├── main.rst
+│       └── training_pipeline.rst
 ├── models
 │   ├── sentiment_analysis
 │   │   ├── best_model
+│   │   │   ├── best_model_name.txt
 │   │   │   ├── dim_reduce.pkl
 │   │   │   ├── model.pkl
 │   │   │   ├── model_class.pkl
 │   │   │   └── vectorizer.pkl
 │   │   ├── log_reg
 │   │   │   ├── model.pkl
+│   │   │   ├── scaler.pkl
 │   │   │   └── vectorizer.pkl
-│   │   ├── seibert
+│   │   ├── lstm
+│   │   ├── naive_bayes
+│   │   │   ├── model.pkl
+│   │   │   └── vectorizer.pkl
+│   │   ├── siebert
+│   │   ├── svm
+│   │   │   ├── model.pkl
+│   │   │   └── vectorizer.pkl
 │   │   ├── xg_boost
 │   │   │   ├── model.pkl
 │   │   │   └── vectorizer.pkl
@@ -75,7 +116,9 @@ Whether for a B2B or B2C company, relevance and longevity in the industry depend
 │   │   ├── XGboost_2.ipynb
 │   │   ├── baselines.ipynb
 │   │   ├── feature_engineering.ipynb
-│   │   └── huggingface.ipynb
+│   │   ├── huggingface.ipynb
+│   │   ├── naive_bayes.ipynb
+│   │   └── svm.ipynb
 │   └── topic modelling
 │       ├── BERT.ipynb
 │       ├── BERTopic.ipynb
@@ -88,74 +131,42 @@ Whether for a B2B or B2C company, relevance and longevity in the industry depend
 ├── setup.py
 ├── src
 │   ├── __init__.py
-│   ├── __pycache__
-│   │   └── __init__.cpython-310.pyc
 │   ├── app
 │   │   ├── __init__.py
-│   │   ├── __pycache__
-│   │   │   ├── __init__.cpython-310.pyc
-│   │   │   ├── navigation.cpython-310.pyc
-│   │   │   └── utils.cpython-310.pyc
 │   │   ├── _pages
 │   │   │   ├── __init__.py
-│   │   │   ├── __pycache__
-│   │   │   │   ├── __init__.cpython-310.pyc
-│   │   │   │   ├── home.cpython-310.pyc
-│   │   │   │   └── main.cpython-310.pyc
 │   │   │   ├── home.py
 │   │   │   ├── main.py
 │   │   │   ├── sentiment_analysis
 │   │   │   │   ├── __init__.py
-│   │   │   │   ├── __pycache__
-│   │   │   │   │   ├── __init__.cpython-310.pyc
-│   │   │   │   │   ├── main.cpython-310.pyc
-│   │   │   │   │   └── sentiment_model.cpython-310.pyc
 │   │   │   │   ├── main.py
 │   │   │   │   └── sentiment_model.py
 │   │   │   └── topic_modelling
 │   │   │       ├── __init__.py
-│   │   │       ├── __pycache__
-│   │   │       │   ├── __init__.cpython-310.pyc
-│   │   │       │   ├── bert_topic.cpython-310.pyc
-│   │   │       │   └── main.cpython-310.pyc
-│   │   │       ├── bert_topic.py
+│   │   │       ├── evaluation.py
 │   │   │       └── main.py
 │   │   ├── main.py
 │   │   ├── navigation.py
 │   │   └── utils.py
 │   ├── data
 │   │   ├── __init__.py
-│   │   ├── __pycache__
-│   │   │   ├── __init__.cpython-310.pyc
-│   │   │   ├── feature_engineering.cpython-310.pyc
-│   │   │   ├── feature_engineering_optimised.cpython-310.pyc
-│   │   │   ├── make_dataset.cpython-310.pyc
-│   │   │   └── preprocess.cpython-310.pyc
 │   │   ├── feature_engineering.py
+│   │   ├── generate_oversample.py
 │   │   ├── make_dataset.py
 │   │   └── preprocess.py
 │   ├── models
 │   │   ├── __init__.py
-│   │   ├── __pycache__
-│   │   │   └── __init__.cpython-310.pyc
 │   │   ├── sentiment_analysis
 │   │   │   ├── __init__.py
-│   │   │   ├── __pycache__
-│   │   │   │   ├── __init__.cpython-310.pyc
-│   │   │   │   ├── base_model.cpython-310.pyc
-│   │   │   │   ├── log_reg.cpython-310.pyc
-│   │   │   │   ├── training_pipeline.cpython-310.pyc
-│   │   │   │   ├── xg_boost.cpython-310.pyc
-│   │   │   │   └── xg_boost_svd.cpython-310.pyc
 │   │   │   ├── base_model.py
-│   │   │   ├── bert.py
 │   │   │   ├── log_reg.py
+│   │   │   ├── lstm.py
+│   │   │   ├── naive_bayes.py
 │   │   │   ├── pre_trained
-│   │   │   │   ├── __pycache__
-│   │   │   │   │   └── seibert.cpython-310.pyc
 │   │   │   │   ├── bert_fine_tuned.py
-│   │   │   │   └── seibert.py
+│   │   │   │   └── siebert.py
 │   │   │   ├── scoring_pipeline.py
+│   │   │   ├── svm.py
 │   │   │   ├── training_pipeline.py
 │   │   │   ├── xg_boost.py
 │   │   │   └── xg_boost_svd.py
@@ -163,12 +174,12 @@ Whether for a B2B or B2C company, relevance and longevity in the industry depend
 │   │       ├── LDA.py
 │   │       ├── LSA.py
 │   │       ├── NMF.py
-│   │       └── __init__.py
+│   │       ├── __init__.py
+│   │       ├── bert_topic.py
+│   │       ├── topic_modelling_lda.csv
+│   │       └── training_pipeline.py
 │   └── utils
 │       ├── __init__.py
-│       ├── __pycache__
-│       │   ├── __init__.cpython-310.pyc
-│       │   └── feature_engineering_helpers.cpython-310.pyc
 │       ├── clear_cache.py
 │       └── feature_engineering_helpers.py
 ├── src.egg-info
@@ -177,21 +188,25 @@ Whether for a B2B or B2C company, relevance and longevity in the industry depend
 │   ├── dependency_links.txt
 │   └── top_level.txt
 ├── test_files
-│   └── log_reg_test
-└── tests
-    ├── __init__.py
-    ├── __pycache__
-    │   ├── __init__.cpython-310.pyc
-    │   ├── test_dummy.cpython-310-pytest-7.2.1.pyc
-    │   ├── test_dummy.cpython-310-pytest-7.2.2.pyc
-    │   ├── test_environment.cpython-310-pytest-7.2.2.pyc
-    │   ├── test_feature_engineering.cpython-310-pytest-7.2.2.pyc
-    │   ├── test_log_reg.cpython-310-pytest-7.2.2.pyc
-    │   ├── test_nb.cpython-310-pytest-7.2.2.pyc
-    │   ├── test_preprocess.cpython-310-pytest-7.2.2.pyc
-    │   ├── test_preprocess_feat_engineering.cpython-310-pytest-7.2.2.pyc
-    │   └── test_preprocessing.cpython-310-pytest-7.2.2.pyc
-    ├── test_environment.py
-    ├── test_feature_engineering.py
-    └── test_nb.py
+│   ├── log_reg_test
+│   ├── test_reviews.csv
+│   └── train_reviews.csv
+├── tests
+│   ├── __init__.py
+│   ├── test_bert_fine_tuned.py
+│   ├── test_environment.py
+│   ├── test_feature_engineering.py
+│   ├── test_lda.py
+│   ├── test_log_reg.py
+│   ├── test_lsa.py
+│   ├── test_lstm.py
+│   ├── test_naive_bayes.py
+│   ├── test_nb.py
+│   ├── test_nmf.py
+│   ├── test_preprocessing.py
+│   ├── test_siebert.py
+│   ├── test_svm.py
+│   ├── test_xg_boost_svd.py
+│   └── test_xgboost.py
+└── topic_modelling_lda.csv
 ```
