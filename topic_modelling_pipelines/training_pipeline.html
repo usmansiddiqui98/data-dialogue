@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Training Pipeline¶ &mdash; Data Dialogue 0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Data" href="../data.html" />
+    <link rel="prev" title="Topic Modelling Pipeline" href="main.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Data Dialogue
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../commands.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../models.html">Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../pipelines.html">Pipelines</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../pipelines.html#sentiment-analysis">Sentiment Analysis</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../pipelines.html#topic-modelling">Topic Modelling</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="main.html">Topic Modelling Pipeline</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Training Pipeline¶</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Data</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Data Dialogue</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../pipelines.html">Pipelines</a></li>
+          <li class="breadcrumb-item"><a href="main.html">Topic Modelling Pipeline</a></li>
+      <li class="breadcrumb-item active">Training Pipeline¶</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/topic_modelling_pipelines/training_pipeline.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-src.models.topic_modelling.training_pipeline">
+<span id="training-pipeline"></span><h1>Training Pipeline¶<a class="headerlink" href="#module-src.models.topic_modelling.training_pipeline" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.models.topic_modelling.training_pipeline.run_training_pipeline">
+<span class="sig-prename descclassname"><span class="pre">src.models.topic_modelling.training_pipeline.</span></span><span class="sig-name descname"><span class="pre">run_training_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_choice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_processed_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_topics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.topic_modelling.training_pipeline.run_training_pipeline" title="Permalink to this definition"></a></dt>
+<dd><p>Train the specified topic modeling algorithm on the given pre-processed DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_topics</strong> (<em>int</em>) – Number of topics</p></li>
+<li><p><strong>tags</strong> (<em>list</em>) – Nouns, Adjectives and Verbs</p></li>
+<li><p><strong>model_choice</strong> (<em>str</em>) – The topic modeling algorithm to use, options are: “lda”, “lsa”, “nmf”, “bertopic”.</p></li>
+<li><p><strong>pre_processed_df</strong> (<em>pd.DataFrame</em>) – The pre-processed input data to train the topic modeling algorithm on.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>topics_dict (dict)A dictionary containing the topics generated by the specified topic modeling algorithm.</p>
+</dd>
+</dl>
+<p>Raises
+ValueError</p>
+<blockquote>
+<div><p>If an invalid model_choice is provided.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.models.topic_modelling.training_pipeline.topics_dict_to_df">
+<span class="sig-prename descclassname"><span class="pre">src.models.topic_modelling.training_pipeline.</span></span><span class="sig-name descname"><span class="pre">topics_dict_to_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_choice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topics_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.topic_modelling.training_pipeline.topics_dict_to_df" title="Permalink to this definition"></a></dt>
+<dd><p>Convert the topics dictionary to a DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_choice</strong> (<em>str</em>) – The topic modeling algorithm used to generate the topics_dict.</p></li>
+<li><p><strong>topics_dict</strong> (<em>dict</em>) – A dictionary containing the topics generated by the specified topic modeling algorithm.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with the topic_id, words and corresponding scores for each topic.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pivoted_df (pd.DataFrame)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="main.html" class="btn btn-neutral float-left" title="Topic Modelling Pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../data.html" class="btn btn-neutral float-right" title="Data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

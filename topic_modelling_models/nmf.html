@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NMF &mdash; Data Dialogue 0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Bert Topic" href="bert_topic.html" />
+    <link rel="prev" title="LSA" href="lsa.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Data Dialogue
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../commands.html">Commands</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../models.html">Models</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../models.html#sentiment-analysis">Sentiment Analysis</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../models.html#topic-modelling">Topic Modelling</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="main.html">Topic Modelling Models</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="lda.html">LDA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="lsa.html">LSA</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">NMF</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bert_topic.html">Bert Topic</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../pipelines.html">Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Data</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Data Dialogue</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../models.html">Models</a></li>
+          <li class="breadcrumb-item"><a href="main.html">Topic Modelling Models</a></li>
+      <li class="breadcrumb-item active">NMF</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/topic_modelling_models/nmf.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-src.models.topic_modelling.NMF">
+<span id="nmf"></span><h1>NMF<a class="headerlink" href="#module-src.models.topic_modelling.NMF" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.models.topic_modelling.NMF.NMFModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.models.topic_modelling.NMF.</span></span><span class="sig-name descname"><span class="pre">NMFModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.topic_modelling.NMF.NMFModel" title="Permalink to this definition"></a></dt>
+<dd><p>A class to represent a NMF (Non-negative matrix factorization) model for topic modeling.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.topic_modelling.NMF.NMFModel.df">
+<span class="sig-name descname"><span class="pre">df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pd.DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.topic_modelling.NMF.NMFModel.df" title="Permalink to this definition"></a></dt>
+<dd><p>The data that the model will be trained on.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">n_components</span> <span class="pre">(int,</span> <span class="pre">optional,</span> <span class="pre">default</span></span></dt>
+<dd><p>The number of topics that will be generated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>10):</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">max_features</span> <span class="pre">(int,</span> <span class="pre">optional,</span> <span class="pre">default</span></span></dt>
+<dd><p>The maximum number of features that will be used to represent the text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>1000):</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">max_df</span> <span class="pre">(float,</span> <span class="pre">optional,</span> <span class="pre">default</span></span></dt>
+<dd><p>The maximum document frequency of the words that will be used to represent the text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>0.5):</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.topic_modelling.NMF.NMFModel.vectorizer">
+<span class="sig-name descname"><span class="pre">vectorizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">TfidfVectorizer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.topic_modelling.NMF.NMFModel.vectorizer" title="Permalink to this definition"></a></dt>
+<dd><p>A vectorizer used to convert text to a matrix of TF-IDF features.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.topic_modelling.NMF.NMFModel.model">
+<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NMF</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.topic_modelling.NMF.NMFModel.model" title="Permalink to this definition"></a></dt>
+<dd><p>A model for topic modeling using non-negative matrix factorization.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.topic_modelling.NMF.NMFModel.topic_df">
+<span class="sig-name descname"><span class="pre">topic_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pd.DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.topic_modelling.NMF.NMFModel.topic_df" title="Permalink to this definition"></a></dt>
+<dd><p>A dataframe of top terms for each topic.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.topic_modelling.NMF.NMFModel.labels">
+<span class="sig-name descname"><span class="pre">labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.topic_modelling.NMF.NMFModel.labels" title="Permalink to this definition"></a></dt>
+<dd><p>A list of labels for each topic.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.topic_modelling.NMF.NMFModel.X">
+<span class="sig-name descname"><span class="pre">X</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array-like</span> <span class="pre">or</span> <span class="pre">sparse</span> <span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span> <span class="pre">(n_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_features)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.topic_modelling.NMF.NMFModel.X" title="Permalink to this definition"></a></dt>
+<dd><p>The matrix of the TF-IDF features for the text.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.topic_modelling.NMF.NMFModel.document_weights">
+<span class="sig-name descname"><span class="pre">document_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array-like</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span> <span class="pre">(n_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.topic_modelling.NMF.NMFModel.document_weights" title="Permalink to this definition"></a></dt>
+<dd><p>The weights of each document on each topic.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.topic_modelling.NMF.NMFModel.label_df">
+<span class="sig-name descname"><span class="pre">label_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pd.DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.topic_modelling.NMF.NMFModel.label_df" title="Permalink to this definition"></a></dt>
+<dd><p>A dataframe with the original data and topic labels.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.models.topic_modelling.NMF.NMFModel.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.models.topic_modelling.NMF.NMFModel.fit_transform" title="Permalink to this definition"></a></dt>
+<dd><p>Fit and transform the data to get the document weights.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.models.topic_modelling.NMF.NMFModel.get_labels">
+<span class="sig-name descname"><span class="pre">get_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_top_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.topic_modelling.NMF.NMFModel.get_labels" title="Permalink to this definition"></a></dt>
+<dd><p>Label the topics for each data point in the input DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n_top_words</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of top words to use in the topic description. Defaults to 5.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new DataFrame with an additional column <cite>Topic_idx</cite> that contains
+the index of the topic with the highest weight for each data point, and
+another additional column <cite>Top_Topic_Terms</cite> that contains the
+description of the top words in the corresponding topic.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<p>Raises
+ValueError
+If <cite>fit_transform</cite> method hasn’t been called yet.</p>
+<p>Notes
+This method uses the <cite>document_weights</cite> attribute that is computed by the
+<cite>fit_transform</cite> method. If the <cite>fit_transform</cite> method hasn’t been called
+yet, a <cite>ValueError</cite> is raised.</p>
+<p>The topic description for each data point is computed as the concatenation
+of the top <cite>n_top_words</cite> words with the highest weights in the corresponding
+topic. The resulting descriptions are stored in a new DataFrame, along with
+the corresponding topic index.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.models.topic_modelling.NMF.NMFModel.get_topic_terms">
+<span class="sig-name descname"><span class="pre">get_topic_terms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_top_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.topic_modelling.NMF.NMFModel.get_topic_terms" title="Permalink to this definition"></a></dt>
+<dd><p>Get the top terms for each topic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n_top_words</strong> (<em>int</em><em>, </em><em>default=10</em>) – The number of top words to display for each topic.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary where each key corresponds to a topic index, and each value is
+another dictionary containing the top words/terms for that topic and their corresponding weights.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>topics_dict (dict)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lsa.html" class="btn btn-neutral float-left" title="LSA" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="bert_topic.html" class="btn btn-neutral float-right" title="Bert Topic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

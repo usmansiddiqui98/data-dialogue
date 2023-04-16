@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bert with Tuned Hyper-parameters¶ &mdash; Data Dialogue 0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Siebert" href="siebert.html" />
+    <link rel="prev" title="XG Boost with Singular Value Decomposition¶" href="xg_boost_svd.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Data Dialogue
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../commands.html">Commands</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../models.html">Models</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../models.html#sentiment-analysis">Sentiment Analysis</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="main.html">Sentiment Analysis Models</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="log_reg.html">Logistic Regression</a></li>
+<li class="toctree-l4"><a class="reference internal" href="lstm.html">Long Short Term Memory¶</a></li>
+<li class="toctree-l4"><a class="reference internal" href="naive_bayes.html">Naive Bayes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="svm.html">SVM</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xg_boost.html">XG Boost</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xg_boost_svd.html">XG Boost with Singular Value Decomposition¶</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Bert with Tuned Hyper-parameters¶</a></li>
+<li class="toctree-l4"><a class="reference internal" href="siebert.html">Siebert</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../models.html#topic-modelling">Topic Modelling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../pipelines.html">Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Data</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Data Dialogue</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../models.html">Models</a></li>
+          <li class="breadcrumb-item"><a href="main.html">Sentiment Analysis Models</a></li>
+      <li class="breadcrumb-item active">Bert with Tuned Hyper-parameters¶</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/sentiment_analysis_models/bert_fine_tuned.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="bert-with-tuned-hyper-parameters">
+<h1>Bert with Tuned Hyper-parameters¶<a class="headerlink" href="#bert-with-tuned-hyper-parameters" title="Permalink to this heading"></a></h1>
+<span class="target" id="module-src.models.sentiment_analysis.pre_trained.bert_fine_tuned"></span><dl class="py class">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BERTDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.models.sentiment_analysis.pre_trained.bert_fine_tuned.</span></span><span class="sig-name descname"><span class="pre">BERTDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reviews</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_len</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BERTDataset" title="Permalink to this definition"></a></dt>
+<dd><p>A custom dataset class for loading and pre-processing text data using BERT tokenizer.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BERTDataset.reviews">
+<span class="sig-name descname"><span class="pre">reviews</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BERTDataset.reviews" title="Permalink to this definition"></a></dt>
+<dd><p>The reviews in the dataset.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BERTDataset.tokenizer">
+<span class="sig-name descname"><span class="pre">tokenizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transformers.BertTokenizer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BERTDataset.tokenizer" title="Permalink to this definition"></a></dt>
+<dd><p>The BERT tokenizer used to process the text data.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BERTDataset.max_len">
+<span class="sig-name descname"><span class="pre">max_len</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BERTDataset.max_len" title="Permalink to this definition"></a></dt>
+<dd><p>The maximum length for the tokenized text.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.models.sentiment_analysis.pre_trained.bert_fine_tuned.</span></span><span class="sig-name descname"><span class="pre">BertFineTuned</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">models_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned" title="Permalink to this definition"></a></dt>
+<dd><p>A class for fine-tuning BERT models for sentiment classification tasks.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.device">
+<span class="sig-name descname"><span class="pre">device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">torch.device</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.device" title="Permalink to this definition"></a></dt>
+<dd><p>The device on which the model will run (either CPU or GPU).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.tokenizer">
+<span class="sig-name descname"><span class="pre">tokenizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transformers.BertTokenizer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.tokenizer" title="Permalink to this definition"></a></dt>
+<dd><p>The BERT tokenizer used to process the text data.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.saved_model">
+<span class="sig-name descname"><span class="pre">saved_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">torch.nn.Module</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.saved_model" title="Permalink to this definition"></a></dt>
+<dd><p>The fine-tuned BERT model.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.batch_size">
+<span class="sig-name descname"><span class="pre">batch_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.batch_size" title="Permalink to this definition"></a></dt>
+<dd><p>The batch size for the DataLoader.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.model_dir">
+<span class="sig-name descname"><span class="pre">model_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.model_dir" title="Permalink to this definition"></a></dt>
+<dd><p>The directory path to the saved model.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.model_path">
+<span class="sig-name descname"><span class="pre">model_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.model_path" title="Permalink to this definition"></a></dt>
+<dd><p>The file path to the saved model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.fit" title="Permalink to this definition"></a></dt>
+<dd><p>Fit method is not implemented since Siebert uses a pre-trained model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_train</strong> (<em>pd.DataFrame</em>) – Training data, a Pandas DataFrame containing text data to be used for training.</p></li>
+<li><p><strong>y_train</strong> (<em>pd.Series</em>) – Labels corresponding to the training data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.load" title="Permalink to this definition"></a></dt>
+<dd><p>Load the model from the models_path directory. This method is not implemented since Siebert uses a pre-trained model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_name</strong> (<em>str</em>) – Name of the model to be loaded.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_test</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.predict" title="Permalink to this definition"></a></dt>
+<dd><p>Predict the sentiment of the given text data using the fine-tuned BERT model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X_test</strong> (<em>DataFrame</em>) – Test data containing cleaned text.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Dictionary containing predicted sentiment labels and probabilities.</dt><dd><dl class="simple">
+<dt>{“predicted_sentiment”: List of predicted sentiment labels,</dt><dd><p>”predicted_sentiment_probability”: List of predicted sentiment probabilities}</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.BertFineTuned.save" title="Permalink to this definition"></a></dt>
+<dd><p>Save the model under the given model_name in the models_path directory.
+This method is not implemented since Siebert uses a pre-trained model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_name</strong> (<em>str</em>) – Name of the model to be saved.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.SentimentClassifier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.models.sentiment_analysis.pre_trained.bert_fine_tuned.</span></span><span class="sig-name descname"><span class="pre">SentimentClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_classes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.SentimentClassifier" title="Permalink to this definition"></a></dt>
+<dd><p>A class for sentiment classification using a fine-tuned BERT model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.SentimentClassifier.bert">
+<span class="sig-name descname"><span class="pre">bert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transformers.BertModel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.SentimentClassifier.bert" title="Permalink to this definition"></a></dt>
+<dd><p>The pre-trained BERT model.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.SentimentClassifier.drop">
+<span class="sig-name descname"><span class="pre">drop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">torch.nn.Dropout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.SentimentClassifier.drop" title="Permalink to this definition"></a></dt>
+<dd><p>The dropout layer.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.SentimentClassifier.out">
+<span class="sig-name descname"><span class="pre">out</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">torch.nn.Linear</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.SentimentClassifier.out" title="Permalink to this definition"></a></dt>
+<dd><p>The output layer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.models.sentiment_analysis.pre_trained.bert_fine_tuned.SentimentClassifier.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_mask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.sentiment_analysis.pre_trained.bert_fine_tuned.SentimentClassifier.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Forward propagation through the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_ids</strong> (<em>torch.Tensor</em>) – The input IDs of the tokenized text.</p></li>
+<li><p><strong>attention_mask</strong> (<em>torch.Tensor</em>) – The attention mask for the tokenized text.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output tensor after passing through the model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="xg_boost_svd.html" class="btn btn-neutral float-left" title="XG Boost with Singular Value Decomposition¶" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siebert.html" class="btn btn-neutral float-right" title="Siebert" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
