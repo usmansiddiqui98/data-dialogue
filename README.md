@@ -31,7 +31,7 @@ This method should be used to skip the training process.
 
 ### With CPU:
 1. `docker pull tanyx43/data-dialogue:cpu`
-2. `docker run -p 8501:8501 tanyx43/data-dialogue:cpu`
+2. `docker run -p 8501:8501 tanyx43/data-dialogue:final-cpu`
 3. Go to <localhost:8501> in your browser
 4. Upload your csv with to predict sentiment
 
