@@ -72,11 +72,12 @@ def find_best_model(models, models_path, X_test, y_test):
             print(f"Loaded model: {model_name}")
             pred = model_instance.predict(X_test)
             y_pred = pred["predicted_sentiment"]
+            y_score = pred["predicted_sentiment_probability"]
             accuracy = accuracy_score(y_test, y_pred)
             precision = precision_score(y_test, y_pred)
             recall = recall_score(y_test, y_pred)
             f1 = f1_score(y_test, y_pred)
-            roc_auc = roc_auc_score(y_test, y_pred)
+            roc_auc = roc_auc_score(y_test, y_score)
             print(f"Accuracy: {accuracy}")
             print(f"Precision: {precision}")
             print(f"Recall: {recall}")

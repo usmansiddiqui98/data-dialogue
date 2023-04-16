@@ -2,6 +2,7 @@ import logging
 import os
 
 import torch
+import torch.nn.functional as F
 import transformers.utils.logging
 from torch import nn
 from torch.utils.data import DataLoader
@@ -212,6 +213,11 @@ class BertFineTuned(BaseModel):
                  "predicted_sentiment_probability": List of predicted sentiment probabilities}
         """
 
+        if torch.cuda.is_available():
+            print("Bert fine-tuned predicting on GPU")
+        else:
+            print("Bert fine-tuned predicting on CPU")
+
         x_test = x_test.text.to_list()
         test_dataset = BERTDataset(x_test, self.tokenizer, 512)
 
@@ -243,8 +249,12 @@ class BertFineTuned(BaseModel):
 
         predictions = torch.stack(predictions).cpu()
         prediction_probs = torch.stack(prediction_probs).cpu()
+        prediction_probs = F.softmax(prediction_probs, dim=1).numpy()
+        prediction_probs_final = []
+        for index, row in enumerate(prediction_probs):
+            prediction_probs_final.append(row[1])
 
         return {
             "predicted_sentiment": predictions,
-            "predicted_sentiment_probability": prediction_probs,
+            "predicted_sentiment_probability": prediction_probs_final,
         }
