@@ -3,17 +3,49 @@ Data Dialogue
 
 Whether for a B2B or B2C company, relevance and longevity in the industry depends on how well the products answer the needs of the customers. However, when the time comes for the companies to demonstrate that understanding — during a sales conversation, customer service interaction, or through the product itself — how can companies evaluate how they measure up?
 
-## To run the app locally:
+## To run the app locally end to end:
+
+### Repo:
 
 1. Clone the repo using `git clone <git repo link>` or download the zip file.
 2. (Optional) Run `make create_environment` to create a virtual environment.
 3. Run `make install` to install dependencies
-4. Upload `bert_state_dict_new_raw.pt` into the models/sentiment_analysis/bert_fine_tuned folder.
-5. Run `make train_sentiment` to feature_engineer, preprocess, and train the models
-6. Run `make run` to start the app to predict the sentiment.
-7. Go to `localhost:8501` in your browser
-8. Upload a file to predict the sentiment
-9. Run `make train_topic` to train the topic models
+
+### Training pipeline:  
+
+1. Upload `bert_state_dict_new_raw.pt` into the models/sentiment_analysis/bert_fine_tuned folder.
+2. Run `make train_sentiment` to feature_engineer, preprocess, and train the models
+
+### Scoring pipeline:
+1. Run `make run` to predict sentiment based on trained models
+2. Open <localhost:8501> in your browser
+3. Upload your csv with to predict sentiment
+
+## Scoring API with docker:
+This method should be used to skip the training process.
+### With GPU:
+1. `docker pull tanyx43/data-dialogue:final-gpu`
+2. `docker run --gpus all -it --rm -p 8501:8501 tanyx43/data-dialogue:final-gpu`
+3. Go to <localhost:8501> in your browser
+4. Upload your csv with to predict sentiment
+
+### With CPU:
+1. `docker pull tanyx43/data-dialogue:cpu`
+2. `docker run -p 8501:8501 tanyx43/data-dialogue:cpu`
+3. Go to <localhost:8501> in your browser
+4. Upload your csv with to predict sentiment
+
+### On an EC2 instance:
+1. Install Nvidia Driver and Docker on the EC2 instance
+2. Install Nvidia Container Toolkit
+3. `docker pull tanyx43/data-dialogue:final-gpu`
+4. `docker run --gpus all -it --rm -p 8501:8501 tanyx43/data-dialogue:final-gpu`
+5. In a new terminal window, enable port forwarding by `ssh -i pem_key.pem ubuntu@<DNS Instance> -L 8501:172.17.0.2:8501`
+6. Go to <localhost:8501> in your browser
+
+## Documentation:
+<https://usmansiddiqui98.github.io/data-dialogue/>
+
 
 ##  Project Organization
 ```

@@ -92,7 +92,9 @@ class Siebert(BaseModel):
         results = sentiment_analysis(x_test)
         labels = [result["label"] for result in results]
         predicted_sentiment = [1 if label == "POSITIVE" else 0 for label in labels]
-        predicted_sentiment_probability = [result["score"] for result in results]
+        predicted_sentiment_probability = [
+            result["score"] if result["label"] == "POSITIVE" else 1 - result["score"] for result in results
+        ]
         return {
             "predicted_sentiment": predicted_sentiment,
             "predicted_sentiment_probability": predicted_sentiment_probability,
