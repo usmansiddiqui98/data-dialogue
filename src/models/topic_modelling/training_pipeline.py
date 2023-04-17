@@ -82,7 +82,7 @@ def topics_dict_to_df(model_choice, topics_dict):
     elif model_choice == "nmf":
         score_col = "tfidf_score"
     elif model_choice == "bertopic":
-        score_col = "probability"
+        score_col = "c-tfidf_score"
 
     topics_df = topics_df.rename(columns={"value": score_col})
 

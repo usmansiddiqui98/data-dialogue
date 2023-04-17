@@ -8,6 +8,7 @@ import streamlit.components.v1 as components
 from wordcloud import WordCloud
 
 from src.data.preprocess import Preprocessor
+from src.models.topic_modelling.bert_topic import BertTopic
 from src.models.topic_modelling.training_pipeline import run_training_pipeline, topics_dict_to_df
 
 sys.path.append(os.path.abspath("../../models/topic_modelling/"))
@@ -46,7 +47,6 @@ def display():
             "the a set of words. Two very commonly used methods are Latent Dirichlet Allocation (LDA), Non-Negative "
             "Matrix Factorization (NMF),  Latent Semantic Analysis (LSA) and Bertopic for instance."
         )
-    st.markdown("#### This is the data we will be using for topic modelling:")
 
     model_choice = st.selectbox("Choose which topic model to run", (None, "LDA", "LSA", "NMF", "Bertopic"))
 
@@ -78,3 +78,20 @@ def display():
                 with cols[index % 3]:
                     wc.generate_from_frequencies(topic)
                     st.image(wc.to_image(), caption=f"Topic #{index}", use_column_width=True)
+
+        # Bertopic Visualizations
+        if model_choice == "Bertopic":
+            with st.spinner("Loading Bertopic Visualisations..."):
+                bertopic_model = BertTopic(st.session_state.pre_processed_df)
+                bertopic_model.prepare_embeddings()
+                bertopic_model.run_bertopic()
+                term_rank_viz, topic_viz, time_viz, topic_per_class_viz = bertopic_model.visualize()
+
+                with st.expander("Term Rank"):
+                    st.plotly_chart(term_rank_viz, use_container_width=True)
+                with st.expander("Topic Visualization"):
+                    st.plotly_chart(topic_viz, use_container_width=True)
+                with st.expander("Topics over time"):
+                    st.plotly_chart(time_viz, use_container_width=True)
+                with st.expander("Topics by Sentiment"):
+                    st.plotly_chart(topic_per_class_viz, use_container_width=True)
