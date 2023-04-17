@@ -24,22 +24,22 @@ Whether for a B2B or B2C company, relevance and longevity in the industry depend
 ## Scoring API with docker:
 This method should be used to skip the training process.
 ### With GPU:
-1. `docker pull tanyx43/data-dialogue:final-gpu`
-2. `docker run --gpus all -it --rm -p 8501:8501 tanyx43/data-dialogue:final-gpu`
+1. `docker pull tanyx43/data-dialogue:final-gpu2`
+2. `docker run --gpus all -it --rm -p 8501:8501 tanyx43/data-dialogue:final-gpu2`
 3. Go to <localhost:8501> in your browser
 4. Upload your csv with to predict sentiment
 
 ### With CPU:
-1. `docker pull tanyx43/data-dialogue:cpu`
-2. `docker run -p 8501:8501 tanyx43/data-dialogue:final-cpu`
+1. `docker pull tanyx43/data-dialogue:final-cpu2`
+2. `docker run -p 8501:8501 tanyx43/data-dialogue:final-cpu2`
 3. Go to <localhost:8501> in your browser
 4. Upload your csv with to predict sentiment
 
 ### On an EC2 instance:
 1. Install Nvidia Driver and Docker on the EC2 instance
 2. Install Nvidia Container Toolkit
-3. `docker pull tanyx43/data-dialogue:final-gpu`
-4. `docker run --gpus all -it --rm -p 8501:8501 tanyx43/data-dialogue:final-gpu`
+3. `docker pull tanyx43/data-dialogue:final-gpu2`
+4. `docker run --gpus all -it --rm -p 8501:8501 tanyx43/data-dialogue:final-gpu2`
 5. In a new terminal window, enable port forwarding by `ssh -i pem_key.pem ubuntu@<DNS Instance> -L 8501:172.17.0.2:8501`
 6. Go to <localhost:8501> in your browser
 
