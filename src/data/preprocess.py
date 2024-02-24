@@ -43,9 +43,9 @@ stopwords = [
     "is",
     "it",
     "its",
-    "may",
-    "might",
-    "must",
+    # "may",
+    # "might",
+    # "must",
     "of",
     "on",
     "or",
@@ -262,8 +262,8 @@ class Preprocessor:
         binary 'Sentiment' column.
         """
         new_df = self.dirty_df.copy()
-        new_df["cleaned_text"] = new_df["Text"].parallel_apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
-        new_df["Sentiment"] = new_df["Sentiment"].parallel_apply(lambda x: 1 if x == "positive" else 0)
+        new_df["cleaned_transcript"] = new_df["transcript"].parallel_apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
+        new_df["Had Timing Objection"] = new_df["Had Timing Objection"].parallel_apply(lambda x: 1 if x == "True" else 0)
         # lower case all column names
         new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]
         self.clean_df = new_df
@@ -281,7 +281,7 @@ class Preprocessor:
         The 'dirty_df' attribute is copied to 'clean_df' attribute with cleaned 'Text' column.
         """
         new_df = self.dirty_df.copy()
-        new_df["cleaned_text"] = new_df["Text"].parallel_apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
+        new_df["cleaned_transcript"] = new_df["transcript"].parallel_apply(lambda x: Preprocessor.clean_sentence(x, stopwords))
         # lower case all column names
         new_df.columns = [x.lower().replace(" ", "_") for x in new_df.columns]
         self.clean_df = new_df
